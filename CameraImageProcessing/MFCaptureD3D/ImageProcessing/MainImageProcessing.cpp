@@ -13,7 +13,7 @@ void MainImageProcessing(unsigned char* InputImage, unsigned int ImageSizeX, uns
 	BMP24RGBIMAGE RGBImage1;											//	宣告RGBImage1用於BMP24RGB型態圖像資料處理
 	RGBImage1.XSIZE = ImageSizeX;										//	傳遞XSIZE資訊
 	RGBImage1.YSIZE = ImageSizeY;										//	傳遞YSIZE資訊
-	RGBImage1.IMAGE_DATA = (BMP24RGB*)InputImage;						//	傳遞影像資料
+	RGBImage1.IMAGE_DATA = (BMP24RGB*)TransformImage_YUY2(InputImage);						//	傳遞影像資料
 	unsigned char Y, U, V, R, G, B;
 	for (unsigned int i = 1; i < 64000; i++)
 	{
