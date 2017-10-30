@@ -92,12 +92,12 @@
 #endif // !BMP24RGBIMAGE
 
 #ifndef HSVIMAGE
-	typedef struct HSVIMAGE													//	宣告HSVIMAGE資料結構
-	{																		//	進入HSVIMAGE資料結構
-		unsigned int XSIZE;													//	宣告X軸像素變數
-		unsigned int YSIZE;													//	宣告Y軸像素變數
-		HSV *IMAGE_DATA;													//	宣告影像資料指標*IMAGE_DATA
-	}HSVIMAGE;																//	結束HSVIMAGE資料結構
+	typedef struct HSVIMAGE												//	宣告HSVIMAGE資料結構
+	{																	//	進入HSVIMAGE資料結構
+		unsigned int XSIZE;												//	宣告X軸像素變數
+		unsigned int YSIZE;												//	宣告Y軸像素變數
+		HSV *IMAGE_DATA;												//	宣告影像資料指標*IMAGE_DATA
+	}HSVIMAGE;															//	結束HSVIMAGE資料結構
 #endif // !HSVIMAGE
 
 /*	HaarWaveletMode集合中宣告Haar濾波模式，說明如下：
@@ -107,13 +107,16 @@
 		VerticalLowPass		－	垂直方向低通濾波
 	各模式計算細節記錄於BMPHaarWavelet副程式宣告處說明
  */
-enum HaarWaveletMode													//	宣告HaarWaveletMode集合(用於HaarWavelet副程式)
-{																		//	進入HaarWaveletMode集合(用於HaarWavelet副程式)
-	HorizontalHighPass,													//	定義Haar小波轉換模式HorizontalHighPass
-	HorizontalLowPass,													//	定義Haar小波轉換模式HorizontalLowPass
-	VerticalHighPass,													//	定義Haar小波轉換模式VerticalHighPass
-	VerticalLowPass,													//	定義Haar小波轉換模式VerticalLowPass
-};																		//	結束HaarWaveletMode集合(用於HaarWavelet副程式)
+#ifndef HaarWaveletMode
+	enum HaarWaveletMode												//	宣告HaarWaveletMode集合(用於HaarWavelet副程式)
+	{																	//	進入HaarWaveletMode集合(用於HaarWavelet副程式)
+		HorizontalHighPass,												//	定義Haar小波轉換模式HorizontalHighPass
+		HorizontalLowPass,												//	定義Haar小波轉換模式HorizontalLowPass
+		VerticalHighPass,												//	定義Haar小波轉換模式VerticalHighPass
+		VerticalLowPass,												//	定義Haar小波轉換模式VerticalLowPass
+	};																	//	結束HaarWaveletMode集合(用於HaarWavelet副程式)
+#endif // !HaarWaveletMode
+
 /*	HaarWavelet2Mode集合中宣告二階Haar濾波模式，命名格式說明如下：
 		[水平方向濾波方式]+[垂直方向濾波方式]
 	即：
