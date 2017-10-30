@@ -18,8 +18,12 @@
 	#define True true													//	定義True為true
 #endif // !True
 
-#define False false														//	定義False為false
+#ifndef False
+	#define False false													//	定義False為false
+#endif // !False
+
 //#define DebugMode														//	定義程式為DebugMode
+
 #define _USE_MATH_DEFINES												//	定義_USE_MATH_DEFINES
 
 //-----全域結構、資料型態宣告區-----
