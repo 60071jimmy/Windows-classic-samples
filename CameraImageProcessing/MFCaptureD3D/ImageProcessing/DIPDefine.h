@@ -14,7 +14,10 @@
 	//	定義檔案根目錄路徑位置(用於開啟圖檔)
 #endif // !FILE_ROOT_PATH
 
-#define True true														//	定義True為true
+#ifndef True
+	#define True true													//	定義True為true
+#endif // !True
+
 #define False false														//	定義False為false
 //#define DebugMode														//	定義程式為DebugMode
 #define _USE_MATH_DEFINES												//	定義_USE_MATH_DEFINES
