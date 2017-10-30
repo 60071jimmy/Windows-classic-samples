@@ -12,7 +12,7 @@ void MainImageProcessing(unsigned char* InputImage, unsigned int ImageSizeX, uns
 {																		//	進入MainImageProcessing副程式
 	if (ImageSizeX == 0 || ImageSizeY == 0)								//	若傳入影像之長或寬為0
 	{																	//	進入if敘述
-		return;
+		return;															//	return MainImageProcessing function
 	}																	//	結束if敘述
 	BMP24RGBIMAGE RGBImage1;											//	宣告RGBImage1用於BMP24RGB型態圖像資料處理
 	RGBImage1.XSIZE = ImageSizeX;										//	傳遞XSIZE資訊
