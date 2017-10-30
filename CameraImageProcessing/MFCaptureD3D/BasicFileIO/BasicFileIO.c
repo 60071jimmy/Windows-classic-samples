@@ -10,7 +10,8 @@
 #include <stdio.h>														//	引入標頭檔stdio.h
 #include <stdlib.h>														//	引入標頭檔stdlib.h
 #include <string.h>														//	引入標頭檔string.h
-#include <unistd.h>														//	引入標頭檔unistd.h
+#include "..\\unistd.h"													//	引入標頭檔unistd.h
+
 //-----副程式實作-----
 bool FileExistCheck(char *file_name)									//	FileExistCheck(檔案存在檢查)副程式
 {																		//	進入FileExistCheck(檔案存在檢查)副程式

@@ -4,13 +4,14 @@
 	Develop by Jimmy HU
 	This program is licensed under GNU General Public License v3.
  */
+#pragma once
 //-----引入標頭檔-----
 #include <math.h>														//	引入標頭檔math.h
 #include <stdbool.h>													//	引入標頭檔stdbool.h
 #include <stdio.h>														//	引入標頭檔stdio.h
 #include <stdlib.h>														//	引入標頭檔stdlib.h
 #include <string.h>														//	引入標頭檔string.h
-#include <unistd.h>														//	引入標頭檔unistd.h
+#include "..\\unistd.h"													//	引入標頭檔unistd.h
 //-----副程式宣告區----- 
 /*	FileExistCheck副程式用於
 	在讀寫檔案前，有時需先確認檔案是否已存在，在此設計FileExistCheck(檔案存在檢查)副程式執行檔案存在與否之檢查工作。
