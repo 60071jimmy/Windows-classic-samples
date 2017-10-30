@@ -82,12 +82,15 @@
 	}BMPIMAGE;															//	結束BMPIMAGE資料結構
 #endif // !BMPIMAGE
 
-typedef struct BMP24RGBIMAGE											//	宣告BMP24RGBIMAGE資料結構
-{																		//	進入BMP24RGBIMAGE資料結構
-	unsigned int XSIZE;													//	宣告X軸像素變數
-	unsigned int YSIZE;													//	宣告Y軸像素變數
-	BMP24RGB *IMAGE_DATA;												//	宣告影像資料指標*IMAGE_DATA
-}BMP24RGBIMAGE;															//	結束BMP24RGBIMAGE資料結構
+#ifndef BMP24RGBIMAGE
+	typedef struct BMP24RGBIMAGE										//	宣告BMP24RGBIMAGE資料結構
+	{																	//	進入BMP24RGBIMAGE資料結構
+		unsigned int XSIZE;												//	宣告X軸像素變數
+		unsigned int YSIZE;												//	宣告Y軸像素變數
+		BMP24RGB *IMAGE_DATA;											//	宣告影像資料指標*IMAGE_DATA
+	}BMP24RGBIMAGE;														//	結束BMP24RGBIMAGE資料結構
+#endif // !BMP24RGBIMAGE
+
 typedef struct HSVIMAGE													//	宣告HSVIMAGE資料結構
 {																		//	進入HSVIMAGE資料結構
 	unsigned int XSIZE;													//	宣告X軸像素變數
