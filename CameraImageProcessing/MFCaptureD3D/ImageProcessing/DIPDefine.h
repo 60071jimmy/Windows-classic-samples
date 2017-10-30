@@ -36,13 +36,15 @@
 	}BMP24RGB;																//	結束BMP24RGB資料結構
 #endif // !BMP24RGB
 
+#ifndef HSV
+	typedef struct HSV														//	宣告HSV資料結構
+	{																		//	進入HSV資料結構
+		long double H;														//	宣告H成分變數(H為色相Hue，值域為0～360)
+		long double S;														//	宣告S成分變數(S為飽和度Saturation，值域為0～1)
+		long double V;														//	宣告V成分變數(V為明度Value，值域為0～255)
+	}HSV;																	//	結束HSV資料結構
+#endif // !HSV
 
-typedef struct HSV														//	宣告HSV資料結構
-{																		//	進入HSV資料結構
-	long double H;														//	宣告H成分變數(H為色相Hue，值域為0～360)
-	long double S;														//	宣告S成分變數(S為飽和度Saturation，值域為0～1)
-	long double V;														//	宣告V成分變數(V為明度Value，值域為0～255)
-}HSV;																	//	結束HSV資料結構
 /*	BMPIMAGE結構建立BMP影像物件，該物件包含：
 		●檔名(FILENAME)，長度最長為MAX_PATH
 		●圖像寬度(XSIZE)
