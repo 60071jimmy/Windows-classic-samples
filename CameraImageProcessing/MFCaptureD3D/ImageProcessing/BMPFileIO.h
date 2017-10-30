@@ -3,9 +3,16 @@
 	Develop by Jimmy HU <s103360021@gmail.com>
 	This program is licensed under GNU General Public License v3.
 */
-
+#pragma once
 //-----include header files, 引入標頭檔-----
 #include "DIPDefine.h"													//	include DIPDefine.h header files, 引入標頭檔DIPDefine.h
+#include "..\\BasicFileIO\\BasicFileIO.h"								//	include BasicFileIO.h header files, 引入標頭檔BasicFileIO.h
+#include <math.h>														//	引入標頭檔math.h
+#include <stdbool.h>													//	引入標頭檔stdbool.h
+#include <stdio.h>														//	引入標頭檔stdio.h
+#include <stdlib.h>														//	引入標頭檔stdlib.h
+#include <string.h>														//	引入標頭檔string.h
+#include "..\\unistd.h"													//	引入標頭檔unistd.h
 
 //-----funtion declaration, 副程式宣告區-----
 
