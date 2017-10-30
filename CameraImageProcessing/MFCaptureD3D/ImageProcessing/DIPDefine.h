@@ -27,12 +27,16 @@
 #define _USE_MATH_DEFINES												//	定義_USE_MATH_DEFINES
 
 //-----全域結構、資料型態宣告區-----
-typedef struct BMP24RGB													//	宣告24位元BMP圖檔像素RGB資料結構
-{																		//	進入BMP24RGB資料結構
-	unsigned char R;													//	宣告R成分變數
-	unsigned char G;													//	宣告G成分變數
-	unsigned char B;													//	宣告B成分變數
-}BMP24RGB;																//	結束BMP24RGB資料結構
+#ifndef BMP24RGB
+	typedef struct BMP24RGB													//	宣告24位元BMP圖檔像素RGB資料結構
+	{																		//	進入BMP24RGB資料結構
+		unsigned char R;													//	宣告R成分變數
+		unsigned char G;													//	宣告G成分變數
+		unsigned char B;													//	宣告B成分變數
+	}BMP24RGB;																//	結束BMP24RGB資料結構
+#endif // !BMP24RGB
+
+
 typedef struct HSV														//	宣告HSV資料結構
 {																		//	進入HSV資料結構
 	long double H;														//	宣告H成分變數(H為色相Hue，值域為0～360)
