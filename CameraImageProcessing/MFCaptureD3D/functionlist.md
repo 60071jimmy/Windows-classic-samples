@@ -76,19 +76,22 @@
 - ValueToBMP24RGB(將Value轉換至圖檔)
 - HSVSkin(HSV色彩空間皮膚偵測副程式)
 
-## 基礎副程式(檔案I/O、排序、字串處理、顯示等)
+## 基礎副程式(排序、字串處理、顯示等)
 
 - BmpFillingByteCalc(BMP圖檔填補位元計算副程式)
-- FileExistCheck(檔案存在檢查副程式)
-- FileReadPermissionCheck(檔案讀取權限檢查副程式)
-- FileWritePermissionCheck(檔案寫入權限檢查副程式)
-- FileWrite(檔案寫入副程式)
 - UCharBubbleSort(unsigned char型態變數氣泡排序副程式)
 - Compare(變數比較副程式)
 - CountCharPointStr(計算字串指標長度副程式)
 - Show_char_point_str(顯示字串副程式)
 - ShowUCharPointStr(顯示無號字串副程式)
 - ShowLongDouble(顯示長浮點數副程式)
+
+### 基礎檔案I/O(BasicFileIO)
+
+- FileExistCheck(檔案存在檢查副程式)
+- FileReadPermissionCheck(檔案讀取權限檢查副程式)
+- FileWritePermissionCheck(檔案寫入權限檢查副程式)
+- FileWrite(檔案寫入副程式)
 
 ## 測試副程式(用於測試上列副程式功能)
 
