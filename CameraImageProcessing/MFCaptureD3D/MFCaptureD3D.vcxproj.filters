@@ -19,6 +19,12 @@
     <Filter Include="Source Files\ImageProcessing">
       <UniqueIdentifier>{0fe21f98-82e9-4ffc-96c6-9ec9cd243487}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\BasicFileIO">
+      <UniqueIdentifier>{01c13835-7a11-4d14-9443-176cfcd595f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\BasicFileIO">
+      <UniqueIdentifier>{854ca3ba-3d0f-497d-8b60-90a140725723}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="device.cpp">
@@ -35,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="ImageProcessing\MainImageProcessing.cpp">
       <Filter>Source Files\ImageProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicFileIO\BasicFileIO.c">
+      <Filter>Source Files\BasicFileIO</Filter>
     </ClCompile>
     <ClCompile Include="ImageProcessing\BMPFileIO.c">
       <Filter>Source Files\ImageProcessing</Filter>
@@ -70,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="ImageProcessing\BMPFileIO.h">
       <Filter>Header Files\ImageProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicFileIO\BasicFileIO.h">
+      <Filter>Header Files\BasicFileIO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
