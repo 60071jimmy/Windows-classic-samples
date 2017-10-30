@@ -3,7 +3,7 @@
 	This program is licensed under GNU General Public License v3.
 	DIPDefine.h定義影像處理函數所使用之結構、資料型態
  */
-
+#pragma once
 //-----全域定義區-----
 #ifndef MAX_PATH
 	#define MAX_PATH 256												//	定義檔案路徑最長長度為256字元
