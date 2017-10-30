@@ -5,7 +5,7 @@
 */
 
 //-----include header files, 引入標頭檔-----
-#include "DIPDefine.h"													//	引入標頭檔DIPDefine.h
+#include "DIPDefine.h"													//	include DIPDefine.h header files, 引入標頭檔DIPDefine.h
 
 //-----funtion declaration, 副程式宣告區-----
 
