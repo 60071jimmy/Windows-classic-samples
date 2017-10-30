@@ -28,21 +28,21 @@
 
 //-----全域結構、資料型態宣告區-----
 #ifndef BMP24RGB
-	typedef struct BMP24RGB													//	宣告24位元BMP圖檔像素RGB資料結構
-	{																		//	進入BMP24RGB資料結構
-		unsigned char R;													//	宣告R成分變數
-		unsigned char G;													//	宣告G成分變數
-		unsigned char B;													//	宣告B成分變數
-	}BMP24RGB;																//	結束BMP24RGB資料結構
+	typedef struct BMP24RGB												//	宣告24位元BMP圖檔像素RGB資料結構
+	{																	//	進入BMP24RGB資料結構
+		unsigned char R;												//	宣告R成分變數
+		unsigned char G;												//	宣告G成分變數
+		unsigned char B;												//	宣告B成分變數
+	}BMP24RGB;															//	結束BMP24RGB資料結構
 #endif // !BMP24RGB
 
 #ifndef HSV
-	typedef struct HSV														//	宣告HSV資料結構
-	{																		//	進入HSV資料結構
-		long double H;														//	宣告H成分變數(H為色相Hue，值域為0～360)
-		long double S;														//	宣告S成分變數(S為飽和度Saturation，值域為0～1)
-		long double V;														//	宣告V成分變數(V為明度Value，值域為0～255)
-	}HSV;																	//	結束HSV資料結構
+	typedef struct HSV													//	宣告HSV資料結構
+	{																	//	進入HSV資料結構
+		long double H;													//	宣告H成分變數(H為色相Hue，值域為0～360)
+		long double S;													//	宣告S成分變數(S為飽和度Saturation，值域為0～1)
+		long double V;													//	宣告V成分變數(V為明度Value，值域為0～255)
+	}HSV;																//	結束HSV資料結構
 #endif // !HSV
 
 /*	BMPIMAGE結構建立BMP影像物件，該物件包含：
@@ -52,33 +52,36 @@
 		●填補位元(FILLINGBYTE)，配合BMP圖像資料格式
 		●圖像資料(IMAGE_DATA)
  */
-typedef struct BMPIMAGE													//	宣告BMPIMAGE資料結構
-{																		//	進入BMPIMAGE資料結構
-	char FILENAME[MAX_PATH];											//	宣告輸入讀取檔案檔名變數FILENAME
-	/*	IMAGE_DATA影像指標可使用陣列方式存取，在一張影像中：
-　　　 __________________
-　　　 |                |
-　　　 |                |
-　　　 |                |
-　　　 |                |
-　　　 |                |
-　　　 |                |
-　　　 |________________|
-　　　  ↑為第一像素 
-　　　 	IMAGE_DATA[0]代表第一像素的藍色(B)，由淡到濃分成8位元，0代表沒有藍色，255代表全藍 
-　　　 	IMAGE_DATA[1]代表第一像素的綠色(G)，由淡到濃分成8位元，0代表沒有綠色，255代表全綠
-　　　 	IMAGE_DATA[2]代表第一像素的紅色(R)，由淡到濃分成8位元，0代表沒有紅色，255代表全紅
-　　　 	IMAGE_DATA[3]代表第二像素的藍色(B)，由淡到濃分成8位元，0代表沒有藍色，255代表全藍 
-		IMAGE_DATA[4]代表第二像素的綠色(G)，由淡到濃分成8位元，0代表沒有綠色，255代表全綠
-		IMAGE_DATA[5]代表第二像素的紅色(R)，由淡到濃分成8位元，0代表沒有紅色，255代表全紅
-		但由於BMP檔案格式可能存在填補位元(當影像寬度不為4的倍數時)，IMAGE_DATA陣列的index對應至圖像像素資料有可能不連續，
-		以RAWImageToArray將IMAGE_DATA陣列轉換至BMP24RGB型態二維陣列，與二維圖像完全對應
-	*/
-	unsigned int XSIZE;													//	宣告X軸像素變數
-	unsigned int YSIZE;													//	宣告Y軸像素變數
-	unsigned char FILLINGBYTE;											//	宣告填充位元組大小
-	unsigned char *IMAGE_DATA;											//	宣告影像資料指標*IMAGE_DATA
-}BMPIMAGE;																//	結束BMPIMAGE資料結構
+#ifndef BMPIMAGE
+	typedef struct BMPIMAGE												//	宣告BMPIMAGE資料結構
+	{																	//	進入BMPIMAGE資料結構
+		char FILENAME[MAX_PATH];										//	宣告輸入讀取檔案檔名變數FILENAME
+		/*	IMAGE_DATA影像指標可使用陣列方式存取，在一張影像中：
+　　　		__________________
+　　　		|                |
+　　　		|                |
+　　　		|                |
+　　　		|                |
+　　　		|                |
+　　　		|                |
+　　　		|________________|
+　　　		 ↑為第一像素 
+　　　 		IMAGE_DATA[0]代表第一像素的藍色(B)，由淡到濃分成8位元，0代表沒有藍色，255代表全藍 
+　　　 		IMAGE_DATA[1]代表第一像素的綠色(G)，由淡到濃分成8位元，0代表沒有綠色，255代表全綠
+　　　 		IMAGE_DATA[2]代表第一像素的紅色(R)，由淡到濃分成8位元，0代表沒有紅色，255代表全紅
+　　　 		IMAGE_DATA[3]代表第二像素的藍色(B)，由淡到濃分成8位元，0代表沒有藍色，255代表全藍 
+			IMAGE_DATA[4]代表第二像素的綠色(G)，由淡到濃分成8位元，0代表沒有綠色，255代表全綠
+			IMAGE_DATA[5]代表第二像素的紅色(R)，由淡到濃分成8位元，0代表沒有紅色，255代表全紅
+			但由於BMP檔案格式可能存在填補位元(當影像寬度不為4的倍數時)，IMAGE_DATA陣列的index對應至圖像像素資料有可能不連續，
+			以RAWImageToArray將IMAGE_DATA陣列轉換至BMP24RGB型態二維陣列，與二維圖像完全對應
+		*/
+		unsigned int XSIZE;												//	宣告X軸像素變數
+		unsigned int YSIZE;												//	宣告Y軸像素變數
+		unsigned char FILLINGBYTE;										//	宣告填充位元組大小
+		unsigned char *IMAGE_DATA;										//	宣告影像資料指標*IMAGE_DATA
+	}BMPIMAGE;															//	結束BMPIMAGE資料結構
+#endif // !BMPIMAGE
+
 typedef struct BMP24RGBIMAGE											//	宣告BMP24RGBIMAGE資料結構
 {																		//	進入BMP24RGBIMAGE資料結構
 	unsigned int XSIZE;													//	宣告X軸像素變數
