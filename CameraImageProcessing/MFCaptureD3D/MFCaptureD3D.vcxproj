@@ -175,6 +175,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="device.cpp" />
+    <ClCompile Include="ImageProcessing\BMPFileIO.c" />
     <ClCompile Include="ImageProcessing\Conversion.cpp" />
     <ClCompile Include="ImageProcessing\MainImageProcessing.cpp" />
     <ClCompile Include="preview.cpp" />
@@ -183,6 +184,7 @@
   <ItemGroup>
     <ClInclude Include="BufferLock.h" />
     <ClInclude Include="device.h" />
+    <ClInclude Include="ImageProcessing\BMPFileIO.h" />
     <ClInclude Include="ImageProcessing\Conversion.h" />
     <ClInclude Include="ImageProcessing\DIPDefine.h" />
     <ClInclude Include="ImageProcessing\MainImageProcessing.h" />
@@ -196,6 +198,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="functionlist.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
