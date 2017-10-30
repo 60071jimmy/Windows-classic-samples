@@ -9,8 +9,11 @@
 	#define MAX_PATH 256												//	定義檔案路徑最長長度為256字元
 #endif // !MAX_PATH
 
-#define FILE_ROOT_PATH "\\"
-//	定義檔案根目錄路徑位置(用於開啟圖檔)
+#ifndef FILE_ROOT_PATH
+	#define FILE_ROOT_PATH "\\"
+	//	定義檔案根目錄路徑位置(用於開啟圖檔)
+#endif // !FILE_ROOT_PATH
+
 #define True true														//	定義True為true
 #define False false														//	定義False為false
 //#define DebugMode														//	定義程式為DebugMode
