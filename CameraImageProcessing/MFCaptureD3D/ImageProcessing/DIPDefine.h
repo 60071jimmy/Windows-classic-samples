@@ -130,13 +130,16 @@
 		水平方向低通濾波(呼叫HaarWavelet副程式HorizontalLowPass模式)、垂直方向低通濾波(呼叫HaarWavelet副程式VerticalLowPass模式)
 	並給定二進位冪次方數值，以便選定多重模式(如：HighHigh|HighLow、HighLow|LowHigh)
  */
-enum HaarWavelet2Mode													//	宣告HaarWavelet2Mode列舉(用於HaarWavelet2副程式)
-{																		//	進入HaarWavelet2Mode列舉(用於HaarWavelet2副程式)
-	HighHigh = 1,														//	定義二階Haar小波轉換模式HighHigh
-	HighLow = 2,														//	定義二階Haar小波轉換模式HighLow
-	LowHigh = 4,														//	定義二階Haar小波轉換模式LowHigh
-	LowLow = 8,															//	定義二階Haar小波轉換模式LowLow
-};																		//	結束HaarWavelet2Mode列舉(用於HaarWavelet2副程式)
+#ifndef HaarWavelet2Mode
+	enum HaarWavelet2Mode												//	宣告HaarWavelet2Mode列舉(用於HaarWavelet2副程式)
+	{																	//	進入HaarWavelet2Mode列舉(用於HaarWavelet2副程式)
+		HighHigh = 1,													//	定義二階Haar小波轉換模式HighHigh
+		HighLow = 2,													//	定義二階Haar小波轉換模式HighLow
+		LowHigh = 4,													//	定義二階Haar小波轉換模式LowHigh
+		LowLow = 8,														//	定義二階Haar小波轉換模式LowLow
+	};																	//	結束HaarWavelet2Mode列舉(用於HaarWavelet2副程式)
+#endif // !HaarWavelet2Mode
+
 
 /*	YUVGUID用於YUVtoRGB24函數作為YUV編碼型態參數
 	
@@ -164,26 +167,28 @@ enum HaarWavelet2Mode													//	宣告HaarWavelet2Mode列舉(用於HaarWave
 
 	Reference：http://blog.csdn.net/zoutian007/article/details/7585511
 */
-enum YUVGUID															//	宣告YUVGUID列舉(用於YUV與RGB轉換)
-{																		//	進入YUVGUID列舉
-	MEDIASUBTYPE_RGB1 = 1,												//	條列YUVGUID內容
-	MEDIASUBTYPE_RGB4 = 2,												//	條列YUVGUID內容
-	MEDIASUBTYPE_RGB8 = 3,												//	條列YUVGUID內容
-	MEDIASUBTYPE_RGB565 = 4,											//	條列YUVGUID內容
-	MEDIASUBTYPE_RGB555 = 5,											//	條列YUVGUID內容
-	MEDIASUBTYPE_RGB24 = 6,												//	條列YUVGUID內容
-	MEDIASUBTYPE_RGB32 = 7,												//	條列YUVGUID內容
-	MEDIASUBTYPE_ARGB32 = 8,											//	條列YUVGUID內容
-	MEDIASUBTYPE_YUY2 = 9,												//	條列YUVGUID內容
-	MEDIASUBTYPE_YUYV = 10,												//	條列YUVGUID內容
-	MEDIASUBTYPE_YVYU = 11,												//	條列YUVGUID內容
-	MEDIASUBTYPE_UYVY = 12,												//	條列YUVGUID內容
-	MEDIASUBTYPE_AYUV = 13,												//	條列YUVGUID內容
-	MEDIASUBTYPE_Y41P = 14,												//	條列YUVGUID內容
-	MEDIASUBTYPE_Y411 = 15,												//	條列YUVGUID內容
-	MEDIASUBTYPE_Y211 = 16,												//	條列YUVGUID內容
-	MEDIASUBTYPE_IF09 = 17,												//	條列YUVGUID內容
-	MEDIASUBTYPE_IYUV = 18,												//	條列YUVGUID內容
-	MEDIASUBTYPE_YV12 = 19,												//	條列YUVGUID內容
-	MEDIASUBTYPE_YVU9 = 20,												//	條列YUVGUID內容
-};																		//	結束YUVGUID列舉
+#ifndef YUVGUID
+	enum YUVGUID														//	宣告YUVGUID列舉(用於YUV與RGB轉換)
+	{																	//	進入YUVGUID列舉
+		MEDIASUBTYPE_RGB1 = 1,											//	條列YUVGUID內容
+		MEDIASUBTYPE_RGB4 = 2,											//	條列YUVGUID內容
+		MEDIASUBTYPE_RGB8 = 3,											//	條列YUVGUID內容
+		MEDIASUBTYPE_RGB565 = 4,										//	條列YUVGUID內容
+		MEDIASUBTYPE_RGB555 = 5,										//	條列YUVGUID內容
+		MEDIASUBTYPE_RGB24 = 6,											//	條列YUVGUID內容
+		MEDIASUBTYPE_RGB32 = 7,											//	條列YUVGUID內容
+		MEDIASUBTYPE_ARGB32 = 8,										//	條列YUVGUID內容
+		MEDIASUBTYPE_YUY2 = 9,											//	條列YUVGUID內容
+		MEDIASUBTYPE_YUYV = 10,											//	條列YUVGUID內容
+		MEDIASUBTYPE_YVYU = 11,											//	條列YUVGUID內容
+		MEDIASUBTYPE_UYVY = 12,											//	條列YUVGUID內容
+		MEDIASUBTYPE_AYUV = 13,											//	條列YUVGUID內容
+		MEDIASUBTYPE_Y41P = 14,											//	條列YUVGUID內容
+		MEDIASUBTYPE_Y411 = 15,											//	條列YUVGUID內容
+		MEDIASUBTYPE_Y211 = 16,											//	條列YUVGUID內容
+		MEDIASUBTYPE_IF09 = 17,											//	條列YUVGUID內容
+		MEDIASUBTYPE_IYUV = 18,											//	條列YUVGUID內容
+		MEDIASUBTYPE_YV12 = 19,											//	條列YUVGUID內容
+		MEDIASUBTYPE_YVU9 = 20,											//	條列YUVGUID內容
+	};																	//	結束YUVGUID列舉
+#endif // !YUVGUID
