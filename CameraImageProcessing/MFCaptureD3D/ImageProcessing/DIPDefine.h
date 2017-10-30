@@ -91,12 +91,15 @@
 	}BMP24RGBIMAGE;														//	結束BMP24RGBIMAGE資料結構
 #endif // !BMP24RGBIMAGE
 
-typedef struct HSVIMAGE													//	宣告HSVIMAGE資料結構
-{																		//	進入HSVIMAGE資料結構
-	unsigned int XSIZE;													//	宣告X軸像素變數
-	unsigned int YSIZE;													//	宣告Y軸像素變數
-	HSV *IMAGE_DATA;													//	宣告影像資料指標*IMAGE_DATA
-}HSVIMAGE;																//	結束HSVIMAGE資料結構
+#ifndef HSVIMAGE
+	typedef struct HSVIMAGE													//	宣告HSVIMAGE資料結構
+	{																		//	進入HSVIMAGE資料結構
+		unsigned int XSIZE;													//	宣告X軸像素變數
+		unsigned int YSIZE;													//	宣告Y軸像素變數
+		HSV *IMAGE_DATA;													//	宣告影像資料指標*IMAGE_DATA
+	}HSVIMAGE;																//	結束HSVIMAGE資料結構
+#endif // !HSVIMAGE
+
 /*	HaarWaveletMode集合中宣告Haar濾波模式，說明如下：
 		HorizontalHighPass	－	水平方向高通濾波
 		HorizontalLowPass	－	水平方向低通濾波
