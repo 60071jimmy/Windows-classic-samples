@@ -5,7 +5,7 @@
 */
 
 //-----include header files, 引入標頭檔-----
-#include "BMPFileIO.h"													//	引入BMPFileIO.h
+#include "BMPFileIO.h"													//	include "BMPFileIO.h" header files, 引入BMPFileIO.h
 
 //----BMP圖檔大小(Byte)讀取副程式----
 unsigned long BmpReadFilesize(const char *filename, const bool FilenameExtension)
