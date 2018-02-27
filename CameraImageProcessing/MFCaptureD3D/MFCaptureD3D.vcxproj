@@ -190,6 +190,7 @@
     <ClInclude Include="ImageProcessing\Conversion.h" />
     <ClInclude Include="ImageProcessing\DIPDefine.h" />
     <ClInclude Include="ImageProcessing\MainImageProcessing.h" />
+    <ClInclude Include="ImageProcessing\OtherBasic.h" />
     <ClInclude Include="MFCaptureD3D.h" />
     <ClInclude Include="preview.h" />
     <ClInclude Include="resource.h" />
@@ -200,6 +201,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />
+    <Text Include="Reference.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="functionlist.md" />
