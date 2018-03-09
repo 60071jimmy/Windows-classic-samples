@@ -174,18 +174,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BasicFileIO\BasicFileIO.c" />
     <ClCompile Include="device.cpp" />
+    <ClCompile Include="ImageProcessing\BMPFileIO.c" />
     <ClCompile Include="ImageProcessing\Conversion.cpp" />
     <ClCompile Include="ImageProcessing\MainImageProcessing.cpp" />
     <ClCompile Include="preview.cpp" />
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BasicFileIO\BasicFileIO.h" />
     <ClInclude Include="BufferLock.h" />
     <ClInclude Include="device.h" />
+    <ClInclude Include="ImageProcessing\BMPFileIO.h" />
     <ClInclude Include="ImageProcessing\Conversion.h" />
     <ClInclude Include="ImageProcessing\DIPDefine.h" />
     <ClInclude Include="ImageProcessing\MainImageProcessing.h" />
+    <ClInclude Include="ImageProcessing\OtherBasic.h" />
     <ClInclude Include="MFCaptureD3D.h" />
     <ClInclude Include="preview.h" />
     <ClInclude Include="resource.h" />
@@ -196,6 +201,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />
+    <Text Include="Reference.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="functionlist.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

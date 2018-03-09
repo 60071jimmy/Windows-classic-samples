@@ -1,26 +1,26 @@
-/*	¼Æ¦ì¼v¹³³B²z¥D¨ç¦¡
+/*	æ•¸ä½å½±åƒè™•ç†ä¸»å‡½å¼
 	Develop by Jimmy HU <s103360021@gmail.com>
 	This program is licensed under GNU General Public License v3.
 */
 
-//-----include header files, ¤Ş¤J¼ĞÀYÀÉ-----
-#include "MainImageProcessing.h"										//	¤Ş¤J¼ĞÀYÀÉMainImageProcessing.h
+//-----include header files, å¼•å…¥æ¨™é ­æª”-----
+#include "MainImageProcessing.h"										//	å¼•å…¥æ¨™é ­æª”MainImageProcessing.h
 
-//-----funtion implementation, °Æµ{¦¡¹ê§@-----
+//-----funtion implementation, å‰¯ç¨‹å¼å¯¦ä½œ-----
 void MainImageProcessing(unsigned char* InputImage, unsigned int ImageSizeX, unsigned int ImageSizeY)
-//	MainImageProcessing°Æµ{¦¡
-{																		//	¶i¤JMainImageProcessing°Æµ{¦¡
-	if (ImageSizeX == 0 || ImageSizeY == 0)
-	{
-		return;
-	}
-	BMP24RGBIMAGE RGBImage1;											//	«Å§iRGBImage1¥Î©óBMP24RGB«¬ºA¹Ï¹³¸ê®Æ³B²z
-	RGBImage1.XSIZE = ImageSizeX;										//	¶Ç»¼XSIZE¸ê°T
-	RGBImage1.YSIZE = ImageSizeY;										//	¶Ç»¼YSIZE¸ê°T
+//	MainImageProcessingå‰¯ç¨‹å¼
+{																		//	é€²å…¥MainImageProcessingå‰¯ç¨‹å¼
+	if (ImageSizeX == 0 || ImageSizeY == 0)								//	è‹¥å‚³å…¥å½±åƒä¹‹é•·æˆ–å¯¬ç‚º0
+	{																	//	é€²å…¥ifæ•˜è¿°
+		return;															//	return MainImageProcessing function
+	}																	//	çµæŸifæ•˜è¿°
+	BMP24RGBIMAGE RGBImage1;											//	å®£å‘ŠRGBImage1ç”¨æ–¼BMP24RGBå‹æ…‹åœ–åƒè³‡æ–™è™•ç†
+	RGBImage1.XSIZE = ImageSizeX;										//	å‚³éXSIZEè³‡è¨Š
+	RGBImage1.YSIZE = ImageSizeY;										//	å‚³éYSIZEè³‡è¨Š
 	RGBImage1.IMAGE_DATA = RGBQUADtoBMP24RGB((RGBQUAD*)InputImage, ImageSizeX, ImageSizeY);
-	//	¶Ç»¼¼v¹³¸ê®Æ
+	//	å‚³éå½±åƒè³‡æ–™
 
-	//-----¥Í¦¨¼v¹³ÀÉ¦W-----
+	//-----ç”Ÿæˆå½±åƒæª”å-----
 	char* FileName = NULL;
 	char* FileNameBMP = NULL;
 	int Counter = 1;
@@ -34,519 +34,265 @@ void MainImageProcessing(unsigned char* InputImage, unsigned int ImageSizeX, uns
 	} while (FileExistCheck(FileNameBMP));
 
 	BmpWriteV1(ArrayToRAWImage(RGBImage1.IMAGE_DATA, RGBImage1.XSIZE, RGBImage1.YSIZE), RGBImage1.XSIZE, RGBImage1.YSIZE, FileName);
-	//	©I¥sBmpToGraylevel±N¼v¹³Âà¬°¦Ç¶¥«á¡A©I¥sArrayToRAWImage°Æµ{¦¡±NAnalysisDataÂà´«¦^BMP¼v¹³¸ê®Æ®æ¦¡«á¥HBmpWrite°Æµ{¦¡¼g¤JBMPÀÉ
+	//	å‘¼å«BmpToGraylevelå°‡å½±åƒè½‰ç‚ºç°éšå¾Œï¼Œå‘¼å«ArrayToRAWImageå‰¯ç¨‹å¼å°‡AnalysisDataè½‰æ›å›BMPå½±åƒè³‡æ–™æ ¼å¼å¾Œä»¥BmpWriteå‰¯ç¨‹å¼å¯«å…¥BMPæª”
 	free((void*)RGBImage1.IMAGE_DATA);
 	RGBImage1.IMAGE_DATA = NULL;
 	free((void*)FileName);
 	FileName = NULL;
 	free((void*)FileNameBMP);
 	FileNameBMP = NULL;
-	return;																//	µ²§ôMainImageProcessing°Æµ{¦¡
-}																		//	µ²§ôMainImageProcessing°Æµ{¦¡
+	return;																//	çµæŸMainImageProcessingå‰¯ç¨‹å¼
+}																		//	çµæŸMainImageProcessingå‰¯ç¨‹å¼
 
-//----BMP¹ÏÀÉ¤j¤p(Byte)Åª¨ú°Æµ{¦¡----
-unsigned long BmpReadFilesize(const char *filename, const bool FilenameExtension)
-//	BmpReadFilesize°Æµ{¦¡
-{																		//	¶i¤JBMP¹ÏÀÉ¤j¤p(Byte)Åª¨ú°Æµ{¦¡
-	//***ÀË¬d°Æµ{¦¡¶Ç¤JÀÉ¦W***
-	if(filename == NULL)												//	­Y¿é¤Jfilename¬°NULL
-	{																	//	¶i¤Jif±Ô­z
-		printf("ÀÉ®×¸ô®|¿é¤J¬°NULL\n");									//	Åã¥Ü"ÀÉ®×¸ô®|¿é¤J¬°NULL"¨Ã´«¦æ
-		return 0;														//	¦^¶Ç¼Æ­È0¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	//***°Ñ¦ÒFilenameExtensionÅÜ¼Æ±±¨îÀÉ¦W³B²z¤è¦¡***
-	char fname_bmp[MAX_PATH];											//	«Å§iÀÉ®×¦WºÙfname_bmp°}¦CÅÜ¼Æ(³Ì¦hMAX_PATH­Ó¦r¤¸) 
-	if(FilenameExtension == false)										//	­Y¿é¤J°Ñ¼Æfname_bmp¤£¨ã°ÆÀÉ¦W
-	{																	//	¶i¤Jif±Ô­z
-		sprintf(fname_bmp, "%s.bmp", filename);							//	²£¥Í§¹¾ãÀÉ®×¸ô®|¨Ã¦s©ñ¦Üfname_bmp°}¦C
-	}																	//	µ²§ôif±Ô­z
-	else																//	­Y¿é¤J°Ñ¼Æfname_bmp¤w¥]§t°ÆÀÉ¦W
-	{																	//	¶i¤Jelse±Ô­z
-		strcpy(fname_bmp,filename);										//	ª½±µ¶ñ¤JÀÉ¦W¸ô®|
-	}																	//	µ²§ôelse±Ô­z
-	printf("¥¿¦bÅª¨ú¤U¦CÀÉ®×¤j¤p(Byte)¡G%s\n",fname_bmp);				//	Åã¥Üµ{¦¡°õ¦æª¬ºA
-	FILE *fp;															//	«Å§iÀÉ®×«ü¼Ğfp°Ï°ìÅÜ¼Æ
-	fp = fopen(fname_bmp, "rb");										//	¥Hrb(¤G¶i¦ìÅª¨ú)¼Ò¦¡¶}±ÒÀÉ®×
-	if (fp==NULL)														//	­Y¶}±ÒÀÉ®×¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("Åª¨úÀÉ®×¥¢±Ñ¡I\n");										//	Åã¥Ü¿ù»~°T®§ 
-		return -1;														//	¶Ç¦^-1¡A¨Ãµ²§ô°Æµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z	 
-	unsigned char header[54]; 											//	«Å§iÀÉÀY³]©wheader°}¦C 
-	fread(header, sizeof(unsigned char), 54, fp);						//	Åª¨úÀÉÀY³]©w
-	unsigned long BmpRead_file_size;									//	«Å§iÅª¨úBMP¹Ï¤ùÀÉ®×¤j¤p(Byte)ÅÜ¼Æ¡A«¬ºA¬°unsigned long 
-	BmpRead_file_size= header[2] + (header[3] << 8) + ( header[4] << 16) + ( header[5] << 24);
-	//	­pºâ¿é¤JBMP¹Ï¤ùÀÉ®×¤j¤p(Byte¡A¦ì¤¸²Õ) 
-	fclose(fp);															//	Ãö³¬ÀÉ®×
-	return BmpRead_file_size;											//	±N­pºâ¥XÀÉ®×¤j¤p¼Æ­È(Byte)¶Ç¦^ 
-}																		//	µ²§ôBMP¹ÏÀÉ¤j¤p(Byte)Åª¨ú°Æµ{¦¡ 
-//----BMP¹ÏÀÉxsize(¼e«×)Åª¨ú°Æµ{¦¡----
-unsigned long BmpReadXSize(const char *filename, const bool FilenameExtension)
-//	BMP¹ÏÀÉxsize(¼e«×)Åª¨ú°Æµ{¦¡
-{																		//	¶i¤JBMP¹ÏÀÉxsize(¼e«×)Åª¨ú°Æµ{¦¡
-	char fname_bmp[MAX_PATH];											//	«Å§iÀÉ®×¦WºÙfname_bmp°}¦CÅÜ¼Æ(³Ì¦hMAX_PATH­Ó¦r¤¸) 
-	if(FilenameExtension == false)										//	­Y¿é¤J°Ñ¼Æfname_bmp¤£¨ã°ÆÀÉ¦W
-	{																	//	¶i¤Jif±Ô­z
-		sprintf(fname_bmp, "%s.bmp", filename);							//	²£¥Í§¹¾ãÀÉ®×¸ô®|¨Ã¦s©ñ¦Üfname_bmp°}¦C
-	}																	//	µ²§ôif±Ô­z
-	else																//	­Y¿é¤J°Ñ¼Æfname_bmp¤w¥]§t°ÆÀÉ¦W
-	{																	//	¶i¤Jelse±Ô­z
-		strcpy(fname_bmp,filename);										//	ª½±µ¶ñ¤JÀÉ¦W¸ô®|
-	}																	//	µ²§ôelse±Ô­z
-	printf("¥¿¦bÅª¨ú¤U¦CÀÉ®×xsize(¼e«×)¡G%s\n",fname_bmp);				//	Åã¥Üµ{¦¡°õ¦æª¬ºA
-	FILE *fp;															//	«Å§iÀÉ®×«ü¼Ğfp°Ï°ìÅÜ¼Æ
-	fp = fopen(fname_bmp, "rb");										//	¥Hrb(¤G¶i¦ìÅª¨ú)¼Ò¦¡¶}±ÒÀÉ®×
-	if (fp==NULL)														//	­Y¶}±ÒÀÉ®×¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("Åª¨úÀÉ®×¥¢±Ñ¡I\n");										//	Åã¥Ü¿ù»~°T®§ 
-		return -1;														//	¶Ç¦^-1¡A¨Ãµ²§ô°Æµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z	 
-	unsigned char header[54]; 											//	«Å§iÀÉÀY³]©wheader°}¦C 
-	fread(header, sizeof(unsigned char), 54, fp);						//	Åª¨úÀÉÀY³]©w
-	unsigned long BmpReadXSize;											//	«Å§iÅª¨úBMP¹Ï¤ùÀÉ®×ªºx(¼e«×)¤j¤p(¹³¯À)ÅÜ¼Æ¡A«¬ºA¬°unsigned long 
-	BmpReadXSize= header[18] + (header[19] << 8) + ( header[20] << 16) + ( header[21] << 24);
-	//	­pºâ¿é¤JBMP¹Ï¤ùÀÉ®×x(¼e«×)¤j¤p(¹³¯À) 
-	fclose(fp);															//	Ãö³¬ÀÉ®×
-	return BmpReadXSize;												//	±N­pºâ¥XBMP¹Ï¤ùÀÉ®×x(¼e«×)¤j¤p(¹³¯À)¼Æ­È¶Ç¦^ 
-}																		//	µ²§ôBMP¹ÏÀÉxsize(¼e«×)Åª¨ú°Æµ{¦¡ 
-
-//----BMP¹ÏÀÉysize(°ª«×)Åª¨ú°Æµ{¦¡----
-unsigned long BmpReadYSize(const char *filename, const bool FilenameExtension)
-//	BMP¹ÏÀÉysize(°ª«×)Åª¨ú°Æµ{¦¡
-{																		//	¶i¤JBMP¹ÏÀÉysize(°ª«×)Åª¨ú°Æµ{¦¡
-	char fname_bmp[MAX_PATH];											//	«Å§iÀÉ®×¦WºÙfname_bmp°}¦CÅÜ¼Æ(³Ì¦hMAX_PATH­Ó¦r¤¸) 
-	if(FilenameExtension == false)										//	­Y¿é¤J°Ñ¼Æfname_bmp¤£¨ã°ÆÀÉ¦W
-	{																	//	¶i¤Jif±Ô­z
-		sprintf(fname_bmp, "%s.bmp", filename);							//	²£¥Í§¹¾ãÀÉ®×¸ô®|¨Ã¦s©ñ¦Üfname_bmp°}¦C
-	}																	//	µ²§ôif±Ô­z
-	else																//	­Y¿é¤J°Ñ¼Æfname_bmp¤w¥]§t°ÆÀÉ¦W
-	{																	//	¶i¤Jelse±Ô­z
-		strcpy(fname_bmp,filename);										//	ª½±µ¶ñ¤JÀÉ¦W¸ô®|
-	}																	//	µ²§ôelse±Ô­z
-	printf("¥¿¦bÅª¨ú¤U¦CÀÉ®×ysize(°ª«×)¡G%s\n",fname_bmp);				//	Åã¥Üµ{¦¡°õ¦æª¬ºA
-	FILE *fp;															//	«Å§iÀÉ®×«ü¼Ğfp°Ï°ìÅÜ¼Æ
-	fp = fopen(fname_bmp, "rb");										//	¥Hrb(¤G¶i¦ìÅª¨ú)¼Ò¦¡¶}±ÒÀÉ®×
-	if (fp==NULL)														//	­Y¶}±ÒÀÉ®×¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("Åª¨úÀÉ®×¥¢±Ñ¡I\n");										//	Åã¥Ü¿ù»~°T®§ 
-		return -1;														//	¶Ç¦^-1¡A¨Ãµ²§ô°Æµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z	 
-	unsigned char header[54]; 											//	«Å§iÀÉÀY³]©wheader°}¦C 
-	fread(header, sizeof(unsigned char), 54, fp);						//	Åª¨úÀÉÀY³]©w
-	unsigned long BmpReadYSize;											//	«Å§iÅª¨úBMP¹Ï¤ùÀÉ®×ªºy(°ª«×)¤j¤p(¹³¯À)ÅÜ¼Æ¡A«¬ºA¬°unsigned long 
-	BmpReadYSize= header[22] + (header[23] << 8) + ( header[24] << 16) + ( header[25] << 24);
-	//	­pºâ¿é¤JBMP¹Ï¤ùÀÉ®×y(°ª«×)¤j¤p(¹³¯À) 
-	fclose(fp);															//	Ãö³¬ÀÉ®×
-	return BmpReadYSize;												//	±N­pºâ¥XBMP¹Ï¤ùÀÉ®×y(°ª«×)¤j¤p(¹³¯À)¼Æ­È¶Ç¦^ 
-}																		//	µ²§ôBMP¹ÏÀÉysize(°ª«×)Åª¨ú°Æµ{¦¡ 
-//----BMP¹ÏÀÉÅª¨ú°Æµ{¦¡---- 
-char BmpRead(unsigned char *image,const int xsize,const int ysize, const char *filename, const bool FilenameExtension)
-{																		//	¶i¤JBMP¹ÏÀÉÅª¨ú°Æµ{¦¡
-	char fname_bmp[MAX_PATH];											//	«Å§iÀÉ®×¦WºÙfname_bmp°}¦CÅÜ¼Æ(³Ì¦hMAX_PATH­Ó¦r¤¸) 
-	if(FilenameExtension == false)										//	­Y¿é¤J°Ñ¼Æfname_bmp¤£¨ã°ÆÀÉ¦W
-	{																	//	¶i¤Jif±Ô­z
-		sprintf(fname_bmp, "%s.bmp", filename);							//	²£¥Í§¹¾ãÀÉ®×¸ô®|¨Ã¦s©ñ¦Üfname_bmp°}¦C
-	}																	//	µ²§ôif±Ô­z
-	else																//	­Y¿é¤J°Ñ¼Æfname_bmp¤w¥]§t°ÆÀÉ¦W
-	{																	//	¶i¤Jelse±Ô­z
-		strcpy(fname_bmp,filename);										//	ª½±µ¶ñ¤JÀÉ¦W¸ô®|
-	}																	//	µ²§ôelse±Ô­z
-	unsigned char FillingByte;											//	«Å§i¶ñ¥R¦ì¤¸²ÕÅÜ¼Æ
-	FillingByte = BmpFillingByteCalc(xsize);							//	©I¥sBmpFillingByteCalc°Æµ{¦¡­pºâ¶ñ¥R¤§¦ì¤¸²Õ¼Æ¶q
-	printf("¥¿¦bÅª¨úÀÉ®×¡G%s\n",fname_bmp);								//	Åã¥Üµ{¦¡°õ¦æª¬ºA
-	FILE *fp;															//	«Å§iÀÉ®×«ü¼Ğfp°Ï°ìÅÜ¼Æ
-	fp = fopen(fname_bmp, "rb");										//	¥Hrb(¤G¶i¦ìÅª¨ú)¼Ò¦¡¶}±ÒÀÉ®×
-	if (fp==NULL)														//	­Y¶}±ÒÀÉ®×¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("Åª¨úÀÉ®×¥¢±Ñ¡I\n");										//	Åã¥Ü¿ù»~°T®§ 
-		return -1;														//	¶Ç¦^-1¡A¨Ãµ²§ô°Æµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z	 
-	unsigned char header[54]; 											//	«Å§iÀÉÀY³]©wheader°}¦C 
-	fread(header, sizeof(unsigned char), 54, fp);						//	Åª¨úÀÉÀY³]©w
-	fread(image, sizeof(unsigned char), (size_t)(long)(xsize * 3 + FillingByte)*ysize, fp);
-	//	Åª¨ú¹ÏÀÉ¸ê®Æ 
-	fclose(fp);															//	Ãö³¬ÀÉ®× 
-	return 0;															//	¶Ç¦^0¨Ãµ²§ô°Æµ{¦¡ 
-}																		//	µ²§ôBMP¹ÏÀÉÅª¨ú°Æµ{¦¡
-BMPIMAGE BmpFileRead(const char *filename, const bool FilenameExtension)
-//	BmpFileRead°Æµ{¦¡
-{																		//	¶i¤JBmpFileRead°Æµ{¦¡
-	BMPIMAGE OutputData;												//	«Å§i¿é¥X¸ê®ÆªÅ¶¡
-	strcpy(OutputData.FILENAME, "");									//	ªì©l¤ÆOutputData
-	OutputData.XSIZE = 0;												//	ªì©l¤ÆOutputData
-	OutputData.YSIZE = 0;												//	ªì©l¤ÆOutputData
-	OutputData.IMAGE_DATA = NULL;										//	ªì©l¤ÆOutputData
-	//***ÀË¬d°Æµ{¦¡¶Ç¤JÀÉ¦W***
-	if(filename == NULL)												//	­Y¿é¤Jfilename¬°NULL
-	{																	//	¶i¤Jif±Ô­z
-		printf("ÀÉ®×¸ô®|¿é¤J¬°NULL\n");									//	Åã¥Ü"ÀÉ®×¸ô®|¿é¤J¬°NULL"¨Ã´«¦æ
-		return OutputData;												//	¦^¶ÇOutputData¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	//***°ÆÀÉ¦W¶ñ¸É***
-	char fname_bmp[MAX_PATH];											//	«Å§iÀÉ®×¦WºÙfname_bmp°}¦CÅÜ¼Æ(³Ì¦hMAX_PATH­Ó¦r¤¸) 
-	if(FilenameExtension == false)										//	­Y¿é¤J°Ñ¼Æfname_bmp¤£¨ã°ÆÀÉ¦W
-	{																	//	¶i¤Jif±Ô­z
-		sprintf(fname_bmp, "%s.bmp", filename);							//	²£¥Í§¹¾ãÀÉ®×¸ô®|¨Ã¦s©ñ¦Üfname_bmp°}¦C
-	}																	//	µ²§ôif±Ô­z
-	else																//	­Y¿é¤J°Ñ¼Æfname_bmp¤w¥]§t°ÆÀÉ¦W
-	{																	//	¶i¤Jelse±Ô­z
-		strcpy(fname_bmp,filename);										//	ª½±µ¶ñ¤JÀÉ¦W¸ô®|
-	}																	//	µ²§ôelse±Ô­z
-	//***½T»{ÀÉ®×¦s¦b¤Î¥iÅª©Ê***
-	if (FileExistCheck(fname_bmp) == false)								//	­YÀÉ®×¤£¦s¦b 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("ÀÉ®×%s¤£¦s¦b¡I\n",fname_bmp);							//	Åã¥Ü¿ù»~°T®§ 
-		return OutputData;												//	¦^¶ÇOutputData¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z	 
-	if (FileReadPermissionCheck(fname_bmp) == false)					//	­YÀÉ®×¤£¥iÅª¨ú
-	{																	//	¶i¤Jif±Ô­z 
-		printf("Åª¨úÀÉ®×¿ù»~¡I\n");										//	Åã¥Ü¿ù»~°T®§
-		return OutputData;												//	¦^¶ÇOutputData¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	//***¶ñ¤J¹ÏÀÉ¸ê°T¦ÜOutputData***
-	strcpy(OutputData.FILENAME, fname_bmp);								//	¶ñ¤JÀÉ®×¸ô®|(§t°ÆÀÉ¦W)
-	OutputData.XSIZE = (unsigned int)BmpReadXSize(OutputData.FILENAME,true);
-	//	Åª¨ú¿é¤JBMP¹ÏÀÉ¼e«×(¸ô®|¤w¥]§t°ÆÀÉ¦W) 
-	OutputData.YSIZE = (unsigned int)BmpReadYSize(OutputData.FILENAME,true);
-	//	Åª¨ú¿é¤JBMP¹ÏÀÉ°ª«×(¸ô®|¤w¥]§t°ÆÀÉ¦W) 
-	if( (OutputData.XSIZE == -1) || (OutputData.YSIZE == -1) )			//	­YXSIZE©ÎYSIZE¬°-1(¥NªíÅª¨úÀÉ®×¥¢±Ñ)	
-	{																	//	¶i¤Jif±Ô­z 
-		printf("Åª¨ú¹ÏÀÉ¤j¤p¸ê°T¥¢±Ñ!");								//	Åã¥Ü"Åª¨ú¹ÏÀÉ¤j¤p¸ê°T¥¢±Ñ!"
-		return OutputData;												//	¦^¶ÇOutputData¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	else																//	­YXSIZE»PYSIZE¬Ò¤£¬°-1(¥¿±`Åª¨úÀÉ®×)
-	{																	//	¶i¤Jelse±Ô­z 
-		printf("¿é¤J¹ÏÀÉ¼e«×¡G%d\n",OutputData.XSIZE);					//	Åã¥Ü¿é¤J¹ÏÀÉ¼e«×¼Æ­È 
-		printf("¿é¤J¹ÏÀÉ°ª«×¡G%d\n",OutputData.YSIZE);					//	Åã¥Ü¿é¤J¹ÏÀÉ°ª«×¼Æ­È 
-		printf("¿é¤J¼v¹³¤j¤p(Byte)¡G%d\n",(size_t)OutputData.XSIZE * OutputData.YSIZE * 3);
-		//	Åã¥Ü¿é¤J¼v¹³¤j¤p¼Æ­È(Byte) 
-		OutputData.FILLINGBYTE = BmpFillingByteCalc(OutputData.XSIZE);	//	©I¥sBmpFillingByteCalc°Æµ{¦¡­pºâ¶ñ¥R¤§¦ì¤¸²Õ¼Æ¶q
-		OutputData.IMAGE_DATA = (unsigned char*)malloc((OutputData.XSIZE * 3 + OutputData.FILLINGBYTE) * OutputData.YSIZE * sizeof(unsigned char));
-		//	­pºâ¨Ã«Ø¥ß¼v¹³¤j¤pªÅ¶¡ 
-		if (OutputData.IMAGE_DATA == NULL) 								//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-		{																//	¶i¤Jif±Ô­z 
-			printf("°O¾ĞÅé¤À°t¿ù»~!");									//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-			return OutputData;											//	¦^¶ÇOutputData¡A¨Ãµ²§ô°Æµ{¦¡
-		}																//	µ²§ôif±Ô­z 
-		else															//	­Y¥¼µo¥Í¿ù»~ 
-		{																//	¶i¤Jelse±Ô­z 
-			int loop_num = 0;											//	«Å§i°Ï°ìÅÜ¼Æloop_num¨Ñ°j°é¨Ï¥Î 
-			for(loop_num=0;loop_num<((OutputData.XSIZE * 3 + OutputData.FILLINGBYTE) * OutputData.YSIZE);loop_num++)
-			//	¥Hfor°j°éªì©l¤Æ¨C­Ó¹³¯À 
-			{															//	¶i¤Jfor°j°é 
-				OutputData.IMAGE_DATA[loop_num]=255;						//	¶ñ¤J¹w³]¹³¯À¦â±m¼Æ­È 
-			}															//	µ²§ôfor°j°é 
-			BmpRead(OutputData.IMAGE_DATA, OutputData.XSIZE, OutputData.YSIZE, OutputData.FILENAME,true);
-			//	Åª¨ú¹ÏÀÉ¸ê®Æ
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôelse±Ô­z
-	return OutputData;													//	¦^¶ÇÅª¨ú¸ê®Æ
-}																		//	µ²§ôBmpFileRead°Æµ{¦¡
-//----BMP¹ÏÀÉ¼g¤J°Æµ{¦¡---- 
-/*	BmpWriteV1°Æµ{¦¡µ{¦¡°õ¦æBMP¹ÏÀÉ¼g¤J¡Aheader°}¦C¬°BMP¹ÏÀÉ¤§ÀÉÀY 
- *
- *
- */
- 
-int BmpWriteV1(const unsigned char *image,const int xsize,const int ysize,const char *filename) 
-{																		//	¶i¤JBmpWriteV1(BMP¹ÏÀÉ¼g¤J)°Æµ{¦¡ 
-	unsigned char FillingByte;											//	«Å§i¶ñ¥R¦ì¤¸²ÕÅÜ¼Æ(FillingByte)
-	FillingByte = BmpFillingByteCalc(xsize);							//	©I¥sBmpFillingByteCalc°Æµ{¦¡­pºâ¶ñ¥R¤§¦ì¤¸²Õ¼Æ¶q
-	unsigned char header[54] = 											//	«Å§iÀÉÀY³]©wheader°}¦C(¦@54Bytes)
-	{																	//	header°}¦Cªì©l­È³]©w 
-	0x42, 0x4d, 0, 0, 0, 0, 0, 0, 0, 0,									//	header°}¦Cªì©l­È³]©w
-	54, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 24, 0, 		//	header°}¦Cªì©l­È³]©w
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 		//	header°}¦Cªì©l­È³]©w
-	0, 0, 0, 0															//	header°}¦Cªì©l­È³]©w
-	};																	//	header°}¦Cªì©l­È³]©w
-	unsigned long file_size = (long)xsize * (long)ysize * 3 + 54;		//	«Å§ifile_sizeÅÜ¼Æ¡A³]©wÀÉ®×¤j¤p 
-	unsigned long width, height;										//	«Å§iwidth»Pheight¬°unsigned long«¬ºAÅÜ¼Æ¡A¥Î©ó­pºâ¹Ï¹³ÀÉ®×¼e«×¡B°ª«×
-	char fname_bmp[MAX_PATH];											//	«Å§iÅÜ¼Æ¥Î¥H°O¿ı¿é¥X¹Ï¤ù¤§§¹¾ãÀÉ¦W(³Ì¦hMAX_PATH­Ó¦r¤¸) 
-	header[2] = (unsigned char)(file_size &0x000000ff);					//	­pºâÀÉÀY¸ê°T(¹Ï¹³ÀÉ®×¤j¤p)
-	header[3] = (file_size >> 8) & 0x000000ff;							//	­pºâÀÉÀY¸ê°T(¹Ï¹³ÀÉ®×¤j¤p)
-	header[4] = (file_size >> 16) & 0x000000ff;							//	­pºâÀÉÀY¸ê°T(¹Ï¹³ÀÉ®×¤j¤p)
-	header[5] = (file_size >> 24) & 0x000000ff;							//	­pºâÀÉÀY¸ê°T(¹Ï¹³ÀÉ®×¤j¤p)
-	
-	width = xsize;														//	±N¹Ï¹³¼e«×¸ê°T¶ñ¤JwidthÅÜ¼Æ
-	header[18] = width & 0x000000ff;									//	­pºâÀÉÀY¸ê°T(¹Ï¹³¼e«×)
-	header[19] = (width >> 8) &0x000000ff;								//	­pºâÀÉÀY¸ê°T(¹Ï¹³¼e«×)
-	header[20] = (width >> 16) &0x000000ff;								//	­pºâÀÉÀY¸ê°T(¹Ï¹³¼e«×)
-	header[21] = (width >> 24) &0x000000ff;								//	­pºâÀÉÀY¸ê°T(¹Ï¹³¼e«×)
-	 
-	height = ysize;														//	±N¹Ï¹³°ª«×¸ê°T¶ñ¤JheightÅÜ¼Æ
-	header[22] = height &0x000000ff;									//	­pºâÀÉÀY¸ê°T(¹Ï¹³°ª«×)
-	header[23] = (height >> 8) &0x000000ff;								//	­pºâÀÉÀY¸ê°T(¹Ï¹³°ª«×)
-	header[24] = (height >> 16) &0x000000ff;							//	­pºâÀÉÀY¸ê°T(¹Ï¹³°ª«×)
-	header[25] = (height >> 24) &0x000000ff;							//	­pºâÀÉÀY¸ê°T(¹Ï¹³°ª«×)
-	sprintf(fname_bmp, "%s.bmp", filename);								//	²£¥Í¹ÏÀÉ§¹¾ãÀÉ¦W¸ô®|
-	FILE *fp;															//	«Å§iÀÉ®×«ü¼Ğfp°Ï°ìÅÜ¼Æ¡A¥Î¥H°O¿ı¼g¤J¹ÏÀÉ¸ô®| 
-	if (!(fp = fopen(fname_bmp, "wb"))) 								//	¹Á¸Õ¥H¤G¶i¦ìÅªÀÉ¤è¦¡¶}±Ò¹ÏÀÉ¡A­YµLªk¦¨¥\¶}±Ò
-	{																	//	¶i¤Jif±Ô­z
-		return -1;														//	¦^¶Ç-1¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	
-	fwrite(header, sizeof(unsigned char), 54, fp);						//	¼g¤JBMP¹ÏÀÉÀÉÀY¸ê°T(54Bytes)
-	fwrite(image, sizeof(unsigned char), (size_t)(long)(xsize * 3 + FillingByte)*ysize, fp);
-	//	¼g¤JBMP¹ÏÀÉ¼v¹³¸ê®Æ
-	fclose(fp);															//	Ãö³¬ÀÉ®×«ü¼Ğ
-	free((void*)image);
-	image = NULL;
-	return 0;															//	¶Ç¦^0¨Ãµ²§ô°Æµ{¦¡
-}																		//	µ²§ôBmpWriteV1(BMP¹ÏÀÉ¼g¤J)°Æµ{¦¡
-int BmpWriteV2(const BMPIMAGE OutputFile)								//	BmpWriteV2°Æµ{¦¡
-{																		//	¶i¤JBmpWriteV2°Æµ{¦¡
-	return BmpWriteV1(OutputFile.IMAGE_DATA, OutputFile.XSIZE, OutputFile.YSIZE, OutputFile.FILENAME);
-	//	±NOutputFileµ²ºc¸ÑªR¦¨¦U¶µ°Ñ¼Æ¶Ç¤JBmpWriteV1°Æµ{¦¡
-}																		//	µ²§ôBmpWriteV2°Æµ{¦¡
-void ViewBMPImage(const char *filename)									//	ViewBMPImage°Æµ{¦¡
-{																		//	¶i¤JViewBMPImage°Æµ{¦¡
-	#ifdef _WIN32														//	­Y½sÄ¶Àô¹Ò¬°Windows¨t²Î
-		if(filename==NULL)												//	­Y¶Ç¤J¤§filename«ü¼Ğ¬°NULL
-		{																//	¶i¤Jif±Ô­z
-			return;														//	µ²§ô°Æµ{¦¡
-		}																//	µ²§ôif±Ô­z
-		char fname_bmp[MAX_PATH];										//	«Å§iÀÉ®×¦WºÙfname_bmp°}¦CÅÜ¼Æ(³Ì¦hMAX_PATH­Ó¦r¤¸) 
-		sprintf(fname_bmp, "%s%s.BMP",FILE_ROOT_PATH ,filename);		//	«Ø¥ß±ı¶}±Ò¹ÏÀÉ¤§§¹¾ãÀÉ¦W(³Ì¦hMAX_PATH­Ó¦r¤¸)
-		char RunCommand[MAX_PATH+100];									//	«Å§i°õ¦æ¶}±Ò¹ÏÀÉ«ü¥O¦r¦êÅÜ¼Æ
+void ViewBMPImage(const char *filename)									//	ViewBMPImageå‰¯ç¨‹å¼
+{																		//	é€²å…¥ViewBMPImageå‰¯ç¨‹å¼
+	#ifdef _WIN32														//	è‹¥ç·¨è­¯ç’°å¢ƒç‚ºWindowsç³»çµ±
+		if(filename==NULL)												//	è‹¥å‚³å…¥ä¹‹filenameæŒ‡æ¨™ç‚ºNULL
+		{																//	é€²å…¥ifæ•˜è¿°
+			return;														//	çµæŸå‰¯ç¨‹å¼
+		}																//	çµæŸifæ•˜è¿°
+		char fname_bmp[MAX_PATH];										//	å®£å‘Šæª”æ¡ˆåç¨±fname_bmpé™£åˆ—è®Šæ•¸(æœ€å¤šMAX_PATHå€‹å­—å…ƒ) 
+		sprintf(fname_bmp, "%s%s.BMP",FILE_ROOT_PATH ,filename);		//	å»ºç«‹æ¬²é–‹å•Ÿåœ–æª”ä¹‹å®Œæ•´æª”å(æœ€å¤šMAX_PATHå€‹å­—å…ƒ)
+		char RunCommand[MAX_PATH+100];									//	å®£å‘ŠåŸ·è¡Œé–‹å•Ÿåœ–æª”æŒ‡ä»¤å­—ä¸²è®Šæ•¸
 		sprintf(RunCommand, "%s%s","\"C:\\WINDOWS\\system32\\rundll32.exe\" C:\\WINDOWS\\system32\\shimgvw.dll,ImageView_Fullscreen ",fname_bmp);
-		#ifdef DebugMode												//	­Y¦³©w¸q¬°DebugMode(°£¿ù¼Ò¦¡)
-			printf("¶}±Ò¹ÏÀÉ«ü¥O¡G%s\n",RunCommand);					//	Åã¥Ü¶}±Ò¹ÏÀÉ«ü¥O¨Ã´«¦æ
-		#endif															//	µ²§ôifdef±Ô­z
-		system(RunCommand);												//	°õ¦æsystem¨ç¼Æ¡A¶}±Ò¹ÏÀÉ
-	#endif																//	µ²§ôifdef±Ô­z
-	#ifdef linux														//	­Y½sÄ¶Àô¹Ò¬°Linux¨t²Î
-		if(filename==NULL)												//	­Y¶Ç¤J¤§filename«ü¼Ğ¬°NULL
-		{																//	¶i¤Jif±Ô­z
-			return;														//	µ²§ô°Æµ{¦¡
-		}																//	µ²§ôif±Ô­z
-		char fname_bmp[MAX_PATH];										//	«Å§iÀÉ®×¦WºÙfname_bmp°}¦CÅÜ¼Æ(³Ì¦hMAX_PATH­Ó¦r¤¸) 
-		sprintf(fname_bmp, "%s%s.BMP",FILE_ROOT_PATH ,filename);		//	«Ø¥ß±ı¶}±Ò¹ÏÀÉ¤§§¹¾ãÀÉ¦W(³Ì¦hMAX_PATH­Ó¦r¤¸)
-		char RunCommand[MAX_PATH+100];									//	«Å§i°õ¦æ¶}±Ò¹ÏÀÉ«ü¥O¦r¦êÅÜ¼Æ
-		sprintf(RunCommand, "%s%s","eog ",fname_bmp);					//	¶}±Ò«ü©w¹ÏÀÉ
-		#ifdef DebugMode												//	­Y¦³©w¸q¬°DebugMode(°£¿ù¼Ò¦¡)
-			printf("¶}±Ò¹ÏÀÉ«ü¥O¡G%s\n",RunCommand);					//	Åã¥Ü¶}±Ò¹ÏÀÉ«ü¥O¨Ã´«¦æ
-		#endif															//	µ²§ôifdef±Ô­z
-		system(RunCommand);												//	°õ¦æsystem¨ç¼Æ¡A¶}±Ò¹ÏÀÉ
-	#endif																//	µ²§ôifdef±Ô­z
+		#ifdef DebugMode												//	è‹¥æœ‰å®šç¾©ç‚ºDebugMode(é™¤éŒ¯æ¨¡å¼)
+			printf("é–‹å•Ÿåœ–æª”æŒ‡ä»¤ï¼š%s\n",RunCommand);					//	é¡¯ç¤ºé–‹å•Ÿåœ–æª”æŒ‡ä»¤ä¸¦æ›è¡Œ
+		#endif															//	çµæŸifdefæ•˜è¿°
+		system(RunCommand);												//	åŸ·è¡Œsystemå‡½æ•¸ï¼Œé–‹å•Ÿåœ–æª”
+	#endif																//	çµæŸifdefæ•˜è¿°
+	#ifdef linux														//	è‹¥ç·¨è­¯ç’°å¢ƒç‚ºLinuxç³»çµ±
+		if(filename==NULL)												//	è‹¥å‚³å…¥ä¹‹filenameæŒ‡æ¨™ç‚ºNULL
+		{																//	é€²å…¥ifæ•˜è¿°
+			return;														//	çµæŸå‰¯ç¨‹å¼
+		}																//	çµæŸifæ•˜è¿°
+		char fname_bmp[MAX_PATH];										//	å®£å‘Šæª”æ¡ˆåç¨±fname_bmpé™£åˆ—è®Šæ•¸(æœ€å¤šMAX_PATHå€‹å­—å…ƒ) 
+		sprintf(fname_bmp, "%s%s.BMP",FILE_ROOT_PATH ,filename);		//	å»ºç«‹æ¬²é–‹å•Ÿåœ–æª”ä¹‹å®Œæ•´æª”å(æœ€å¤šMAX_PATHå€‹å­—å…ƒ)
+		char RunCommand[MAX_PATH+100];									//	å®£å‘ŠåŸ·è¡Œé–‹å•Ÿåœ–æª”æŒ‡ä»¤å­—ä¸²è®Šæ•¸
+		sprintf(RunCommand, "%s%s","eog ",fname_bmp);					//	é–‹å•ŸæŒ‡å®šåœ–æª”
+		#ifdef DebugMode												//	è‹¥æœ‰å®šç¾©ç‚ºDebugMode(é™¤éŒ¯æ¨¡å¼)
+			printf("é–‹å•Ÿåœ–æª”æŒ‡ä»¤ï¼š%s\n",RunCommand);					//	é¡¯ç¤ºé–‹å•Ÿåœ–æª”æŒ‡ä»¤ä¸¦æ›è¡Œ
+		#endif															//	çµæŸifdefæ•˜è¿°
+		system(RunCommand);												//	åŸ·è¡Œsystemå‡½æ•¸ï¼Œé–‹å•Ÿåœ–æª”
+	#endif																//	çµæŸifdefæ•˜è¿°
 	
-}																		//	µ²§ôViewBMPImage°Æµ{¦¡
+}																		//	çµæŸViewBMPImageå‰¯ç¨‹å¼
 
-BMP24RGB *InitialIMGArray(const int xsize, const int ysize)				//	InitialIMGArray°Æµ{¦¡
-{																		//	¶i¤JInitialIMGArray°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData¬°BMP24RGB«ü¼Ğ«¬ºAÅÜ¼Æ
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData(¤Gºû)«ü¼Ğ°O¾ĞÅé¤j¤p
-	if(OutputData == NULL)												//	­YOutput¬°ªÅ«ü¼Ğ
-	{																	//	¶i¤Jif±Ô­z
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~"
-		return NULL;													//	¦^¶ÇNULL¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	int LoopNumber1,LoopNumber2;										//	«Å§iLoopNumber1»PLoopNumber2¡A¥Î©ó°j°é­pºâ
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-		{																//	¶i¤Jfor°j°é
-			OutputData[LoopNumber1*xsize + LoopNumber2].R = 0;			//	¶ñ¤JR¹³¯À¸ê®Æ
-			OutputData[LoopNumber1*xsize + LoopNumber2].G = 0;			//	¶ñ¤JG¹³¯À¸ê®Æ
-			OutputData[LoopNumber1*xsize + LoopNumber2].B = 0;			//	¶ñ¤JB¹³¯À¸ê®Æ
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶Ç¥Í¦¨µ²ªG
-}																		//	µ²§ôInitialIMGArray°Æµ{¦¡
+BMP24RGB *InitialIMGArray(const int xsize, const int ysize)				//	InitialIMGArrayå‰¯ç¨‹å¼
+{																		//	é€²å…¥InitialIMGArrayå‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataç‚ºBMP24RGBæŒ‡æ¨™å‹æ…‹è®Šæ•¸
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputData(äºŒç¶­)æŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if(OutputData == NULL)												//	è‹¥Outputç‚ºç©ºæŒ‡æ¨™
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤"
+		return NULL;													//	å›å‚³NULLï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	int LoopNumber1,LoopNumber2;										//	å®£å‘ŠLoopNumber1èˆ‡LoopNumber2ï¼Œç”¨æ–¼è¿´åœˆè¨ˆç®—
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+		{																//	é€²å…¥forè¿´åœˆ
+			OutputData[LoopNumber1*xsize + LoopNumber2].R = 0;			//	å¡«å…¥Råƒç´ è³‡æ–™
+			OutputData[LoopNumber1*xsize + LoopNumber2].G = 0;			//	å¡«å…¥Gåƒç´ è³‡æ–™
+			OutputData[LoopNumber1*xsize + LoopNumber2].B = 0;			//	å¡«å…¥Båƒç´ è³‡æ–™
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³ç”Ÿæˆçµæœ
+}																		//	çµæŸInitialIMGArrayå‰¯ç¨‹å¼
 
 BMP24RGB *RGBQUADtoBMP24RGB(const RGBQUAD* InputRGBQUADImage, const int xsize, const int ysize)
-//	RGBQUADtoBMP24RGB°Æµ{¦¡
-{																		//	¶i¤JRGBQUADtoBMP24RGB°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData¬°BMP24RGB«ü¼Ğ«¬ºAÅÜ¼Æ
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData(¤Gºû)«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL)												//	­YOutput¬°ªÅ«ü¼Ğ
-	{																	//	¶i¤Jif±Ô­z
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~"
-		return NULL;													//	¦^¶ÇNULL¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	int LoopNumber1, LoopNumber2;										//	«Å§iLoopNumber1»PLoopNumber2¡A¥Î©ó°j°é­pºâ
-	for (LoopNumber1 = 0; LoopNumber1<ysize; LoopNumber1++)				//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		for (LoopNumber2 = 0; LoopNumber2<xsize; LoopNumber2++)			//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-		{																//	¶i¤Jfor°j°é
-			OutputData[LoopNumber1*xsize + LoopNumber2].R = 			//	¶ñ¤JR¹³¯À¸ê®Æ
-				InputRGBQUADImage[(ysize - LoopNumber1) * xsize + LoopNumber2].rgbRed;
-			OutputData[LoopNumber1*xsize + LoopNumber2].G = 			//	¶ñ¤JG¹³¯À¸ê®Æ
-				InputRGBQUADImage[(ysize - LoopNumber1) * xsize + LoopNumber2].rgbGreen;
-			OutputData[LoopNumber1*xsize + LoopNumber2].B = 			//	¶ñ¤JB¹³¯À¸ê®Æ
-				InputRGBQUADImage[(ysize - LoopNumber1) * xsize + LoopNumber2].rgbBlue;
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶ÇÂà´«µ²ªG
-}																		//	µ²§ôRGBQUADtoBMP24RGB°Æµ{¦¡
+//	RGBQUADtoBMP24RGBå‰¯ç¨‹å¼
+{																		//	é€²å…¥RGBQUADtoBMP24RGBå‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataç‚ºBMP24RGBæŒ‡æ¨™å‹æ…‹è®Šæ•¸
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputData(äºŒç¶­)æŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL)												//	è‹¥Outputç‚ºç©ºæŒ‡æ¨™
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤"
+		return NULL;													//	å›å‚³NULLï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	int LoopNumber1, LoopNumber2;										//	å®£å‘ŠLoopNumber1èˆ‡LoopNumber2ï¼Œç”¨æ–¼è¿´åœˆè¨ˆç®—
+	for (LoopNumber1 = 0; LoopNumber1<ysize; LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		for (LoopNumber2 = 0; LoopNumber2<xsize; LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+		{																//	é€²å…¥forè¿´åœˆ
+			OutputData[LoopNumber1*xsize + LoopNumber2].R = 			//	å¡«å…¥Råƒç´ è³‡æ–™
+				InputRGBQUADImage[(ysize - LoopNumber1 - 1) * xsize + LoopNumber2].rgbRed;
+			OutputData[LoopNumber1*xsize + LoopNumber2].G = 			//	å¡«å…¥Gåƒç´ è³‡æ–™
+				InputRGBQUADImage[(ysize - LoopNumber1 - 1) * xsize + LoopNumber2].rgbGreen;
+			OutputData[LoopNumber1*xsize + LoopNumber2].B = 			//	å¡«å…¥Båƒç´ è³‡æ–™
+				InputRGBQUADImage[(ysize - LoopNumber1 - 1) * xsize + LoopNumber2].rgbBlue;
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³è½‰æ›çµæœ
+}																		//	çµæŸRGBQUADtoBMP24RGBå‰¯ç¨‹å¼
 
 RGBQUAD* BMP24RGBtoRGBQUAD(const BMP24RGB* InputBMP24RGBImage, const int xsize, const int ysize)
 {
-	RGBQUAD *OutputData;												//	«Å§iOutputData¬°BMP24RGB«ü¼Ğ«¬ºAÅÜ¼Æ
-	OutputData = (RGBQUAD*)malloc(xsize * ysize * sizeof(RGBQUAD));		//	°t¸mOutputData(¤Gºû)«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL)												//	­YOutput¬°ªÅ«ü¼Ğ
-	{																	//	¶i¤Jif±Ô­z
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~"
-		return NULL;													//	¦^¶ÇNULL¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	int LoopNumber1, LoopNumber2;										//	«Å§iLoopNumber1»PLoopNumber2¡A¥Î©ó°j°é­pºâ
-	for (LoopNumber1 = 0; LoopNumber1<ysize; LoopNumber1++)				//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		for (LoopNumber2 = 0; LoopNumber2<xsize; LoopNumber2++)			//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-		{																//	¶i¤Jfor°j°é
+	RGBQUAD *OutputData;												//	å®£å‘ŠOutputDataç‚ºBMP24RGBæŒ‡æ¨™å‹æ…‹è®Šæ•¸
+	OutputData = (RGBQUAD*)malloc(xsize * ysize * sizeof(RGBQUAD));		//	é…ç½®OutputData(äºŒç¶­)æŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL)												//	è‹¥Outputç‚ºç©ºæŒ‡æ¨™
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤"
+		return NULL;													//	å›å‚³NULLï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	int LoopNumber1, LoopNumber2;										//	å®£å‘ŠLoopNumber1èˆ‡LoopNumber2ï¼Œç”¨æ–¼è¿´åœˆè¨ˆç®—
+	for (LoopNumber1 = 0; LoopNumber1<ysize; LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		for (LoopNumber2 = 0; LoopNumber2<xsize; LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+		{																//	é€²å…¥forè¿´åœˆ
 			OutputData[(ysize - LoopNumber1) * xsize + LoopNumber2].rgbRed = 
-				InputBMP24RGBImage[LoopNumber1*xsize + LoopNumber2].R;	//	¶ñ¤JR¹³¯À¸ê®Æ
+				InputBMP24RGBImage[LoopNumber1*xsize + LoopNumber2].R;	//	å¡«å…¥Råƒç´ è³‡æ–™
 			OutputData[(ysize - LoopNumber1) * xsize + LoopNumber2].rgbGreen = 
-				InputBMP24RGBImage[LoopNumber1*xsize + LoopNumber2].G;	//	¶ñ¤JG¹³¯À¸ê®Æ
+				InputBMP24RGBImage[LoopNumber1*xsize + LoopNumber2].G;	//	å¡«å…¥Gåƒç´ è³‡æ–™
 			OutputData[(ysize - LoopNumber1) * xsize + LoopNumber2].rgbBlue = 
-				InputBMP24RGBImage[LoopNumber1*xsize + LoopNumber2].B;	//	¶ñ¤JB¹³¯À¸ê®Æ
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶ÇÂà´«µ²ªG
+				InputBMP24RGBImage[LoopNumber1*xsize + LoopNumber2].B;	//	å¡«å…¥Båƒç´ è³‡æ–™
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³è½‰æ›çµæœ
 }
 
 BMP24RGB *RAWImageToArray(const unsigned char *image, const int xsize, const int ysize)
-//	BMP¹ÏÀÉ¸ê®Æ¦Ü°}¦CÂà´«°Æµ{¦¡
-{																		//	¶i¤JBMP¹ÏÀÉ¸ê®Æ¦Ü°}¦CÂà´«°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData¬°BMP24RGB«ü¼Ğ«¬ºAÅÜ¼Æ
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData(¤Gºû)«ü¼Ğ°O¾ĞÅé¤j¤p
-	if(OutputData == NULL)												//	­YOutput¬°ªÅ«ü¼Ğ
-	{																	//	¶i¤Jif±Ô­z
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~"
-		return NULL;													//	¦^¶ÇNULL¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	unsigned char FillingByte;											//	«Å§iFillingByte°Ï°ìÅÜ¼Æ
-	FillingByte = BmpFillingByteCalc(xsize);							//	©I¥sBmpFillingByteCalc°Æµ{¦¡­pºâ¶ñ¥R¤§¦ì¤¸²Õ¼Æ¶q
-	int LoopNumber1,LoopNumber2;										//	«Å§iLoopNumber1»PLoopNumber2¡A¥Î©ó°j°é­pºâ
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-		{																//	¶i¤Jfor°j°é
-			OutputData[LoopNumber1*xsize + LoopNumber2].R = 			//	¶ñ¤JR¹³¯À¸ê®Æ
+//	BMPåœ–æª”è³‡æ–™è‡³é™£åˆ—è½‰æ›å‰¯ç¨‹å¼
+{																		//	é€²å…¥BMPåœ–æª”è³‡æ–™è‡³é™£åˆ—è½‰æ›å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataç‚ºBMP24RGBæŒ‡æ¨™å‹æ…‹è®Šæ•¸
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputData(äºŒç¶­)æŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if(OutputData == NULL)												//	è‹¥Outputç‚ºç©ºæŒ‡æ¨™
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤"
+		return NULL;													//	å›å‚³NULLï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	unsigned char FillingByte;											//	å®£å‘ŠFillingByteå€åŸŸè®Šæ•¸
+	FillingByte = BmpFillingByteCalc(xsize);							//	å‘¼å«BmpFillingByteCalcå‰¯ç¨‹å¼è¨ˆç®—å¡«å……ä¹‹ä½å…ƒçµ„æ•¸é‡
+	int LoopNumber1,LoopNumber2;										//	å®£å‘ŠLoopNumber1èˆ‡LoopNumber2ï¼Œç”¨æ–¼è¿´åœˆè¨ˆç®—
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+		{																//	é€²å…¥forè¿´åœˆ
+			OutputData[LoopNumber1*xsize + LoopNumber2].R = 			//	å¡«å…¥Råƒç´ è³‡æ–™
 			image[3*(LoopNumber1 * xsize + LoopNumber2) + LoopNumber1 * FillingByte + 2];
-			OutputData[LoopNumber1*xsize + LoopNumber2].G = 			//	¶ñ¤JG¹³¯À¸ê®Æ
+			OutputData[LoopNumber1*xsize + LoopNumber2].G = 			//	å¡«å…¥Gåƒç´ è³‡æ–™
 			image[3*(LoopNumber1 * xsize + LoopNumber2) + LoopNumber1 * FillingByte + 1];
-			OutputData[LoopNumber1*xsize + LoopNumber2].B = 			//	¶ñ¤JB¹³¯À¸ê®Æ
+			OutputData[LoopNumber1*xsize + LoopNumber2].B = 			//	å¡«å…¥Båƒç´ è³‡æ–™
 			image[3*(LoopNumber1 * xsize + LoopNumber2) + LoopNumber1 * FillingByte + 0];
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶ÇÂà´«µ²ªG
-}																		//	µ²§ôBMP¹ÏÀÉ¸ê®Æ¦Ü°}¦CÂà´«°Æµ{¦¡
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³è½‰æ›çµæœ
+}																		//	çµæŸBMPåœ–æª”è³‡æ–™è‡³é™£åˆ—è½‰æ›å‰¯ç¨‹å¼
 
 unsigned char *ArrayToRAWImage(const BMP24RGB* InputData,const int xsize,const int ysize)
-//	ArrayToRAWImage°Æµ{¦¡
-{																		//	¶i¤JArrayToRAWImage°Æµ{¦¡
-	unsigned char FillingByte;											//	«Å§iFillingByte°Ï°ìÅÜ¼Æ
-	FillingByte = BmpFillingByteCalc(xsize);							//	©I¥sBmpFillingByteCalc°Æµ{¦¡­pºâ¶ñ¥R¤§¦ì¤¸²Õ¼Æ¶q
-	unsigned char *OutputData;											//	«Å§iOutputData°O¿ıÂà´«§¹¦¨¸ê®Æ
+//	ArrayToRAWImageå‰¯ç¨‹å¼
+{																		//	é€²å…¥ArrayToRAWImageå‰¯ç¨‹å¼
+	unsigned char FillingByte;											//	å®£å‘ŠFillingByteå€åŸŸè®Šæ•¸
+	FillingByte = BmpFillingByteCalc(xsize);							//	å‘¼å«BmpFillingByteCalcå‰¯ç¨‹å¼è¨ˆç®—å¡«å……ä¹‹ä½å…ƒçµ„æ•¸é‡
+	unsigned char *OutputData;											//	å®£å‘ŠOutputDataè¨˜éŒ„è½‰æ›å®Œæˆè³‡æ–™
 	OutputData = (unsigned char*)malloc((xsize * 3 + FillingByte) * ysize * sizeof(unsigned char));
-	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if(OutputData == NULL)												//	­YOutput¬°ªÅ«ü¼Ğ
-	{																	//	¶i¤Jif±Ô­z
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~"
-		return NULL;													//	¦^¶ÇNULL¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	int LoopNumber1,LoopNumber2;										//	«Å§iLoopNumber1»PLoopNumber2¡A¥Î©ó°j°é­pºâ
-	//***ªì©l¤ÆOutputData«ü¼Ğ¸ê®Æ***
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§Çªì©l¤ÆOutputData«ü¼Ğ¸ê®Æ¬°0
-	{																	//	¶i¤Jfor°j°é
+	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if(OutputData == NULL)												//	è‹¥Outputç‚ºç©ºæŒ‡æ¨™
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤"
+		return NULL;													//	å›å‚³NULLï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	int LoopNumber1,LoopNumber2;										//	å®£å‘ŠLoopNumber1èˆ‡LoopNumber2ï¼Œç”¨æ–¼è¿´åœˆè¨ˆç®—
+	//***åˆå§‹åŒ–OutputDataæŒ‡æ¨™è³‡æ–™***
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–OutputDataæŒ‡æ¨™è³‡æ–™ç‚º0
+	{																	//	é€²å…¥forè¿´åœˆ
 		for(LoopNumber2 = 0;LoopNumber2<(xsize * 3 + FillingByte);LoopNumber2++)
-		//	¥Hfor°j°é¨Ì§Çªì©l¤ÆOutputData«ü¼Ğ¸ê®Æ¬°0
-		{																//	¶i¤Jfor°j°é
+		//	ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–OutputDataæŒ‡æ¨™è³‡æ–™ç‚º0
+		{																//	é€²å…¥forè¿´åœˆ
 			OutputData[LoopNumber1 * (xsize * 3 + FillingByte) + LoopNumber2] = 0;
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	//***¶ñ¤J¹Ï¹³¸ê®Æ¦ÜOutputData***
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-		{																//	¶i¤Jfor°j°é
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	//***å¡«å…¥åœ–åƒè³‡æ–™è‡³OutputData***
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+		{																//	é€²å…¥forè¿´åœˆ
 			OutputData[3*(LoopNumber1 * xsize + LoopNumber2) + LoopNumber1 * FillingByte + 2]
-			= InputData[LoopNumber1*xsize + LoopNumber2].R;				//	¶ñ¤JR¹³¯À¸ê®Æ
+			= InputData[LoopNumber1*xsize + LoopNumber2].R;				//	å¡«å…¥Råƒç´ è³‡æ–™
 			OutputData[3*(LoopNumber1 * xsize + LoopNumber2) + LoopNumber1 * FillingByte + 1]
-			= InputData[LoopNumber1*xsize + LoopNumber2].G;				//	¶ñ¤JG¹³¯À¸ê®Æ
+			= InputData[LoopNumber1*xsize + LoopNumber2].G;				//	å¡«å…¥Gåƒç´ è³‡æ–™
 			OutputData[3*(LoopNumber1 * xsize + LoopNumber2) + LoopNumber1 * FillingByte + 0]
-			= InputData[LoopNumber1*xsize + LoopNumber2].B;				//	¶ñ¤JB¹³¯À¸ê®Æ
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶ÇÂà´«µ²ªG
-}																		//	µ²§ôArrayToRAWImage°Æµ{¦¡
+			= InputData[LoopNumber1*xsize + LoopNumber2].B;				//	å¡«å…¥Båƒç´ è³‡æ–™
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³è½‰æ›çµæœ
+}																		//	çµæŸArrayToRAWImageå‰¯ç¨‹å¼
 
 HSV *BMP24RGBToHSV(const BMP24RGB *InputData,const int xsize,const int ysize)
-//	BMP24RGBToHSV°Æµ{¦¡
-{																		//	¶i¤JBMP24RGBToHSV°Æµ{¦¡
-	HSV *OutputData;													//	«Å§iOutputData¬°HSV«ü¼Ğ«¬ºAÅÜ¼Æ
-	OutputData = (HSV*)malloc(xsize * ysize * sizeof(HSV));				//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if(OutputData == NULL)												//	­YOutput¬°ªÅ«ü¼Ğ
-	{																	//	¶i¤Jif±Ô­z
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~"
-		return NULL;													//	¦^¶ÇNULL¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	int LoopNumber1,LoopNumber2;										//	«Å§iLoopNumber1»PLoopNumber2¡A¥Î©ó°j°é­pºâ
-	//***OutputData«ü¼Ğªì©l¤Æ***
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-		{																//	¶i¤Jfor°j°é
-			OutputData[LoopNumber1 * xsize + LoopNumber2].H = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-			OutputData[LoopNumber1 * xsize + LoopNumber2].S = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-			OutputData[LoopNumber1 * xsize + LoopNumber2].V = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-		{																//	¶i¤Jfor°j°é
-			unsigned char Red,Green,Blue;								//	«Å§iRed,Green,BlueÅÜ¼Æ¡A°O¿ı¹³¯À¸ê®Æ
-			Red = InputData[LoopNumber1 * xsize + LoopNumber2].R;		//	¶ñ¤JRed¸ê®Æ
-			Green = InputData[LoopNumber1 * xsize + LoopNumber2].G;		//	¶ñ¤JGreen¸ê®Æ
-			Blue = InputData[LoopNumber1 * xsize + LoopNumber2].B;		//	¶ñ¤JBlue¸ê®Æ
-			//***±Æ§ÇRGB¹³¯À¸ê®Æ***
-			unsigned char *SortArray;									//	«Å§iSortArray¬°unsigned char«¬ºA«ü¼Ğ¡A¨Ñ¹³¯À­ÈRGB±Æ§Ç¨Ï¥Î
+//	BMP24RGBToHSVå‰¯ç¨‹å¼
+{																		//	é€²å…¥BMP24RGBToHSVå‰¯ç¨‹å¼
+	HSV *OutputData;													//	å®£å‘ŠOutputDataç‚ºHSVæŒ‡æ¨™å‹æ…‹è®Šæ•¸
+	OutputData = (HSV*)malloc(xsize * ysize * sizeof(HSV));				//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if(OutputData == NULL)												//	è‹¥Outputç‚ºç©ºæŒ‡æ¨™
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤"
+		return NULL;													//	å›å‚³NULLï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	int LoopNumber1,LoopNumber2;										//	å®£å‘ŠLoopNumber1èˆ‡LoopNumber2ï¼Œç”¨æ–¼è¿´åœˆè¨ˆç®—
+	//***OutputDataæŒ‡æ¨™åˆå§‹åŒ–***
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+		{																//	é€²å…¥forè¿´åœˆ
+			OutputData[LoopNumber1 * xsize + LoopNumber2].H = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+			OutputData[LoopNumber1 * xsize + LoopNumber2].S = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+			OutputData[LoopNumber1 * xsize + LoopNumber2].V = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+		{																//	é€²å…¥forè¿´åœˆ
+			unsigned char Red,Green,Blue;								//	å®£å‘ŠRed,Green,Blueè®Šæ•¸ï¼Œè¨˜éŒ„åƒç´ è³‡æ–™
+			Red = InputData[LoopNumber1 * xsize + LoopNumber2].R;		//	å¡«å…¥Redè³‡æ–™
+			Green = InputData[LoopNumber1 * xsize + LoopNumber2].G;		//	å¡«å…¥Greenè³‡æ–™
+			Blue = InputData[LoopNumber1 * xsize + LoopNumber2].B;		//	å¡«å…¥Blueè³‡æ–™
+			//***æ’åºRGBåƒç´ è³‡æ–™***
+			unsigned char *SortArray;									//	å®£å‘ŠSortArrayç‚ºunsigned charå‹æ…‹æŒ‡æ¨™ï¼Œä¾›åƒç´ å€¼RGBæ’åºä½¿ç”¨
 			SortArray = (unsigned char *)malloc( 3 * sizeof(unsigned char) );
-			SortArray[0] = Red;											//	±N¹³¯ÀR¸ê®Æ¶ñ¤JSortArray
-			SortArray[1] = Green;										//	±N¹³¯ÀG¸ê®Æ¶ñ¤JSortArray
-			SortArray[2] = Blue;										//	±N¹³¯ÀB¸ê®Æ¶ñ¤JSortArray
-			//printf("%d,%d,%d\n",SortArray[0],SortArray[1],SortArray[2]);//	Åã¥ÜÅª¨ú¸ê®Æ
-			SortArray = UCharBubbleSort(SortArray, 3, 0);				//	©I¥sUCharBubbleSort±Æ§Ç°Æµ{¦¡¶i¦æ±Æ§Ç(¥Ñ¤p¦Ü¤j)
-			//printf("%d,%d,%d\n",SortArray[0],SortArray[1],SortArray[2]);//	Åã¥Ü±Æ§Ç«á¸ê®Æ
-			unsigned char Max,Mid,Min;									//	«Å§iMax,Mid,MinÅÜ¼Æ¡A°O¿ı±Æ§Ç§¹¦¨¹³¯À¸ê®Æ
-			Max = SortArray[2];											//	¶ñ¤JMax¼Æ­È
-			Mid = SortArray[1];											//	¶ñ¤JMid¼Æ­È
-			Min = SortArray[0];											//	¶ñ¤JMin¼Æ­È
+			SortArray[0] = Red;											//	å°‡åƒç´ Rè³‡æ–™å¡«å…¥SortArray
+			SortArray[1] = Green;										//	å°‡åƒç´ Gè³‡æ–™å¡«å…¥SortArray
+			SortArray[2] = Blue;										//	å°‡åƒç´ Bè³‡æ–™å¡«å…¥SortArray
+			//printf("%d,%d,%d\n",SortArray[0],SortArray[1],SortArray[2]);//	é¡¯ç¤ºè®€å–è³‡æ–™
+			SortArray = UCharBubbleSort(SortArray, 3, 0);				//	å‘¼å«UCharBubbleSortæ’åºå‰¯ç¨‹å¼é€²è¡Œæ’åº(ç”±å°è‡³å¤§)
+			//printf("%d,%d,%d\n",SortArray[0],SortArray[1],SortArray[2]);//	é¡¯ç¤ºæ’åºå¾Œè³‡æ–™
+			unsigned char Max,Mid,Min;									//	å®£å‘ŠMax,Mid,Minè®Šæ•¸ï¼Œè¨˜éŒ„æ’åºå®Œæˆåƒç´ è³‡æ–™
+			Max = SortArray[2];											//	å¡«å…¥Maxæ•¸å€¼
+			Mid = SortArray[1];											//	å¡«å…¥Midæ•¸å€¼
+			Min = SortArray[0];											//	å¡«å…¥Minæ•¸å€¼
 			//system("pause");
-			//***­pºâH***
+			//***è¨ˆç®—H***
 			long double H1 = acos(0.5 * ((Red - Green) + (Red - Blue)) /
 							 sqrt(((pow((Red - Green), 2.0)) + 
 							 (Red - Blue) * (Green - Blue)))) * (180.0 / M_PI);
-			if( Max == Min )											//	­YMax=Min
-			{															//	¶i¤Jif±Ô­z
-				OutputData[LoopNumber1 * xsize + LoopNumber2].H = 0.0;	//	³]©wH=0
-			}															//	µ²§ôif±Ô­z
-			else if(Blue <= Green)										//	­YBlue(ÂÅ¦â¦¨¤À)¤p©óµ¥©óGreen(ºñ¦â¦¨¤À)
-			{															//	¶i¤Jelse if±Ô­z
+			if( Max == Min )											//	è‹¥Max=Min
+			{															//	é€²å…¥ifæ•˜è¿°
+				OutputData[LoopNumber1 * xsize + LoopNumber2].H = 0.0;	//	è¨­å®šH=0
+			}															//	çµæŸifæ•˜è¿°
+			else if(Blue <= Green)										//	è‹¥Blue(è—è‰²æˆåˆ†)å°æ–¼ç­‰æ–¼Green(ç¶ è‰²æˆåˆ†)
+			{															//	é€²å…¥else ifæ•˜è¿°
 				OutputData[LoopNumber1 * xsize + LoopNumber2].H = H1;
-			}															//	µ²§ôelse if±Ô­z
-			else														//	­YMax¤£µ¥©óMin¥BBlue¤j©óGreen
-			{															//	¶i¤Jelse±Ô­z
+			}															//	çµæŸelse ifæ•˜è¿°
+			else														//	è‹¥Maxä¸ç­‰æ–¼Minä¸”Blueå¤§æ–¼Green
+			{															//	é€²å…¥elseæ•˜è¿°
 				OutputData[LoopNumber1 * xsize + LoopNumber2].H = 360.0-H1;
-			}															//	µ²§ôelse±Ô­z
-			//***­pºâS***
-			if(Max == 0)												//	­YMax=0
-			{															//	¶i¤Jif±Ô­z
-				OutputData[LoopNumber1 * xsize + LoopNumber2].S = 0.0;	//	¶ñ¤JS¼Æ­È
-			}															//	µ²§ôif±Ô­z
-			else														//	­YMax¤£¬°0
-			{															//	¶i¤Jelse±Ô­z
+			}															//	çµæŸelseæ•˜è¿°
+			//***è¨ˆç®—S***
+			if(Max == 0)												//	è‹¥Max=0
+			{															//	é€²å…¥ifæ•˜è¿°
+				OutputData[LoopNumber1 * xsize + LoopNumber2].S = 0.0;	//	å¡«å…¥Sæ•¸å€¼
+			}															//	çµæŸifæ•˜è¿°
+			else														//	è‹¥Maxä¸ç‚º0
+			{															//	é€²å…¥elseæ•˜è¿°
 				OutputData[LoopNumber1 * xsize + LoopNumber2].S =
-				1.0 - ( (long double)Min / (long double)Max);			//	­pºâS¼Æ­È
-			}															//	µ²§ôelse±Ô­z
-			//***­pºâV***
+				1.0 - ( (long double)Min / (long double)Max);			//	è¨ˆç®—Sæ•¸å€¼
+			}															//	çµæŸelseæ•˜è¿°
+			//***è¨ˆç®—V***
 			OutputData[LoopNumber1 * xsize + LoopNumber2].V =
-			SortArray[2];												//	­pºâV¼Æ­È
-			free(SortArray);											//	ÄÀ©ñSortArrayªÅ¶¡
+			SortArray[2];												//	è¨ˆç®—Væ•¸å€¼
+			free(SortArray);											//	é‡‹æ”¾SortArrayç©ºé–“
 			
-			#ifdef DebugMode											//	­Y¦³©w¸q¬°DebugMode(°£¿ù¼Ò¦¡)
-				printf("\nÂà´«µ²ªG¡G\n­ì©l¹³¯À\tÂà´««á¹³¯À\n");
+			#ifdef DebugMode											//	è‹¥æœ‰å®šç¾©ç‚ºDebugMode(é™¤éŒ¯æ¨¡å¼)
+				printf("\nè½‰æ›çµæœï¼š\nåŸå§‹åƒç´ \tè½‰æ›å¾Œåƒç´ \n");
 				printf("R=%d\t\tHue=\t\t",InputData[LoopNumber1 * xsize + LoopNumber2].R);
 				ShowLongDouble(OutputData[LoopNumber1 * xsize + LoopNumber2].H);
 				printf("\nG=%d\t\tSaturation=\t",InputData[LoopNumber1 * xsize + LoopNumber2].G);
@@ -555,860 +301,860 @@ HSV *BMP24RGBToHSV(const BMP24RGB *InputData,const int xsize,const int ysize)
 				ShowLongDouble(OutputData[LoopNumber1 * xsize + LoopNumber2].V);
 				printf("\n");
 				system("pause");
-			#endif														//	µ²§ôifdef±Ô­z
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶ÇOutputData¡A¨Ãµ²§ô°Æµ{¦¡
-}																		//	µ²§ôBMP24RGBToHSV°Æµ{¦¡
+			#endif														//	çµæŸifdefæ•˜è¿°
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³OutputDataï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+}																		//	çµæŸBMP24RGBToHSVå‰¯ç¨‹å¼
 BMP24RGB *HSVToBMP24RGB(const HSV *InputData,const int xsize,const int ysize)
-//	HSVToBMP24RGB°Æµ{¦¡
-{																		//	¶i¤JHSVToBMP24RGB°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData¬°HSV«ü¼Ğ«¬ºAÅÜ¼Æ
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if(OutputData == NULL)												//	­YOutput¬°ªÅ«ü¼Ğ
-	{																	//	¶i¤Jif±Ô­z
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~"
-		return NULL;													//	¦^¶ÇNULL¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	int LoopNumber1,LoopNumber2;										//	«Å§iLoopNumber1»PLoopNumber2¡A¥Î©ó°j°é­pºâ
-	//***OutputData«ü¼Ğªì©l¤Æ***
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-		{																//	¶i¤Jfor°j°é
-			OutputData[LoopNumber1 * xsize + LoopNumber2].R = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-			OutputData[LoopNumber1 * xsize + LoopNumber2].G = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-			OutputData[LoopNumber1 * xsize + LoopNumber2].B = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-		{																//	¶i¤Jfor°j°é
-			long double H,S,Max;										//	«Å§iH¡BS»PMaxªøÂùºë«×¯BÂI¼Æ¥Î¥H°O¿ı·í«e¹³¯À¸ê®Æ
-			H = InputData[LoopNumber1 * xsize + LoopNumber2].H;			//	¶ñ¤JH¸ê®Æ
-			S = InputData[LoopNumber1 * xsize + LoopNumber2].S;			//	¶ñ¤JS¸ê®Æ
-			Max = InputData[LoopNumber1 * xsize + LoopNumber2].V;		//	¶ñ¤JMax¸ê®Æ
-			unsigned char hi = floor( H / 60.0);						//	­pºâhi
-			long double f = (H / 60.0) - hi;							//	­pºâf
+//	HSVToBMP24RGBå‰¯ç¨‹å¼
+{																		//	é€²å…¥HSVToBMP24RGBå‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataç‚ºHSVæŒ‡æ¨™å‹æ…‹è®Šæ•¸
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if(OutputData == NULL)												//	è‹¥Outputç‚ºç©ºæŒ‡æ¨™
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤"
+		return NULL;													//	å›å‚³NULLï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	int LoopNumber1,LoopNumber2;										//	å®£å‘ŠLoopNumber1èˆ‡LoopNumber2ï¼Œç”¨æ–¼è¿´åœˆè¨ˆç®—
+	//***OutputDataæŒ‡æ¨™åˆå§‹åŒ–***
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+		{																//	é€²å…¥forè¿´åœˆ
+			OutputData[LoopNumber1 * xsize + LoopNumber2].R = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+			OutputData[LoopNumber1 * xsize + LoopNumber2].G = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+			OutputData[LoopNumber1 * xsize + LoopNumber2].B = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+		{																//	é€²å…¥forè¿´åœˆ
+			long double H,S,Max;										//	å®£å‘ŠHã€Sèˆ‡Maxé•·é›™ç²¾åº¦æµ®é»æ•¸ç”¨ä»¥è¨˜éŒ„ç•¶å‰åƒç´ è³‡æ–™
+			H = InputData[LoopNumber1 * xsize + LoopNumber2].H;			//	å¡«å…¥Hè³‡æ–™
+			S = InputData[LoopNumber1 * xsize + LoopNumber2].S;			//	å¡«å…¥Sè³‡æ–™
+			Max = InputData[LoopNumber1 * xsize + LoopNumber2].V;		//	å¡«å…¥Maxè³‡æ–™
+			unsigned char hi = floor( H / 60.0);						//	è¨ˆç®—hi
+			long double f = (H / 60.0) - hi;							//	è¨ˆç®—f
 			long double Min,q,t;
 			Min = Max * (1.0 - S);
 			q = Max * (1.0 - f * S);
 			t = Max * (1.0 - (1.0 - f) * S);
-			if(hi == 0)													//	­Yhi=0
-			{															//	¶i¤Jif±Ô­z
-				OutputData[LoopNumber1 * xsize + LoopNumber2].R = Max;	//	¶ñ¤JR¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].G = t;	//	¶ñ¤JG¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].B = Min;	//	¶ñ¤JB¸ê®Æ
-			}															//	µ²§ôif±Ô­z
-			else if(hi == 1)											//	­Yhi=1
-			{															//	¶i¤Jelse if±Ô­z
-				OutputData[LoopNumber1 * xsize + LoopNumber2].R = q;	//	¶ñ¤JR¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].G = Max;	//	¶ñ¤JG¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].B = Min;	//	¶ñ¤JB¸ê®Æ
-			}															//	µ²§ôelse if±Ô­z
-			else if(hi == 2)											//	­Yhi=2
-			{															//	¶i¤Jelse if±Ô­z
-				OutputData[LoopNumber1 * xsize + LoopNumber2].R = Min;	//	¶ñ¤JR¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].G = Max;	//	¶ñ¤JG¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].B = t;	//	¶ñ¤JB¸ê®Æ
-			}															//	µ²§ôelse if±Ô­z
-			else if(hi == 3)											//	­Yhi=3
-			{															//	¶i¤Jelse if±Ô­z
-				OutputData[LoopNumber1 * xsize + LoopNumber2].R = Min;	//	¶ñ¤JR¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].G = q;	//	¶ñ¤JG¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].B = Max;	//	¶ñ¤JB¸ê®Æ
-			}															//	µ²§ôelse if±Ô­z
-			else if(hi == 4)											//	­Yhi=4
-			{															//	¶i¤Jelse if±Ô­z
-				OutputData[LoopNumber1 * xsize + LoopNumber2].R = t;	//	¶ñ¤JR¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].G = Min;	//	¶ñ¤JG¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].B = Max;	//	¶ñ¤JB¸ê®Æ
-			}															//	µ²§ôelse if±Ô­z
-			else if(hi == 5)											//	­Yhi=5
-			{															//	¶i¤Jelse if±Ô­z
-				OutputData[LoopNumber1 * xsize + LoopNumber2].R = Max;	//	¶ñ¤JR¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].G = Min;	//	¶ñ¤JG¸ê®Æ
-				OutputData[LoopNumber1 * xsize + LoopNumber2].B = q;	//	¶ñ¤JB¸ê®Æ
-			}															//	µ²§ôelse if±Ô­z
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôHSVToBMP24RGB°Æµ{¦¡
+			if(hi == 0)													//	è‹¥hi=0
+			{															//	é€²å…¥ifæ•˜è¿°
+				OutputData[LoopNumber1 * xsize + LoopNumber2].R = Max;	//	å¡«å…¥Rè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].G = t;	//	å¡«å…¥Gè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].B = Min;	//	å¡«å…¥Bè³‡æ–™
+			}															//	çµæŸifæ•˜è¿°
+			else if(hi == 1)											//	è‹¥hi=1
+			{															//	é€²å…¥else ifæ•˜è¿°
+				OutputData[LoopNumber1 * xsize + LoopNumber2].R = q;	//	å¡«å…¥Rè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].G = Max;	//	å¡«å…¥Gè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].B = Min;	//	å¡«å…¥Bè³‡æ–™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if(hi == 2)											//	è‹¥hi=2
+			{															//	é€²å…¥else ifæ•˜è¿°
+				OutputData[LoopNumber1 * xsize + LoopNumber2].R = Min;	//	å¡«å…¥Rè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].G = Max;	//	å¡«å…¥Gè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].B = t;	//	å¡«å…¥Bè³‡æ–™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if(hi == 3)											//	è‹¥hi=3
+			{															//	é€²å…¥else ifæ•˜è¿°
+				OutputData[LoopNumber1 * xsize + LoopNumber2].R = Min;	//	å¡«å…¥Rè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].G = q;	//	å¡«å…¥Gè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].B = Max;	//	å¡«å…¥Bè³‡æ–™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if(hi == 4)											//	è‹¥hi=4
+			{															//	é€²å…¥else ifæ•˜è¿°
+				OutputData[LoopNumber1 * xsize + LoopNumber2].R = t;	//	å¡«å…¥Rè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].G = Min;	//	å¡«å…¥Gè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].B = Max;	//	å¡«å…¥Bè³‡æ–™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if(hi == 5)											//	è‹¥hi=5
+			{															//	é€²å…¥else ifæ•˜è¿°
+				OutputData[LoopNumber1 * xsize + LoopNumber2].R = Max;	//	å¡«å…¥Rè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].G = Min;	//	å¡«å…¥Gè³‡æ–™
+				OutputData[LoopNumber1 * xsize + LoopNumber2].B = q;	//	å¡«å…¥Bè³‡æ–™
+			}															//	çµæŸelse ifæ•˜è¿°
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸHSVToBMP24RGBå‰¯ç¨‹å¼
 bool ImageDataToTxt(const char *file_name,const BMP24RGB *image,const int xsize,const int ysize)
-//	ImageDataToTxt°Æµ{¦¡¡A¥Î©ó±N¹Ï¹³¼v¹³¸ê®Æ¼g¤JtxtÀÉ
-{																		//	¶i¤JImageDataToTxt°Æµ{¦¡
-	char fname_txt[MAX_PATH];											//	«Å§i¹Ï¤ù¸ê®Æ°O¿ıÀÉ¤§§¹¾ãÀÉ¦W(³Ì¦hMAX_PATH­Ó¦r¤¸)
-	sprintf(fname_txt, "%s.txt", file_name);							//	«Ø¥ß¹Ï¤ù¸ê®Æ°O¿ıÀÉ¤§§¹¾ãÀÉ¦W(³Ì¦hMAX_PATH­Ó¦r¤¸)
-	if(FileWrite(fname_txt,"","w") == False)							//	¹Á¸Õ«Ø¥ßÀÉ®×¡A­YÀÉ®×«Ø¥ß¥¢±Ñ
-	{																	//	¶i¤Jif±Ô­z
-		return False;													//	¦^¶ÇFalse¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-	}																	//	µ²§ôif±Ô­z
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	char WriteStringTemp[50];											//	«Å§iWriteStringTemp¦r¦ê¡A¥Î©ó¼È¦s¼g¤J¸ê®Æ
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç¼g¤J¹Ï¹³¸ê®Æ
-	{																	//	¶i¤Jfor°j°é
-		sprintf(WriteStringTemp,"²Ä%d­Ó¹³¯ÀR=%d\t",loop_num,image[loop_num].R);
-		//	¥Í¦¨¼g¤J¦r¦ê¸ê®Æ
-		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	¹Á¸Õ¼g¤J¸ê®Æ
-		{																//	¶i¤Jif±Ô­z
-			return False;												//	¦^¶ÇFalse¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-		}																//	µ²§ôif±Ô­z
-		sprintf(WriteStringTemp,"²Ä%d­Ó¹³¯ÀG=%d\t",loop_num,image[loop_num].G);
-		//	¥Í¦¨¼g¤J¦r¦ê¸ê®Æ
-		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	¹Á¸Õ¼g¤J¸ê®Æ
-		{																//	¶i¤Jif±Ô­z
-			return False;												//	¦^¶ÇFalse¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-		}																//	µ²§ôif±Ô­z
-		sprintf(WriteStringTemp,"²Ä%d­Ó¹³¯ÀB=%d\n",loop_num,image[loop_num].B);
-		//	¥Í¦¨¼g¤J¦r¦ê¸ê®Æ
-		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	¹Á¸Õ¼g¤J¸ê®Æ
-		{																//	¶i¤Jif±Ô­z
-			return False;												//	¦^¶ÇFalse¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-		}																//	µ²§ôif±Ô­z
-	}																	//	µ²§ôfor°j°é
-	return True;														//	¦^¶ÇTrue¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-}																		//	µ²§ôImageDataToTxt°Æµ{¦¡
+//	ImageDataToTxtå‰¯ç¨‹å¼ï¼Œç”¨æ–¼å°‡åœ–åƒå½±åƒè³‡æ–™å¯«å…¥txtæª”
+{																		//	é€²å…¥ImageDataToTxtå‰¯ç¨‹å¼
+	char fname_txt[MAX_PATH];											//	å®£å‘Šåœ–ç‰‡è³‡æ–™è¨˜éŒ„æª”ä¹‹å®Œæ•´æª”å(æœ€å¤šMAX_PATHå€‹å­—å…ƒ)
+	sprintf(fname_txt, "%s.txt", file_name);							//	å»ºç«‹åœ–ç‰‡è³‡æ–™è¨˜éŒ„æª”ä¹‹å®Œæ•´æª”å(æœ€å¤šMAX_PATHå€‹å­—å…ƒ)
+	if(FileWrite(fname_txt,"","w") == False)							//	å˜—è©¦å»ºç«‹æª”æ¡ˆï¼Œè‹¥æª”æ¡ˆå»ºç«‹å¤±æ•—
+	{																	//	é€²å…¥ifæ•˜è¿°
+		return False;													//	å›å‚³Falseä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+	}																	//	çµæŸifæ•˜è¿°
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	char WriteStringTemp[50];											//	å®£å‘ŠWriteStringTempå­—ä¸²ï¼Œç”¨æ–¼æš«å­˜å¯«å…¥è³‡æ–™
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºå¯«å…¥åœ–åƒè³‡æ–™
+	{																	//	é€²å…¥forè¿´åœˆ
+		sprintf(WriteStringTemp,"ç¬¬%då€‹åƒç´ R=%d\t",loop_num,image[loop_num].R);
+		//	ç”Ÿæˆå¯«å…¥å­—ä¸²è³‡æ–™
+		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	å˜—è©¦å¯«å…¥è³‡æ–™
+		{																//	é€²å…¥ifæ•˜è¿°
+			return False;												//	å›å‚³Falseä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+		}																//	çµæŸifæ•˜è¿°
+		sprintf(WriteStringTemp,"ç¬¬%då€‹åƒç´ G=%d\t",loop_num,image[loop_num].G);
+		//	ç”Ÿæˆå¯«å…¥å­—ä¸²è³‡æ–™
+		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	å˜—è©¦å¯«å…¥è³‡æ–™
+		{																//	é€²å…¥ifæ•˜è¿°
+			return False;												//	å›å‚³Falseä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+		}																//	çµæŸifæ•˜è¿°
+		sprintf(WriteStringTemp,"ç¬¬%då€‹åƒç´ B=%d\n",loop_num,image[loop_num].B);
+		//	ç”Ÿæˆå¯«å…¥å­—ä¸²è³‡æ–™
+		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	å˜—è©¦å¯«å…¥è³‡æ–™
+		{																//	é€²å…¥ifæ•˜è¿°
+			return False;												//	å›å‚³Falseä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+		}																//	çµæŸifæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ
+	return True;														//	å›å‚³Trueä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+}																		//	çµæŸImageDataToTxtå‰¯ç¨‹å¼
 bool HSVDataToTxt(const char *file_name,const HSV *image,const int xsize,const int ysize)
-//	HSVDataToTxt°Æµ{¦¡¡A¥Î©ó±NHSV«¬ºA¼v¹³¸ê®Æ¼g¤JtxtÀÉ
-{																		//	¶i¤JHSVDataToTxt°Æµ{¦¡
-	char fname_txt[MAX_PATH];											//	«Å§i¹Ï¤ù¸ê®Æ°O¿ıÀÉ¤§§¹¾ãÀÉ¦W(³Ì¦hMAX_PATH­Ó¦r¤¸)
-	sprintf(fname_txt, "%s.txt", file_name);							//	«Ø¥ß¹Ï¤ù¸ê®Æ°O¿ıÀÉ¤§§¹¾ãÀÉ¦W(³Ì¦hMAX_PATH­Ó¦r¤¸)
-	if(FileWrite(fname_txt,"","w") == False)							//	¹Á¸Õ«Ø¥ßÀÉ®×¡A­YÀÉ®×«Ø¥ß¥¢±Ñ
-	{																	//	¶i¤Jif±Ô­z
-		return False;													//	¦^¶ÇFalse¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-	}																	//	µ²§ôif±Ô­z
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	char WriteStringTemp[50];											//	«Å§iWriteStringTemp¦r¦ê¡A¥Î©ó¼È¦s¼g¤J¸ê®Æ
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç¼g¤J¹Ï¹³¸ê®Æ
-	{																	//	¶i¤Jfor°j°é
-		sprintf(WriteStringTemp,"²Ä%d­Ó¹³¯ÀH=%f\t",loop_num,(float)image[loop_num].H);
-		//	¥Í¦¨¼g¤J¦r¦ê¸ê®Æ
-		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	¹Á¸Õ¼g¤J¸ê®Æ
-		{																//	¶i¤Jif±Ô­z
-			return False;												//	¦^¶ÇFalse¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-		}																//	µ²§ôif±Ô­z
-		sprintf(WriteStringTemp,"²Ä%d­Ó¹³¯ÀS=%f\t",loop_num,(float)image[loop_num].S);
-		//	¥Í¦¨¼g¤J¦r¦ê¸ê®Æ
-		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	¹Á¸Õ¼g¤J¸ê®Æ
-		{																//	¶i¤Jif±Ô­z
-			return False;												//	¦^¶ÇFalse¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-		}																//	µ²§ôif±Ô­z
-		sprintf(WriteStringTemp,"²Ä%d­Ó¹³¯ÀV=%f\n",loop_num,(float)image[loop_num].V);
-		//	¥Í¦¨¼g¤J¦r¦ê¸ê®Æ
-		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	¹Á¸Õ¼g¤J¸ê®Æ
-		{																//	¶i¤Jif±Ô­z
-			return False;												//	¦^¶ÇFalse¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-		}																//	µ²§ôif±Ô­z
-	}																	//	µ²§ôfor°j°é
-	return True;														//	¦^¶ÇTrue¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-}																		//	µ²§ôHSVDataToTxt°Æµ{¦¡
+//	HSVDataToTxtå‰¯ç¨‹å¼ï¼Œç”¨æ–¼å°‡HSVå‹æ…‹å½±åƒè³‡æ–™å¯«å…¥txtæª”
+{																		//	é€²å…¥HSVDataToTxtå‰¯ç¨‹å¼
+	char fname_txt[MAX_PATH];											//	å®£å‘Šåœ–ç‰‡è³‡æ–™è¨˜éŒ„æª”ä¹‹å®Œæ•´æª”å(æœ€å¤šMAX_PATHå€‹å­—å…ƒ)
+	sprintf(fname_txt, "%s.txt", file_name);							//	å»ºç«‹åœ–ç‰‡è³‡æ–™è¨˜éŒ„æª”ä¹‹å®Œæ•´æª”å(æœ€å¤šMAX_PATHå€‹å­—å…ƒ)
+	if(FileWrite(fname_txt,"","w") == False)							//	å˜—è©¦å»ºç«‹æª”æ¡ˆï¼Œè‹¥æª”æ¡ˆå»ºç«‹å¤±æ•—
+	{																	//	é€²å…¥ifæ•˜è¿°
+		return False;													//	å›å‚³Falseä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+	}																	//	çµæŸifæ•˜è¿°
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	char WriteStringTemp[50];											//	å®£å‘ŠWriteStringTempå­—ä¸²ï¼Œç”¨æ–¼æš«å­˜å¯«å…¥è³‡æ–™
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºå¯«å…¥åœ–åƒè³‡æ–™
+	{																	//	é€²å…¥forè¿´åœˆ
+		sprintf(WriteStringTemp,"ç¬¬%då€‹åƒç´ H=%f\t",loop_num,(float)image[loop_num].H);
+		//	ç”Ÿæˆå¯«å…¥å­—ä¸²è³‡æ–™
+		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	å˜—è©¦å¯«å…¥è³‡æ–™
+		{																//	é€²å…¥ifæ•˜è¿°
+			return False;												//	å›å‚³Falseä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+		}																//	çµæŸifæ•˜è¿°
+		sprintf(WriteStringTemp,"ç¬¬%då€‹åƒç´ S=%f\t",loop_num,(float)image[loop_num].S);
+		//	ç”Ÿæˆå¯«å…¥å­—ä¸²è³‡æ–™
+		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	å˜—è©¦å¯«å…¥è³‡æ–™
+		{																//	é€²å…¥ifæ•˜è¿°
+			return False;												//	å›å‚³Falseä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+		}																//	çµæŸifæ•˜è¿°
+		sprintf(WriteStringTemp,"ç¬¬%då€‹åƒç´ V=%f\n",loop_num,(float)image[loop_num].V);
+		//	ç”Ÿæˆå¯«å…¥å­—ä¸²è³‡æ–™
+		if(FileWrite(fname_txt,WriteStringTemp,"a")==False)				//	å˜—è©¦å¯«å…¥è³‡æ–™
+		{																//	é€²å…¥ifæ•˜è¿°
+			return False;												//	å›å‚³Falseä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+		}																//	çµæŸifæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ
+	return True;														//	å›å‚³Trueä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+}																		//	çµæŸHSVDataToTxtå‰¯ç¨‹å¼
 BMP24RGB *ImgDifference2(const BMP24RGB *InputData1,const BMP24RGB *InputData2,const int xsize,const int ysize)
-//	ImgDifference2°Æµ{¦¡
-{																		//	¶i¤JImgDifference2°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData¬°BMP24RGB«ü¼Ğ«¬ºAÅÜ¼Æ
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(HSV));		//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if(OutputData == NULL)												//	­YOutput¬°ªÅ«ü¼Ğ
-	{																	//	¶i¤Jif±Ô­z
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~"
-		return NULL;													//	¦^¶ÇNULL¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	int LoopNumber1,LoopNumber2;										//	«Å§iLoopNumber1»PLoopNumber2¡A¥Î©ó°j°é­pºâ
-	//***OutputData«ü¼Ğªì©l¤Æ***
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-		{																//	¶i¤Jfor°j°é
-			OutputData[LoopNumber1 * xsize + LoopNumber2].R = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-			OutputData[LoopNumber1 * xsize + LoopNumber2].G = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-			OutputData[LoopNumber1 * xsize + LoopNumber2].B = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-		{																//	¶i¤Jfor°j°é
-			unsigned char Red1,Green1,Blue1;							//	«Å§iRed1,Green1,Blue1ÅÜ¼Æ¡A°O¿ı¹³¯À¸ê®Æ
-			Red1 = InputData1[LoopNumber1 * xsize + LoopNumber2].R;		//	¶ñ¤JInputData1¤§Red¸ê®Æ
-			Green1 = InputData1[LoopNumber1 * xsize + LoopNumber2].G;	//	¶ñ¤JInputData1¤§Green¸ê®Æ
-			Blue1 = InputData1[LoopNumber1 * xsize + LoopNumber2].B;	//	¶ñ¤JInputData1¤§Blue¸ê®Æ
-			unsigned char Red2,Green2,Blue2;							//	«Å§iRed2,Green2,Blue2ÅÜ¼Æ¡A°O¿ı¹³¯À¸ê®Æ
-			Red2 = InputData2[LoopNumber1 * xsize + LoopNumber2].R;		//	¶ñ¤JInputData2¤§Red¸ê®Æ
-			Green2 = InputData2[LoopNumber1 * xsize + LoopNumber2].G;	//	¶ñ¤JInputData2¤§Green¸ê®Æ
-			Blue2 = InputData2[LoopNumber1 * xsize + LoopNumber2].B;	//	¶ñ¤JInputData2¤§Blue¸ê®Æ
+//	ImgDifference2å‰¯ç¨‹å¼
+{																		//	é€²å…¥ImgDifference2å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataç‚ºBMP24RGBæŒ‡æ¨™å‹æ…‹è®Šæ•¸
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(HSV));		//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if(OutputData == NULL)												//	è‹¥Outputç‚ºç©ºæŒ‡æ¨™
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤"
+		return NULL;													//	å›å‚³NULLï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	int LoopNumber1,LoopNumber2;										//	å®£å‘ŠLoopNumber1èˆ‡LoopNumber2ï¼Œç”¨æ–¼è¿´åœˆè¨ˆç®—
+	//***OutputDataæŒ‡æ¨™åˆå§‹åŒ–***
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+		{																//	é€²å…¥forè¿´åœˆ
+			OutputData[LoopNumber1 * xsize + LoopNumber2].R = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+			OutputData[LoopNumber1 * xsize + LoopNumber2].G = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+			OutputData[LoopNumber1 * xsize + LoopNumber2].B = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+		{																//	é€²å…¥forè¿´åœˆ
+			unsigned char Red1,Green1,Blue1;							//	å®£å‘ŠRed1,Green1,Blue1è®Šæ•¸ï¼Œè¨˜éŒ„åƒç´ è³‡æ–™
+			Red1 = InputData1[LoopNumber1 * xsize + LoopNumber2].R;		//	å¡«å…¥InputData1ä¹‹Redè³‡æ–™
+			Green1 = InputData1[LoopNumber1 * xsize + LoopNumber2].G;	//	å¡«å…¥InputData1ä¹‹Greenè³‡æ–™
+			Blue1 = InputData1[LoopNumber1 * xsize + LoopNumber2].B;	//	å¡«å…¥InputData1ä¹‹Blueè³‡æ–™
+			unsigned char Red2,Green2,Blue2;							//	å®£å‘ŠRed2,Green2,Blue2è®Šæ•¸ï¼Œè¨˜éŒ„åƒç´ è³‡æ–™
+			Red2 = InputData2[LoopNumber1 * xsize + LoopNumber2].R;		//	å¡«å…¥InputData2ä¹‹Redè³‡æ–™
+			Green2 = InputData2[LoopNumber1 * xsize + LoopNumber2].G;	//	å¡«å…¥InputData2ä¹‹Greenè³‡æ–™
+			Blue2 = InputData2[LoopNumber1 * xsize + LoopNumber2].B;	//	å¡«å…¥InputData2ä¹‹Blueè³‡æ–™
 			OutputData[LoopNumber1 * xsize + LoopNumber2].R = fabs(Red1 - Red2);
-			//	±N¿é¤J¸ê®ÆInputData1»PInputData2¶i¦æ¬Û´î¹Bºâ¨Ã¨úµ´¹ï­È«á¶ñ¤JOutputData
+			//	å°‡è¼¸å…¥è³‡æ–™InputData1èˆ‡InputData2é€²è¡Œç›¸æ¸›é‹ç®—ä¸¦å–çµ•å°å€¼å¾Œå¡«å…¥OutputData
 			OutputData[LoopNumber1 * xsize + LoopNumber2].G = fabs(Green1 - Green2);
-			//	±N¿é¤J¸ê®ÆInputData1»PInputData2¶i¦æ¬Û´î¹Bºâ¨Ã¨úµ´¹ï­È«á¶ñ¤JOutputData
+			//	å°‡è¼¸å…¥è³‡æ–™InputData1èˆ‡InputData2é€²è¡Œç›¸æ¸›é‹ç®—ä¸¦å–çµ•å°å€¼å¾Œå¡«å…¥OutputData
 			OutputData[LoopNumber1 * xsize + LoopNumber2].B = fabs(Blue1 - Blue2);
-			//	±N¿é¤J¸ê®ÆInputData1»PInputData2¶i¦æ¬Û´î¹Bºâ¨Ã¨úµ´¹ï­È«á¶ñ¤JOutputData
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶ÇOutputData¡A¨Ãµ²§ô°Æµ{¦¡
-}																		//	µ²§ôImgDifference2°Æµ{¦¡
+			//	å°‡è¼¸å…¥è³‡æ–™InputData1èˆ‡InputData2é€²è¡Œç›¸æ¸›é‹ç®—ä¸¦å–çµ•å°å€¼å¾Œå¡«å…¥OutputData
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³OutputDataï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+}																		//	çµæŸImgDifference2å‰¯ç¨‹å¼
 BMP24RGB *BMP24RGB2or(const BMP24RGB *InputData1,const BMP24RGB *InputData2,const int xsize,const int ysize)
-//	BMP24RGB2or°Æµ{¦¡
-{																		//	¶i¤JBMP24RGB2or°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData¬°BMP24RGB«ü¼Ğ«¬ºAÅÜ¼Æ
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(HSV));		//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if(OutputData == NULL)												//	­YOutput¬°ªÅ«ü¼Ğ
-	{																	//	¶i¤Jif±Ô­z
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~"
-		return NULL;													//	¦^¶ÇNULL¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	int LoopNumber1,LoopNumber2;										//	«Å§iLoopNumber1»PLoopNumber2¡A¥Î©ó°j°é­pºâ
-	//***OutputData«ü¼Ğªì©l¤Æ***
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-		{																//	¶i¤Jfor°j°é
-			OutputData[LoopNumber1 * xsize + LoopNumber2].R = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-			OutputData[LoopNumber1 * xsize + LoopNumber2].G = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-			OutputData[LoopNumber1 * xsize + LoopNumber2].B = 0;		//	ªì©l¤ÆOutputData«ü¼ĞÅÜ¼Æ
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-	{																	//	¶i¤Jfor°j°é
-		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	¥Hfor°j°é¨Ì§ÇÂà´«¹Ï¹³¹³¯À¸ê®Æ
-		{																//	¶i¤Jfor°j°é
-			unsigned char Red1,Green1,Blue1;							//	«Å§iRed1,Green1,Blue1ÅÜ¼Æ¡A°O¿ı¹³¯À¸ê®Æ
-			Red1 = InputData1[LoopNumber1 * xsize + LoopNumber2].R;		//	¶ñ¤JInputData1¤§Red¸ê®Æ
-			Green1 = InputData1[LoopNumber1 * xsize + LoopNumber2].G;	//	¶ñ¤JInputData1¤§Green¸ê®Æ
-			Blue1 = InputData1[LoopNumber1 * xsize + LoopNumber2].B;	//	¶ñ¤JInputData1¤§Blue¸ê®Æ
-			unsigned char Red2,Green2,Blue2;							//	«Å§iRed2,Green2,Blue2ÅÜ¼Æ¡A°O¿ı¹³¯À¸ê®Æ
-			Red2 = InputData2[LoopNumber1 * xsize + LoopNumber2].R;		//	¶ñ¤JInputData2¤§Red¸ê®Æ
-			Green2 = InputData2[LoopNumber1 * xsize + LoopNumber2].G;	//	¶ñ¤JInputData2¤§Green¸ê®Æ
-			Blue2 = InputData2[LoopNumber1 * xsize + LoopNumber2].B;	//	¶ñ¤JInputData2¤§Blue¸ê®Æ
+//	BMP24RGB2orå‰¯ç¨‹å¼
+{																		//	é€²å…¥BMP24RGB2orå‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataç‚ºBMP24RGBæŒ‡æ¨™å‹æ…‹è®Šæ•¸
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(HSV));		//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if(OutputData == NULL)												//	è‹¥Outputç‚ºç©ºæŒ‡æ¨™
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤"
+		return NULL;													//	å›å‚³NULLï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	int LoopNumber1,LoopNumber2;										//	å®£å‘ŠLoopNumber1èˆ‡LoopNumber2ï¼Œç”¨æ–¼è¿´åœˆè¨ˆç®—
+	//***OutputDataæŒ‡æ¨™åˆå§‹åŒ–***
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+		{																//	é€²å…¥forè¿´åœˆ
+			OutputData[LoopNumber1 * xsize + LoopNumber2].R = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+			OutputData[LoopNumber1 * xsize + LoopNumber2].G = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+			OutputData[LoopNumber1 * xsize + LoopNumber2].B = 0;		//	åˆå§‹åŒ–OutputDataæŒ‡æ¨™è®Šæ•¸
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	for(LoopNumber1 = 0;LoopNumber1<ysize;LoopNumber1++)				//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(LoopNumber2 = 0;LoopNumber2<xsize;LoopNumber2++)			//	ä»¥forè¿´åœˆä¾åºè½‰æ›åœ–åƒåƒç´ è³‡æ–™
+		{																//	é€²å…¥forè¿´åœˆ
+			unsigned char Red1,Green1,Blue1;							//	å®£å‘ŠRed1,Green1,Blue1è®Šæ•¸ï¼Œè¨˜éŒ„åƒç´ è³‡æ–™
+			Red1 = InputData1[LoopNumber1 * xsize + LoopNumber2].R;		//	å¡«å…¥InputData1ä¹‹Redè³‡æ–™
+			Green1 = InputData1[LoopNumber1 * xsize + LoopNumber2].G;	//	å¡«å…¥InputData1ä¹‹Greenè³‡æ–™
+			Blue1 = InputData1[LoopNumber1 * xsize + LoopNumber2].B;	//	å¡«å…¥InputData1ä¹‹Blueè³‡æ–™
+			unsigned char Red2,Green2,Blue2;							//	å®£å‘ŠRed2,Green2,Blue2è®Šæ•¸ï¼Œè¨˜éŒ„åƒç´ è³‡æ–™
+			Red2 = InputData2[LoopNumber1 * xsize + LoopNumber2].R;		//	å¡«å…¥InputData2ä¹‹Redè³‡æ–™
+			Green2 = InputData2[LoopNumber1 * xsize + LoopNumber2].G;	//	å¡«å…¥InputData2ä¹‹Greenè³‡æ–™
+			Blue2 = InputData2[LoopNumber1 * xsize + LoopNumber2].B;	//	å¡«å…¥InputData2ä¹‹Blueè³‡æ–™
 			OutputData[LoopNumber1 * xsize + LoopNumber2].R = Red1 | Red2;
-			//	±N¿é¤J¸ê®ÆInputData1»PInputData2¶i¦æOR¹Bºâ«á¶ñ¤JOutputData
+			//	å°‡è¼¸å…¥è³‡æ–™InputData1èˆ‡InputData2é€²è¡ŒORé‹ç®—å¾Œå¡«å…¥OutputData
 			OutputData[LoopNumber1 * xsize + LoopNumber2].G = Green1 | Green2;
-			//	±N¿é¤J¸ê®ÆInputData1»PInputData2¶i¦æOR¹Bºâ«á¶ñ¤JOutputData
+			//	å°‡è¼¸å…¥è³‡æ–™InputData1èˆ‡InputData2é€²è¡ŒORé‹ç®—å¾Œå¡«å…¥OutputData
 			OutputData[LoopNumber1 * xsize + LoopNumber2].B = Blue1 | Blue2;
-			//	±N¿é¤J¸ê®ÆInputData1»PInputData2¶i¦æOR¹Bºâ«á¶ñ¤JOutputData
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶ÇOutputData¡A¨Ãµ²§ô°Æµ{¦¡
-}																		//	µ²§ôBMP24RGB2or°Æµ{¦¡
+			//	å°‡è¼¸å…¥è³‡æ–™InputData1èˆ‡InputData2é€²è¡ŒORé‹ç®—å¾Œå¡«å…¥OutputData
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³OutputDataï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+}																		//	çµæŸBMP24RGB2orå‰¯ç¨‹å¼
 BMP24RGB *BmpToGraylevel(const BMP24RGB *image,const int xsize,const int ysize)
-//	BMP¹Ï¤ù¸ê®ÆÂà¦Ç¶¥°Æµ{¦¡
-{																		//	¶i¤JBMP¹Ï¤ù¸ê®ÆÂà¦Ç¶¥°Æµ{¦¡
-	BMP24RGB *GraylevelImage;											//	«Å§iGraylevelImage«ü¼ĞÅÜ¼Æ¡A°O¿ı¦Ç¶¥Âà´««á¹Ï¹³¸ê®Æ
+//	BMPåœ–ç‰‡è³‡æ–™è½‰ç°éšå‰¯ç¨‹å¼
+{																		//	é€²å…¥BMPåœ–ç‰‡è³‡æ–™è½‰ç°éšå‰¯ç¨‹å¼
+	BMP24RGB *GraylevelImage;											//	å®£å‘ŠGraylevelImageæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„ç°éšè½‰æ›å¾Œåœ–åƒè³‡æ–™
 	GraylevelImage = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));
-	//	°t¸mGraylevelImage«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (GraylevelImage == NULL) 										//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À¦Ç¶¥­È
-	{																	//	¶i¤Jfor°j°é
+	//	é…ç½®GraylevelImageæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (GraylevelImage == NULL) 										//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ ç°éšå€¼
+	{																	//	é€²å…¥forè¿´åœˆ
 		GraylevelImage[loop_num].R = (image[loop_num].R + image[loop_num].G + image[loop_num].B) / 3;
-		//	­pºâ¦Ç¶¥Âà´«¹³¯À­È
+		//	è¨ˆç®—ç°éšè½‰æ›åƒç´ å€¼
 		GraylevelImage[loop_num].G = (image[loop_num].R + image[loop_num].G + image[loop_num].B) / 3;
-		//	­pºâ¦Ç¶¥Âà´«¹³¯À­È
+		//	è¨ˆç®—ç°éšè½‰æ›åƒç´ å€¼
 		GraylevelImage[loop_num].B = (image[loop_num].R + image[loop_num].G + image[loop_num].B) / 3;
-		//	­pºâ¦Ç¶¥Âà´«¹³¯À­È
-	}																	//	µ²§ôfor°j°é
-    return GraylevelImage;												//	¦^¶Ç¦Ç¶¥Âà´«µ²ªG
-}																		//	µ²§ôBMP¹Ï¤ù¸ê®ÆÂà¦Ç¶¥°Æµ{¦¡
+		//	è¨ˆç®—ç°éšè½‰æ›åƒç´ å€¼
+	}																	//	çµæŸforè¿´åœˆ
+    return GraylevelImage;												//	å›å‚³ç°éšè½‰æ›çµæœ
+}																		//	çµæŸBMPåœ–ç‰‡è³‡æ–™è½‰ç°éšå‰¯ç¨‹å¼
 BMP24RGB *BmpConvolution33(const BMP24RGB *image,const int xsize,const int ysize,const long double Mask[])
-//	BmpConvolution33°Æµ{¦¡
-{																		//	¶i¤JBmpConvolution33°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long double weighting = 0;											//	«Å§i¨Ãªì©l¤Æweighting(Åv­«)ÅÜ¼Æ
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num < 3 * 3;loop_num = loop_num + 1)			//	¥Hfor°j°é­pºâÅv­«²Ö­p­È
-	{																	//	¶i¤Jfor°j°é
-		weighting = weighting + Mask[loop_num];							//	²Î­pÅv­«
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+//	BmpConvolution33å‰¯ç¨‹å¼
+{																		//	é€²å…¥BmpConvolution33å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long double weighting = 0;											//	å®£å‘Šä¸¦åˆå§‹åŒ–weighting(æ¬Šé‡)è®Šæ•¸
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num < 3 * 3;loop_num = loop_num + 1)			//	ä»¥forè¿´åœˆè¨ˆç®—æ¬Šé‡ç´¯è¨ˆå€¼
+	{																	//	é€²å…¥forè¿´åœˆ
+		weighting = weighting + Mask[loop_num];							//	çµ±è¨ˆæ¬Šé‡
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		if( (loop_num < xsize) || ( (loop_num % xsize) == 0) || ( ((loop_num + 1) % xsize) == 0) || (loop_num >= (xsize*(ysize-1))))
-		//	ÀË´úÃä¬ÉÂI¹³¯À
-		//	(loop_num >= (xsize*(ysize-1)))		------->	|-¡Ğ¡Ğ¡Ğ¡Ğ¡Ğ¡Ğ¡Ğ|
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ 
+		//	(loop_num >= (xsize*(ysize-1)))		------->	|-ï¼ï¼ï¼ï¼ï¼ï¼ï¼|
 		//													|				|
 		//	( (loop_num % xsize) == 0)			------->	|				|	<-------	( ((loop_num + 1) % xsize) == 0)
 		//													|				|
-		//	(loop_num < xsize)					------->	|-¡Ğ¡Ğ¡Ğ¡Ğ¡Ğ¡Ğ¡Ğ|
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num].R = image[loop_num].R;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].G = image[loop_num].G;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].B = image[loop_num].B;					//	Ãä¬ÉÂI¤£³B²z
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
+		//	(loop_num < xsize)					------->	|-ï¼ï¼ï¼ï¼ï¼ï¼ï¼|
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num].R = image[loop_num].R;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].G = image[loop_num].G;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].B = image[loop_num].B;					//	é‚Šç•Œé»ä¸è™•ç†
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
 			OutputData[loop_num].R = (
 				image[loop_num+xsize-1].R	* Mask[6] + image[loop_num+xsize].R	* Mask[7] + image[loop_num+xsize+1].R	* Mask[8] +
 				image[loop_num-1].R 		* Mask[3] + image[loop_num].R		* Mask[4] + image[loop_num+1].R 		* Mask[5] +
 				image[loop_num-xsize-1].R	* Mask[0] + image[loop_num-xsize].R	* Mask[1] + image[loop_num-xsize+1].R	* Mask[2]
-				) / weighting;											//	­pºâConvolution
+				) / weighting;											//	è¨ˆç®—Convolution
 			OutputData[loop_num].G = (
 				image[loop_num+xsize-1].G	* Mask[6] + image[loop_num+xsize].G	* Mask[7] + image[loop_num+xsize+1].G	* Mask[8] +
 				image[loop_num-1].G 		* Mask[3] + image[loop_num].G		* Mask[4] + image[loop_num+1].G 		* Mask[5] +
 				image[loop_num-xsize-1].G	* Mask[0] + image[loop_num-xsize].G	* Mask[1] + image[loop_num-xsize+1].G	* Mask[2]
-				) / weighting;											//	­pºâConvolution
+				) / weighting;											//	è¨ˆç®—Convolution
 			OutputData[loop_num].B = (
 				image[loop_num+xsize-1].B	* Mask[6] + image[loop_num+xsize].B	* Mask[7] + image[loop_num+xsize+1].B	* Mask[8] +
 				image[loop_num-1].B 		* Mask[3] + image[loop_num].B		* Mask[4] + image[loop_num+1].B 		* Mask[5] +
 				image[loop_num-xsize-1].B	* Mask[0] + image[loop_num-xsize].B	* Mask[1] + image[loop_num-xsize+1].B	* Mask[2]
-				) / weighting;											//	­pºâConvolution
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôfor°j°é
-    return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôBmpConvolution33°Æµ{¦¡
+				) / weighting;											//	è¨ˆç®—Convolution
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸBmpConvolution33å‰¯ç¨‹å¼
 BMP24RGB *BmpConvolution55(const BMP24RGB *image,const int xsize,const int ysize,const long double Mask[])
-//	BmpConvolution55°Æµ{¦¡
-{																		//	¶i¤JBmpConvolution55°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long double weighting = 0;											//	«Å§i¨Ãªì©l¤Æweighting(Åv­«)ÅÜ¼Æ
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num < 5 * 5;loop_num = loop_num + 1)			//	¥Hfor°j°é­pºâÅv­«²Ö­p­È
-	{																	//	¶i¤Jfor°j°é
-		weighting = weighting + Mask[loop_num];							//	²Î­pÅv­«
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+//	BmpConvolution55å‰¯ç¨‹å¼
+{																		//	é€²å…¥BmpConvolution55å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long double weighting = 0;											//	å®£å‘Šä¸¦åˆå§‹åŒ–weighting(æ¬Šé‡)è®Šæ•¸
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num < 5 * 5;loop_num = loop_num + 1)			//	ä»¥forè¿´åœˆè¨ˆç®—æ¬Šé‡ç´¯è¨ˆå€¼
+	{																	//	é€²å…¥forè¿´åœˆ
+		weighting = weighting + Mask[loop_num];							//	çµ±è¨ˆæ¬Šé‡
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		if( (loop_num < 2 * xsize) || 
 			( (loop_num % xsize) == 0) ||
 			( (loop_num % xsize) == 1) ||
 			( ((loop_num + 1) % xsize) == 0) ||
 			( ((loop_num + 2) % xsize) == 0) ||
 			(loop_num >= (xsize*(ysize-2))) )
-		//	ÀË´úÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num].R = image[loop_num].R;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].G = image[loop_num].G;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].B = image[loop_num].B;					//	Ãä¬ÉÂI¤£³B²z
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num].R = image[loop_num].R;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].G = image[loop_num].G;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].B = image[loop_num].B;					//	é‚Šç•Œé»ä¸è™•ç†
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
 			OutputData[loop_num].R = (
 				image[loop_num+2*xsize-2].R	* Mask[20] + image[loop_num+2*xsize-1].R	* Mask[21] + image[loop_num+2*xsize].R	* Mask[22] + image[loop_num+2*xsize+1].R	* Mask[23] + image[loop_num+2*xsize+2].R	* Mask[24] +
 				image[loop_num+1*xsize-2].R	* Mask[15] + image[loop_num+1*xsize-1].R	* Mask[16] + image[loop_num+1*xsize].R	* Mask[17] + image[loop_num+1*xsize+1].R	* Mask[18] + image[loop_num+1*xsize+2].R	* Mask[19] +
 				image[loop_num-0*xsize-2].R	* Mask[10] + image[loop_num-0*xsize-1].R	* Mask[11] + image[loop_num-0*xsize].R	* Mask[12] + image[loop_num-0*xsize+1].R	* Mask[13] + image[loop_num-0*xsize+2].R	* Mask[14] +
 				image[loop_num-1*xsize-2].R	* Mask[ 5] + image[loop_num-1*xsize-1].R	* Mask[6]  + image[loop_num-1*xsize].R	* Mask[ 7] + image[loop_num-1*xsize+1].R	* Mask[ 8] + image[loop_num-1*xsize+2].R	* Mask[ 9] +
 				image[loop_num-2*xsize-2].R	* Mask[ 0] + image[loop_num-2*xsize-1].R	* Mask[1]  + image[loop_num-2*xsize].R	* Mask[ 2] + image[loop_num-2*xsize+1].R	* Mask[ 3] + image[loop_num-2*xsize+2].R	* Mask[ 4]
-				) / weighting;											//	­pºâConvolution
+				) / weighting;											//	è¨ˆç®—Convolution
 			OutputData[loop_num].G = (
 				image[loop_num+2*xsize-2].G	* Mask[20] + image[loop_num+2*xsize-1].G	* Mask[21] + image[loop_num+2*xsize].G	* Mask[22] + image[loop_num+2*xsize+1].G	* Mask[23] + image[loop_num+2*xsize+2].G	* Mask[24] +
 				image[loop_num+1*xsize-2].G	* Mask[15] + image[loop_num+1*xsize-1].G	* Mask[16] + image[loop_num+1*xsize].G	* Mask[17] + image[loop_num+1*xsize+1].G	* Mask[18] + image[loop_num+1*xsize+2].G	* Mask[19] +
 				image[loop_num-0*xsize-2].G	* Mask[10] + image[loop_num-0*xsize-1].G	* Mask[11] + image[loop_num-0*xsize].G	* Mask[12] + image[loop_num-0*xsize+1].G	* Mask[13] + image[loop_num-0*xsize+2].G	* Mask[14] +
 				image[loop_num-1*xsize-2].G	* Mask[ 5] + image[loop_num-1*xsize-1].G	* Mask[ 6]  + image[loop_num-1*xsize].G	* Mask[ 7] + image[loop_num-1*xsize+1].G	* Mask[ 8] + image[loop_num-1*xsize+2].G	* Mask[ 9] +
 				image[loop_num-2*xsize-2].G	* Mask[ 0] + image[loop_num-2*xsize-1].G	* Mask[ 1]  + image[loop_num-2*xsize].G	* Mask[ 2] + image[loop_num-2*xsize+1].G	* Mask[ 3] + image[loop_num-2*xsize+2].G	* Mask[ 4]
-				) / weighting;											//	­pºâConvolution
+				) / weighting;											//	è¨ˆç®—Convolution
 			OutputData[loop_num].B = (
 				image[loop_num+2*xsize-2].B	* Mask[20] + image[loop_num+2*xsize-1].B	* Mask[21] + image[loop_num+2*xsize].B	* Mask[22] + image[loop_num+2*xsize+1].B	* Mask[23] + image[loop_num+2*xsize+2].B	* Mask[24] +
 				image[loop_num+1*xsize-2].B	* Mask[15] + image[loop_num+1*xsize-1].B	* Mask[16] + image[loop_num+1*xsize].B	* Mask[17] + image[loop_num+1*xsize+1].B	* Mask[18] + image[loop_num+1*xsize+2].B	* Mask[19] +
 				image[loop_num-0*xsize-2].B	* Mask[10] + image[loop_num-0*xsize-1].B	* Mask[11] + image[loop_num-0*xsize].B	* Mask[12] + image[loop_num-0*xsize+1].B	* Mask[13] + image[loop_num-0*xsize+2].B	* Mask[14] +
 				image[loop_num-1*xsize-2].B	* Mask[ 5] + image[loop_num-1*xsize-1].B	* Mask[ 6] + image[loop_num-1*xsize].B	* Mask[ 7] + image[loop_num-1*xsize+1].B	* Mask[ 8] + image[loop_num-1*xsize+2].B	* Mask[ 9] +
 				image[loop_num-2*xsize-2].B	* Mask[ 0] + image[loop_num-2*xsize-1].B	* Mask[ 1] + image[loop_num-2*xsize].B	* Mask[ 2] + image[loop_num-2*xsize+1].B	* Mask[ 3] + image[loop_num-2*xsize+2].B	* Mask[ 4]
-				) / weighting;											//	­pºâConvolution
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôfor°j°é
-    return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôBmpConvolution55°Æµ{¦¡
+				) / weighting;											//	è¨ˆç®—Convolution
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸBmpConvolution55å‰¯ç¨‹å¼
 BMP24RGB *BmpConvolution77(const BMP24RGB *image,const int xsize,const int ysize,const long double Mask[])
-//	BmpConvolution77°Æµ{¦¡
-{																		//	¶i¤JBmpConvolution77°Æµ{¦¡
-	char MaskSize = 7;													//	«Å§iMaskSize(Mask¤j¤pÅÜ¼Æ¡A°O¿ıMaskÃäªø)¬°7
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long double weighting = 0;											//	«Å§i¨Ãªì©l¤Æweighting(Åv­«)ÅÜ¼Æ
-	long long int loop_num1;											//	«Å§iloop_num1°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
+//	BmpConvolution77å‰¯ç¨‹å¼
+{																		//	é€²å…¥BmpConvolution77å‰¯ç¨‹å¼
+	char MaskSize = 7;													//	å®£å‘ŠMaskSize(Maskå¤§å°è®Šæ•¸ï¼Œè¨˜éŒ„Maské‚Šé•·)ç‚º7
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long double weighting = 0;											//	å®£å‘Šä¸¦åˆå§‹åŒ–weighting(æ¬Šé‡)è®Šæ•¸
+	long long int loop_num1;											//	å®£å‘Šloop_num1å€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
 	for(loop_num1 = 0; loop_num1 < MaskSize * MaskSize;loop_num1 = loop_num1 + 1)
-	//	¥Hfor°j°é­pºâÅv­«²Ö­p­È
-	{																	//	¶i¤Jfor°j°é
-		weighting = weighting + Mask[loop_num1];						//	²Î­pÅv­«
-	}																	//	µ²§ôfor°j°é
-	for(loop_num1 = 0; loop_num1 <(xsize * ysize); loop_num1++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		int PixelLocationX;												//	«Å§iPixelLocationX¡A°O¿ı¹³¯ÀÂI¦ì©ó¹Ï¹³¤Gºû®y¼Ğ¤¤¤§X¤è¦V¦ì¸m
-		int PixelLocationY;												//	«Å§iPixelLocationY¡A°O¿ı¹³¯ÀÂI¦ì©ó¹Ï¹³¤Gºû®y¼Ğ¤¤¤§Y¤è¦V¦ì¸m
-		PixelLocationX = loop_num1 % xsize;								//	­pºâPixelLocationX
-		PixelLocationY = floor(loop_num1 / xsize);						//	­pºâPixelLocationY
+	//	ä»¥forè¿´åœˆè¨ˆç®—æ¬Šé‡ç´¯è¨ˆå€¼
+	{																	//	é€²å…¥forè¿´åœˆ
+		weighting = weighting + Mask[loop_num1];						//	çµ±è¨ˆæ¬Šé‡
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num1 = 0; loop_num1 <(xsize * ysize); loop_num1++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		int PixelLocationX;												//	å®£å‘ŠPixelLocationXï¼Œè¨˜éŒ„åƒç´ é»ä½æ–¼åœ–åƒäºŒç¶­åº§æ¨™ä¸­ä¹‹Xæ–¹å‘ä½ç½®
+		int PixelLocationY;												//	å®£å‘ŠPixelLocationYï¼Œè¨˜éŒ„åƒç´ é»ä½æ–¼åœ–åƒäºŒç¶­åº§æ¨™ä¸­ä¹‹Yæ–¹å‘ä½ç½®
+		PixelLocationX = loop_num1 % xsize;								//	è¨ˆç®—PixelLocationX
+		PixelLocationY = floor(loop_num1 / xsize);						//	è¨ˆç®—PixelLocationY
 		if( (PixelLocationX < floor(MaskSize/2)) || (PixelLocationX > (xsize - floor(MaskSize/2))) ||
 			(PixelLocationY < floor(MaskSize/2)) || (PixelLocationY > (ysize - floor(MaskSize/2))) )
-		//	ÀË´úÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num1].R = image[loop_num1].R;				//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num1].G = image[loop_num1].G;				//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num1].B = image[loop_num1].B;				//	Ãä¬ÉÂI¤£³B²z
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
-			char loop_num2, loop_num3;									//	«Å§iloop_num2¡Bloop_num3ÅÜ¼Æ¥H¶i¦æ°j°é­p¼Æ
-			double sum_R = 0;											//	«Å§isum_RÅÜ¼Æ²Î­p¹³¯À¥[ÅvÁ`©M
-			double sum_G = 0;											//	«Å§isum_GÅÜ¼Æ²Î­p¹³¯À¥[ÅvÁ`©M
-			double sum_B = 0;											//	«Å§isum_BÅÜ¼Æ²Î­p¹³¯À¥[ÅvÁ`©M
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num1].R = image[loop_num1].R;				//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num1].G = image[loop_num1].G;				//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num1].B = image[loop_num1].B;				//	é‚Šç•Œé»ä¸è™•ç†
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
+			char loop_num2, loop_num3;									//	å®£å‘Šloop_num2ã€loop_num3è®Šæ•¸ä»¥é€²è¡Œè¿´åœˆè¨ˆæ•¸
+			double sum_R = 0;											//	å®£å‘Šsum_Rè®Šæ•¸çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
+			double sum_G = 0;											//	å®£å‘Šsum_Gè®Šæ•¸çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
+			double sum_B = 0;											//	å®£å‘Šsum_Bè®Šæ•¸çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
 			for(loop_num2 = -floor(MaskSize/2); loop_num2 <= floor(MaskSize/2); loop_num2 ++)
-			//	¥Hfor°j°é­pºâConvolution
-			{															//	¶i¤Jfor°j°é
+			//	ä»¥forè¿´åœˆè¨ˆç®—Convolution
+			{															//	é€²å…¥forè¿´åœˆ
 				for(loop_num3 = -floor(MaskSize/2); loop_num3 <= floor(MaskSize/2); loop_num3 ++)
-				//	¥Hfor°j°é­pºâConvolution
-				{														//	¶i¤Jfor°j°é
+				//	ä»¥forè¿´åœˆè¨ˆç®—Convolution
+				{														//	é€²å…¥forè¿´åœˆ
 					sum_R += image[loop_num1+loop_num2*xsize+loop_num3].R *
 							 Mask[(int)((loop_num2 + floor(MaskSize/2)) * MaskSize + (loop_num3 + floor(MaskSize/2)))];
-					//	²Î­p¹³¯À¥[ÅvÁ`©M
+					//	çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
 					sum_G += image[loop_num1+loop_num2*xsize+loop_num3].G *
 							 Mask[(int)((loop_num2 + floor(MaskSize/2)) * MaskSize + (loop_num3 + floor(MaskSize/2)))];
-					//	²Î­p¹³¯À¥[ÅvÁ`©M
+					//	çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
 					sum_B += image[loop_num1+loop_num2*xsize+loop_num3].B *
 							 Mask[(int)((loop_num2 + floor(MaskSize/2)) * MaskSize + (loop_num3 + floor(MaskSize/2)))];
-					//	²Î­p¹³¯À¥[ÅvÁ`©M
-				}														//	µ²§ôfor°j°é
-			}															//	µ²§ôfor°j°é
-			OutputData[loop_num1].R = sum_R / weighting;				//	­pºâConvolution
-			OutputData[loop_num1].G = sum_G / weighting;				//	­pºâConvolution
-			OutputData[loop_num1].B = sum_B / weighting;				//	­pºâConvolution
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôfor°j°é
-    return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôBmpConvolution77°Æµ{¦¡
+					//	çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
+				}														//	çµæŸforè¿´åœˆ
+			}															//	çµæŸforè¿´åœˆ
+			OutputData[loop_num1].R = sum_R / weighting;				//	è¨ˆç®—Convolution
+			OutputData[loop_num1].G = sum_G / weighting;				//	è¨ˆç®—Convolution
+			OutputData[loop_num1].B = sum_B / weighting;				//	è¨ˆç®—Convolution
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸBmpConvolution77å‰¯ç¨‹å¼
 BMP24RGB *BmpConvolution(int MaskSize, const BMP24RGB *image,const int xsize,const int ysize,const long double Mask[])
-{																		//	¶i¤JBmpConvolution°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long double weighting = 0;											//	«Å§i¨Ãªì©l¤Æweighting(Åv­«)ÅÜ¼Æ
-	long long int loop_num1;											//	«Å§iloop_num1°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
+{																		//	é€²å…¥BmpConvolutionå‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long double weighting = 0;											//	å®£å‘Šä¸¦åˆå§‹åŒ–weighting(æ¬Šé‡)è®Šæ•¸
+	long long int loop_num1;											//	å®£å‘Šloop_num1å€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
 	for(loop_num1 = 0; loop_num1 < MaskSize * MaskSize;loop_num1 = loop_num1 + 1)
-	//	¥Hfor°j°é­pºâÅv­«²Ö­p­È
-	{																	//	¶i¤Jfor°j°é
-		weighting = weighting + Mask[loop_num1];						//	²Î­pÅv­«
-	}																	//	µ²§ôfor°j°é
-	for(loop_num1 = 0; loop_num1 <(xsize * ysize); loop_num1++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		int PixelLocationX;												//	«Å§iPixelLocationX¡A°O¿ı¹³¯ÀÂI¦ì©ó¹Ï¹³¤Gºû®y¼Ğ¤¤¤§X¤è¦V¦ì¸m
-		int PixelLocationY;												//	«Å§iPixelLocationY¡A°O¿ı¹³¯ÀÂI¦ì©ó¹Ï¹³¤Gºû®y¼Ğ¤¤¤§Y¤è¦V¦ì¸m
-		PixelLocationX = loop_num1 % xsize;								//	­pºâPixelLocationX
-		PixelLocationY = floor(loop_num1 / xsize);						//	­pºâPixelLocationY
+	//	ä»¥forè¿´åœˆè¨ˆç®—æ¬Šé‡ç´¯è¨ˆå€¼
+	{																	//	é€²å…¥forè¿´åœˆ
+		weighting = weighting + Mask[loop_num1];						//	çµ±è¨ˆæ¬Šé‡
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num1 = 0; loop_num1 <(xsize * ysize); loop_num1++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		int PixelLocationX;												//	å®£å‘ŠPixelLocationXï¼Œè¨˜éŒ„åƒç´ é»ä½æ–¼åœ–åƒäºŒç¶­åº§æ¨™ä¸­ä¹‹Xæ–¹å‘ä½ç½®
+		int PixelLocationY;												//	å®£å‘ŠPixelLocationYï¼Œè¨˜éŒ„åƒç´ é»ä½æ–¼åœ–åƒäºŒç¶­åº§æ¨™ä¸­ä¹‹Yæ–¹å‘ä½ç½®
+		PixelLocationX = loop_num1 % xsize;								//	è¨ˆç®—PixelLocationX
+		PixelLocationY = floor(loop_num1 / xsize);						//	è¨ˆç®—PixelLocationY
 		if( (PixelLocationX < floor(MaskSize/2)) || (PixelLocationX > (xsize - floor(MaskSize/2))) ||
 			(PixelLocationY < floor(MaskSize/2)) || (PixelLocationY > (ysize - floor(MaskSize/2))) )
-		//	ÀË´úÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num1].R = image[loop_num1].R;				//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num1].G = image[loop_num1].G;				//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num1].B = image[loop_num1].B;				//	Ãä¬ÉÂI¤£³B²z
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
-			char loop_num2, loop_num3;									//	«Å§iloop_num2¡Bloop_num3ÅÜ¼Æ¥H¶i¦æ°j°é­p¼Æ
-			double sum_R = 0;											//	«Å§isum_RÅÜ¼Æ²Î­p¹³¯À¥[ÅvÁ`©M
-			double sum_G = 0;											//	«Å§isum_GÅÜ¼Æ²Î­p¹³¯À¥[ÅvÁ`©M
-			double sum_B = 0;											//	«Å§isum_BÅÜ¼Æ²Î­p¹³¯À¥[ÅvÁ`©M
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num1].R = image[loop_num1].R;				//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num1].G = image[loop_num1].G;				//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num1].B = image[loop_num1].B;				//	é‚Šç•Œé»ä¸è™•ç†
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
+			char loop_num2, loop_num3;									//	å®£å‘Šloop_num2ã€loop_num3è®Šæ•¸ä»¥é€²è¡Œè¿´åœˆè¨ˆæ•¸
+			double sum_R = 0;											//	å®£å‘Šsum_Rè®Šæ•¸çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
+			double sum_G = 0;											//	å®£å‘Šsum_Gè®Šæ•¸çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
+			double sum_B = 0;											//	å®£å‘Šsum_Bè®Šæ•¸çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
 			for(loop_num2 = -floor(MaskSize/2); loop_num2 <= floor(MaskSize/2); loop_num2 ++)
-			//	¥Hfor°j°é­pºâConvolution
-			{															//	¶i¤Jfor°j°é
+			//	ä»¥forè¿´åœˆè¨ˆç®—Convolution
+			{															//	é€²å…¥forè¿´åœˆ
 				for(loop_num3 = -floor(MaskSize/2); loop_num3 <= floor(MaskSize/2); loop_num3 ++)
-				//	¥Hfor°j°é­pºâConvolution
-				{														//	¶i¤Jfor°j°é
+				//	ä»¥forè¿´åœˆè¨ˆç®—Convolution
+				{														//	é€²å…¥forè¿´åœˆ
 					sum_R += image[loop_num1+loop_num2*xsize+loop_num3].R *
 							 Mask[(int)((loop_num2 + floor(MaskSize/2)) * MaskSize + (loop_num3 + floor(MaskSize/2)))];
-					//	²Î­p¹³¯À¥[ÅvÁ`©M
+					//	çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
 					sum_G += image[loop_num1+loop_num2*xsize+loop_num3].G *
 							 Mask[(int)((loop_num2 + floor(MaskSize/2)) * MaskSize + (loop_num3 + floor(MaskSize/2)))];
-					//	²Î­p¹³¯À¥[ÅvÁ`©M
+					//	çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
 					sum_B += image[loop_num1+loop_num2*xsize+loop_num3].B *
 							 Mask[(int)((loop_num2 + floor(MaskSize/2)) * MaskSize + (loop_num3 + floor(MaskSize/2)))];
-					//	²Î­p¹³¯À¥[ÅvÁ`©M
-				}														//	µ²§ôfor°j°é
-			}															//	µ²§ôfor°j°é
-			OutputData[loop_num1].R = sum_R / weighting;				//	­pºâConvolution
-			OutputData[loop_num1].G = sum_G / weighting;				//	­pºâConvolution
-			OutputData[loop_num1].B = sum_B / weighting;				//	­pºâConvolution
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôfor°j°é
-    return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôBmpConvolution°Æµ{¦¡
+					//	çµ±è¨ˆåƒç´ åŠ æ¬Šç¸½å’Œ
+				}														//	çµæŸforè¿´åœˆ
+			}															//	çµæŸforè¿´åœˆ
+			OutputData[loop_num1].R = sum_R / weighting;				//	è¨ˆç®—Convolution
+			OutputData[loop_num1].G = sum_G / weighting;				//	è¨ˆç®—Convolution
+			OutputData[loop_num1].B = sum_B / weighting;				//	è¨ˆç®—Convolution
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸBmpConvolutionå‰¯ç¨‹å¼
 BMP24RGB *ImageSmoothing33V1(const BMP24RGB *image,const int xsize,const int ysize)
-//	ImageSmoothing33V1(BMP¹ÏÀÉ3*3Mask¥­·ÆÂoªi)°Æµ{¦¡
-{																		//	¶i¤JImageSmoothing33V1°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+//	ImageSmoothing33V1(BMPåœ–æª”3*3Maskå¹³æ»‘æ¿¾æ³¢)å‰¯ç¨‹å¼
+{																		//	é€²å…¥ImageSmoothing33V1å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		if( (loop_num < xsize) || ( (loop_num % xsize) == 0) || ( ((loop_num + 1) % xsize) == 0) || (loop_num >= (xsize*(ysize-1))))
-		//	ÀË´úÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num].R = image[loop_num].R;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].G = image[loop_num].G;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].B = image[loop_num].B;					//	Ãä¬ÉÂI¤£³B²z
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num].R = image[loop_num].R;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].G = image[loop_num].G;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].B = image[loop_num].B;					//	é‚Šç•Œé»ä¸è™•ç†
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
 			OutputData[loop_num].R = (
 				image[loop_num+xsize-1].R	* 1 + image[loop_num+xsize].R	* 1 + image[loop_num+xsize+1].R	* 1 +
 				image[loop_num-1].R 		* 1 + image[loop_num].R			* 1 + image[loop_num+1].R 		* 1 +
 				image[loop_num-xsize-1].R	* 1 + image[loop_num-xsize].R	* 1 + image[loop_num-xsize+1].R	* 1
-				) / 9;													//	¥­·Æªk­pºâ
+				) / 9;													//	å¹³æ»‘æ³•è¨ˆç®—
 			OutputData[loop_num].G = (
 				image[loop_num+xsize-1].G	* 1 + image[loop_num+xsize].G	* 1 + image[loop_num+xsize+1].G	* 1 +
 				image[loop_num-1].G 		* 1 + image[loop_num].G			* 1 + image[loop_num+1].G 		* 1 +
 				image[loop_num-xsize-1].G	* 1 + image[loop_num-xsize].G	* 1 + image[loop_num-xsize+1].G	* 1
-				) / 9;													//	¥­·Æªk­pºâ
+				) / 9;													//	å¹³æ»‘æ³•è¨ˆç®—
 			OutputData[loop_num].B = (
 				image[loop_num+xsize-1].B	* 1 + image[loop_num+xsize].B	* 1 + image[loop_num+xsize+1].B	* 1 +
 				image[loop_num-1].B 		* 1 + image[loop_num].B			* 1 + image[loop_num+1].B 		* 1 +
 				image[loop_num-xsize-1].B	* 1 + image[loop_num-xsize].B	* 1 + image[loop_num-xsize+1].B	* 1
-				) / 9;													//	¥­·Æªk­pºâ
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôfor°j°é
-    return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôImageSmoothing33V1°Æµ{¦¡
+				) / 9;													//	å¹³æ»‘æ³•è¨ˆç®—
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸImageSmoothing33V1å‰¯ç¨‹å¼
 BMP24RGB *ImageSmoothing33V2(const BMP24RGB *image,const int xsize,const int ysize)
-//	ImageSmoothing33V2(BMP¹ÏÀÉ3*3Mask¥­·ÆÂoªi)°Æµ{¦¡
-{																		//	¶i¤JImageSmoothing33V2°Æµ{¦¡
-	long double Mask[3 * 3];											//	«Å§iMask°}¦C
+//	ImageSmoothing33V2(BMPåœ–æª”3*3Maskå¹³æ»‘æ¿¾æ³¢)å‰¯ç¨‹å¼
+{																		//	é€²å…¥ImageSmoothing33V2å‰¯ç¨‹å¼
+	long double Mask[3 * 3];											//	å®£å‘ŠMaské™£åˆ—
 	Mask[6] = (long double)1;	Mask[7] = (long double)1;	Mask[8] = (long double)1;
-	//	µ¹©wMask¾B¸n¼Æ­È
+	//	çµ¦å®šMaské®ç½©æ•¸å€¼
 	Mask[3] = (long double)1;	Mask[4] = (long double)1;	Mask[5] = (long double)1;
-	//	µ¹©wMask¾B¸n¼Æ­È
+	//	çµ¦å®šMaské®ç½©æ•¸å€¼
 	Mask[0] = (long double)1;	Mask[1] = (long double)1;	Mask[2] = (long double)1;
-	//	µ¹©wMask¾B¸n¼Æ­È
-    return BmpConvolution33(image, xsize, ysize, Mask);					//	©I¥sBmpConvolution33°Æµ{¦¡­pºâ¨Ã¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôImageSmoothing33V2°Æµ{¦¡
+	//	çµ¦å®šMaské®ç½©æ•¸å€¼
+    return BmpConvolution33(image, xsize, ysize, Mask);					//	å‘¼å«BmpConvolution33å‰¯ç¨‹å¼è¨ˆç®—ä¸¦å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸImageSmoothing33V2å‰¯ç¨‹å¼
 BMP24RGB *ImageSmoothing55(const BMP24RGB *image,const int xsize,const int ysize)
-//	ImageSmoothing55(BMP¹ÏÀÉ5*5Mask¥­·ÆÂoªi)°Æµ{¦¡
-{																		//	¶i¤JImageSmoothing55°Æµ{¦¡
-	long double Mask[5 * 5];											//	«Å§iMask°}¦C
+//	ImageSmoothing55(BMPåœ–æª”5*5Maskå¹³æ»‘æ¿¾æ³¢)å‰¯ç¨‹å¼
+{																		//	é€²å…¥ImageSmoothing55å‰¯ç¨‹å¼
+	long double Mask[5 * 5];											//	å®£å‘ŠMaské™£åˆ—
 	Mask[20] = (long double)1;	Mask[21] = (long double)1;	Mask[22] = (long double)1;	Mask[23] = (long double)1;	Mask[24] = (long double)1;
 	Mask[15] = (long double)1;	Mask[16] = (long double)1;	Mask[17] = (long double)1;	Mask[18] = (long double)1;	Mask[19] = (long double)1;
 	Mask[10] = (long double)1;	Mask[11] = (long double)1;	Mask[12] = (long double)1;	Mask[13] = (long double)1;	Mask[14] = (long double)1;
 	Mask[ 5] = (long double)1;	Mask[ 6] = (long double)1;	Mask[ 7] = (long double)1;	Mask[ 8] = (long double)1;	Mask[ 9] = (long double)1;
 	Mask[ 0] = (long double)1;	Mask[ 1] = (long double)1;	Mask[ 2] = (long double)1;	Mask[ 3] = (long double)1;	Mask[ 4] = (long double)1;
-	//	µ¹©wMask¾B¸n¼Æ­È
-    return BmpConvolution55(image, xsize, ysize, Mask);					//	©I¥sBmpConvolution55°Æµ{¦¡­pºâ¨Ã¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôImageSmoothing55°Æµ{¦¡
+	//	çµ¦å®šMaské®ç½©æ•¸å€¼
+    return BmpConvolution55(image, xsize, ysize, Mask);					//	å‘¼å«BmpConvolution55å‰¯ç¨‹å¼è¨ˆç®—ä¸¦å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸImageSmoothing55å‰¯ç¨‹å¼
 BMP24RGB *ImageSmoothing77(const BMP24RGB *image,const int xsize,const int ysize)
-//	ImageSmoothing77(BMP¹ÏÀÉ7*7Mask¥­·ÆÂoªi)°Æµ{¦¡
-{																		//	¶i¤JImageSmoothing77°Æµ{¦¡
-	long double Mask[7 * 7];											//	«Å§iMask°}¦C
-	char loop_num = 0;													//	«Å§iloop_numÅÜ¼Æ¥Î©ó°j°é­p¼Æ¡A¨Ã³]©wªì©l­È¬°0
-	for(loop_num = 0; loop_num < 7 * 7; loop_num++)						//	¥Hfor°j°éµ¹©wMask¼Æ­È
-	{																	//	¶i¤Jfor°j°é
-		Mask[loop_num] = (long double)1;								//	µ¹©wMask¾B¸n¼Æ­È
-	}																	//	µ²§ôfor°j°é
-    return BmpConvolution77(image, xsize, ysize, Mask);					//	©I¥sBmpConvolution77°Æµ{¦¡­pºâ¨Ã¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôImageSmoothing77°Æµ{¦¡
+//	ImageSmoothing77(BMPåœ–æª”7*7Maskå¹³æ»‘æ¿¾æ³¢)å‰¯ç¨‹å¼
+{																		//	é€²å…¥ImageSmoothing77å‰¯ç¨‹å¼
+	long double Mask[7 * 7];											//	å®£å‘ŠMaské™£åˆ—
+	char loop_num = 0;													//	å®£å‘Šloop_numè®Šæ•¸ç”¨æ–¼è¿´åœˆè¨ˆæ•¸ï¼Œä¸¦è¨­å®šåˆå§‹å€¼ç‚º0
+	for(loop_num = 0; loop_num < 7 * 7; loop_num++)						//	ä»¥forè¿´åœˆçµ¦å®šMaskæ•¸å€¼
+	{																	//	é€²å…¥forè¿´åœˆ
+		Mask[loop_num] = (long double)1;								//	çµ¦å®šMaské®ç½©æ•¸å€¼
+	}																	//	çµæŸforè¿´åœˆ
+    return BmpConvolution77(image, xsize, ysize, Mask);					//	å‘¼å«BmpConvolution77å‰¯ç¨‹å¼è¨ˆç®—ä¸¦å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸImageSmoothing77å‰¯ç¨‹å¼
 BMP24RGB *ImageSmoothing(const int MaskSize, const BMP24RGB *image, const int xsize, const int ysize)
-//	ImageSmoothing(BMP¹ÏÀÉ¥­·ÆÂoªi)°Æµ{¦¡
-{																		//	¶i¤JImageSmoothing°Æµ{¦¡
-	long double *Mask;													//	«Å§iMask«ü¼Ğ
+//	ImageSmoothing(BMPåœ–æª”å¹³æ»‘æ¿¾æ³¢)å‰¯ç¨‹å¼
+{																		//	é€²å…¥ImageSmoothingå‰¯ç¨‹å¼
+	long double *Mask;													//	å®£å‘ŠMaskæŒ‡æ¨™
 	Mask = (long double*)malloc(MaskSize * MaskSize * sizeof(long double));
-	//	°t¸mMask«ü¼Ğ°O¾ĞÅé¤j¤p
-	int loop_num = 0;													//	«Å§iloop_numÅÜ¼Æ¥Î©ó°j°é­p¼Æ¡A¨Ã³]©wªì©l­È¬°0
-	for(loop_num = 0; loop_num < MaskSize * MaskSize; loop_num++)		//	¥Hfor°j°éµ¹©wMask¼Æ­È
-	{																	//	¶i¤Jfor°j°é
-		Mask[loop_num] = (long double)1;								//	µ¹©wMask¾B¸n¼Æ­È
-	}																	//	µ²§ôfor°j°é
-    return BmpConvolution(MaskSize, image, xsize, ysize, Mask);			//	©I¥sBmpConvolution°Æµ{¦¡­pºâ¨Ã¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôImageSmoothing°Æµ{¦¡
+	//	é…ç½®MaskæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	int loop_num = 0;													//	å®£å‘Šloop_numè®Šæ•¸ç”¨æ–¼è¿´åœˆè¨ˆæ•¸ï¼Œä¸¦è¨­å®šåˆå§‹å€¼ç‚º0
+	for(loop_num = 0; loop_num < MaskSize * MaskSize; loop_num++)		//	ä»¥forè¿´åœˆçµ¦å®šMaskæ•¸å€¼
+	{																	//	é€²å…¥forè¿´åœˆ
+		Mask[loop_num] = (long double)1;								//	çµ¦å®šMaské®ç½©æ•¸å€¼
+	}																	//	çµæŸforè¿´åœˆ
+    return BmpConvolution(MaskSize, image, xsize, ysize, Mask);			//	å‘¼å«BmpConvolutionå‰¯ç¨‹å¼è¨ˆç®—ä¸¦å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸImageSmoothingå‰¯ç¨‹å¼
 BMP24RGB *MedianFilter33(const BMP24RGB *image,const int xsize,const int ysize)
-//	BMP¹ÏÀÉ3*3Mask¤¤­ÈÂoªi°Æµ{¦¡
-{																		//	¶i¤JMedianFilter33(BMP¹ÏÀÉ3*3¤¤­ÈÂoªi)°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+//	BMPåœ–æª”3*3Maskä¸­å€¼æ¿¾æ³¢å‰¯ç¨‹å¼
+{																		//	é€²å…¥MedianFilter33(BMPåœ–æª”3*3ä¸­å€¼æ¿¾æ³¢)å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		if( (loop_num < xsize) || ( (loop_num % xsize) == 0) || ( ((loop_num + 1) % xsize) == 0) || (loop_num >= (xsize*(ysize-1))))
-		//	ÀË´úÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num].R = image[loop_num].R;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].G = image[loop_num].G;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].B = image[loop_num].B;					//	Ãä¬ÉÂI¤£³B²z
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
-			unsigned char *SortArray;									//	«Å§iSortArray¬°unsigned char«¬ºA«ü¼Ğ¡A¨Ñ¹³¯À­È±Æ§Ç¨Ï¥Î
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num].R = image[loop_num].R;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].G = image[loop_num].G;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].B = image[loop_num].B;					//	é‚Šç•Œé»ä¸è™•ç†
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
+			unsigned char *SortArray;									//	å®£å‘ŠSortArrayç‚ºunsigned charå‹æ…‹æŒ‡æ¨™ï¼Œä¾›åƒç´ å€¼æ’åºä½¿ç”¨
 			SortArray = (unsigned char*)malloc(9 * sizeof(unsigned char));
-			//---R¹³¯À±Æ§Ç---
-			SortArray[0] = image[loop_num-xsize-1].R;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[1] = image[loop_num-xsize].R;						//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[2] = image[loop_num-xsize+1].R;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[3] = image[loop_num-1].R;							//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[4] = image[loop_num].R;							//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[5] = image[loop_num+1].R;							//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[6] = image[loop_num+xsize-1].R;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[7] = image[loop_num+xsize].R;						//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[8] = image[loop_num+xsize+1].R;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			//qsort(SortArray, 9, sizeof(unsigned char), Compare);		//	©I¥sqsort±Æ§Ç¨ç¼Æ(©w¸q©óstdlib.h)
+			//---Råƒç´ æ’åº---
+			SortArray[0] = image[loop_num-xsize-1].R;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[1] = image[loop_num-xsize].R;						//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[2] = image[loop_num-xsize+1].R;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[3] = image[loop_num-1].R;							//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[4] = image[loop_num].R;							//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[5] = image[loop_num+1].R;							//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[6] = image[loop_num+xsize-1].R;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[7] = image[loop_num+xsize].R;						//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[8] = image[loop_num+xsize+1].R;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			//qsort(SortArray, 9, sizeof(unsigned char), Compare);		//	å‘¼å«qsortæ’åºå‡½æ•¸(å®šç¾©æ–¼stdlib.h)
 			SortArray = UCharBubbleSort(SortArray,9,0);
-			OutputData[loop_num].R = SortArray[4];						//	±N±Æ§Ç«á¤¤­È¶ñ¤J¹³¯À¸ê®Æ
-			//---G¹³¯À±Æ§Ç---
-			SortArray[0] = image[loop_num-xsize-1].G;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[1] = image[loop_num-xsize].G;						//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[2] = image[loop_num-xsize+1].G;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[3] = image[loop_num-1].G;							//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[4] = image[loop_num].G;							//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[5] = image[loop_num+1].G;							//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[6] = image[loop_num+xsize-1].G;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[7] = image[loop_num+xsize].G;						//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[8] = image[loop_num+xsize+1].G;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			//qsort(SortArray, 9, sizeof(unsigned char), Compare);		//	©I¥sqsort±Æ§Ç¨ç¼Æ(©w¸q©óstdlib.h)
+			OutputData[loop_num].R = SortArray[4];						//	å°‡æ’åºå¾Œä¸­å€¼å¡«å…¥åƒç´ è³‡æ–™
+			//---Gåƒç´ æ’åº---
+			SortArray[0] = image[loop_num-xsize-1].G;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[1] = image[loop_num-xsize].G;						//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[2] = image[loop_num-xsize+1].G;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[3] = image[loop_num-1].G;							//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[4] = image[loop_num].G;							//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[5] = image[loop_num+1].G;							//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[6] = image[loop_num+xsize-1].G;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[7] = image[loop_num+xsize].G;						//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[8] = image[loop_num+xsize+1].G;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			//qsort(SortArray, 9, sizeof(unsigned char), Compare);		//	å‘¼å«qsortæ’åºå‡½æ•¸(å®šç¾©æ–¼stdlib.h)
 			UCharBubbleSort(SortArray,9,0);
-			OutputData[loop_num].G = SortArray[4];						//	±N±Æ§Ç«á¤¤­È¶ñ¤J¹³¯À¸ê®Æ
-			//---B¹³¯À±Æ§Ç---
-			SortArray[0] = image[loop_num-xsize-1].B;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[1] = image[loop_num-xsize].B;						//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[2] = image[loop_num-xsize+1].B;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[3] = image[loop_num-1].B;							//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[4] = image[loop_num].B;							//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[5] = image[loop_num+1].B;							//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[6] = image[loop_num+xsize-1].B;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[7] = image[loop_num+xsize].B;						//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			SortArray[8] = image[loop_num+xsize+1].B;					//	±N¹³¯À¸ê®Æ¶ñ¤JSortArray°}¦C
-			//qsort(SortArray, 9, sizeof(unsigned char), Compare);		//	©I¥sqsort±Æ§Ç¨ç¼Æ(©w¸q©óstdlib.h)
+			OutputData[loop_num].G = SortArray[4];						//	å°‡æ’åºå¾Œä¸­å€¼å¡«å…¥åƒç´ è³‡æ–™
+			//---Båƒç´ æ’åº---
+			SortArray[0] = image[loop_num-xsize-1].B;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[1] = image[loop_num-xsize].B;						//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[2] = image[loop_num-xsize+1].B;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[3] = image[loop_num-1].B;							//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[4] = image[loop_num].B;							//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[5] = image[loop_num+1].B;							//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[6] = image[loop_num+xsize-1].B;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[7] = image[loop_num+xsize].B;						//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			SortArray[8] = image[loop_num+xsize+1].B;					//	å°‡åƒç´ è³‡æ–™å¡«å…¥SortArrayé™£åˆ—
+			//qsort(SortArray, 9, sizeof(unsigned char), Compare);		//	å‘¼å«qsortæ’åºå‡½æ•¸(å®šç¾©æ–¼stdlib.h)
 			UCharBubbleSort(SortArray,9,0);
-			OutputData[loop_num].B = SortArray[4];						//	±N±Æ§Ç«á¤¤­È¶ñ¤J¹³¯À¸ê®Æ
-		}																//	µ²§ôelse±Ô­z		
-	}																	//	µ²§ôfor°j°é
-    return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôMedianFilter33(BMP¹ÏÀÉ3*3¤¤­ÈÂoªi)°Æµ{¦¡
+			OutputData[loop_num].B = SortArray[4];						//	å°‡æ’åºå¾Œä¸­å€¼å¡«å…¥åƒç´ è³‡æ–™
+		}																//	çµæŸelseæ•˜è¿°		
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸMedianFilter33(BMPåœ–æª”3*3ä¸­å€¼æ¿¾æ³¢)å‰¯ç¨‹å¼
 BMP24RGB *GaussianBlur33V1(const BMP24RGB *image,const int xsize,const int ysize,const long double StandardDeviation)
-//	GaussianBlur33V1(3*3°ª´µÂoªi)°Æµ{¦¡
-{																		//	¶i¤JGaussianBlur33V1°Æµ{¦¡
-	#ifdef DebugMode													//	­Y¦³©w¸q¬°DebugMode(°£¿ù¼Ò¦¡)
-		printf("StandardDeviation¡G");									//	Åã¥Ü"StandardDeviation¡G"¦r¦ê
-		ShowLongDouble(StandardDeviation);								//	Åã¥Ü°Æµ{¦¡¶Ç¤J¤§StandardDeviation(°£¿ù¥Î)
-	#endif																//	µ²§ôifdef±Ô­z
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
+//	GaussianBlur33V1(3*3é«˜æ–¯æ¿¾æ³¢)å‰¯ç¨‹å¼
+{																		//	é€²å…¥GaussianBlur33V1å‰¯ç¨‹å¼
+	#ifdef DebugMode													//	è‹¥æœ‰å®šç¾©ç‚ºDebugMode(é™¤éŒ¯æ¨¡å¼)
+		printf("StandardDeviationï¼š");									//	é¡¯ç¤º"StandardDeviationï¼š"å­—ä¸²
+		ShowLongDouble(StandardDeviation);								//	é¡¯ç¤ºå‰¯ç¨‹å¼å‚³å…¥ä¹‹StandardDeviation(é™¤éŒ¯ç”¨)
+	#endif																//	çµæŸifdefæ•˜è¿°
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
 	long double Gaussian00 = NormalDistribution2D(0,0,StandardDeviation);
-	//	©I¥sNormalDistribution2D°Æµ{¦¡­pºâ°ª´µ¤Gºû¤À¥¬(x=0,y=0,±`ºA¤À¥¬ªº¼Ğ·Ç°¾®t£m=StandardDeviation)
+	//	å‘¼å«NormalDistribution2Då‰¯ç¨‹å¼è¨ˆç®—é«˜æ–¯äºŒç¶­åˆ†å¸ƒ(x=0,y=0,å¸¸æ…‹åˆ†å¸ƒçš„æ¨™æº–åå·®Ïƒ=StandardDeviation)
 	long double Gaussian01 = NormalDistribution2D(0,1,StandardDeviation);
-	//	©I¥sNormalDistribution2D°Æµ{¦¡­pºâ°ª´µ¤Gºû¤À¥¬(x=0,y=1,±`ºA¤À¥¬ªº¼Ğ·Ç°¾®t£m=StandardDeviation)¡AGaussian01»PGaussian10¬Û¦P¡A¤£­«ÂĞ­pºâ
+	//	å‘¼å«NormalDistribution2Då‰¯ç¨‹å¼è¨ˆç®—é«˜æ–¯äºŒç¶­åˆ†å¸ƒ(x=0,y=1,å¸¸æ…‹åˆ†å¸ƒçš„æ¨™æº–åå·®Ïƒ=StandardDeviation)ï¼ŒGaussian01èˆ‡Gaussian10ç›¸åŒï¼Œä¸é‡è¦†è¨ˆç®—
 	long double Gaussian11 = NormalDistribution2D(1,1,StandardDeviation);
-	//	©I¥sNormalDistribution2D°Æµ{¦¡­pºâ°ª´µ¤Gºû¤À¥¬(x=1,y=1,±`ºA¤À¥¬ªº¼Ğ·Ç°¾®t£m=StandardDeviation)
+	//	å‘¼å«NormalDistribution2Då‰¯ç¨‹å¼è¨ˆç®—é«˜æ–¯äºŒç¶­åˆ†å¸ƒ(x=1,y=1,å¸¸æ…‹åˆ†å¸ƒçš„æ¨™æº–åå·®Ïƒ=StandardDeviation)
 	long double weighting = Gaussian00 + 4 * Gaussian01 + 4 * Gaussian11;
-	//	­pºâÅv­«­È
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+	//	è¨ˆç®—æ¬Šé‡å€¼
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		if( (loop_num < xsize) || ( (loop_num % xsize) == 0) || ( ((loop_num + 1) % xsize) == 0) || (loop_num >= (xsize*(ysize-1))))
-		//	ÀË´úÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num].R = image[loop_num].R;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].G = image[loop_num].G;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].B = image[loop_num].B;					//	Ãä¬ÉÂI¤£³B²z
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num].R = image[loop_num].R;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].G = image[loop_num].G;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].B = image[loop_num].B;					//	é‚Šç•Œé»ä¸è™•ç†
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
 			OutputData[loop_num].R = (
 				image[loop_num+xsize-1].R	* Gaussian11 + image[loop_num+xsize].R	* Gaussian01 + image[loop_num+xsize+1].R	* Gaussian11 +
 				image[loop_num-1].R 		* Gaussian01 + image[loop_num].R		* Gaussian00 + image[loop_num+1].R 			* Gaussian01 +
 				image[loop_num-xsize-1].R	* Gaussian11 + image[loop_num-xsize].R	* Gaussian01 + image[loop_num-xsize+1].R	* Gaussian11
-				) / weighting;											//	°ª´µÂoªi­pºâ
+				) / weighting;											//	é«˜æ–¯æ¿¾æ³¢è¨ˆç®—
 			OutputData[loop_num].G = (
 				image[loop_num+xsize-1].G	* Gaussian11 + image[loop_num+xsize].G	* Gaussian01 + image[loop_num+xsize+1].G	* Gaussian11 +
 				image[loop_num-1].G 		* Gaussian01 + image[loop_num].G		* Gaussian00 + image[loop_num+1].G 			* Gaussian01 +
 				image[loop_num-xsize-1].G	* Gaussian11 + image[loop_num-xsize].G	* Gaussian01 + image[loop_num-xsize+1].G	* Gaussian11
-				) / weighting;											//	°ª´µÂoªi­pºâ
+				) / weighting;											//	é«˜æ–¯æ¿¾æ³¢è¨ˆç®—
 			OutputData[loop_num].B = (
 				image[loop_num+xsize-1].B	* Gaussian11 + image[loop_num+xsize].B	* Gaussian01 + image[loop_num+xsize+1].B	* Gaussian11 +
 				image[loop_num-1].B 		* Gaussian01 + image[loop_num].B		* Gaussian00 + image[loop_num+1].B 			* Gaussian01 +
 				image[loop_num-xsize-1].B	* Gaussian11 + image[loop_num-xsize].B	* Gaussian01 + image[loop_num-xsize+1].B	* Gaussian11
-				) / weighting;											//	°ª´µÂoªi­pºâ
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôfor°j°é
-    return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôGaussianBlur33V1°Æµ{¦¡
+				) / weighting;											//	é«˜æ–¯æ¿¾æ³¢è¨ˆç®—
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸGaussianBlur33V1å‰¯ç¨‹å¼
 BMP24RGB *GaussianBlur33V2(const BMP24RGB *image,const int xsize,const int ysize,const long double StandardDeviation)
-//	GaussianBlur33V2(3*3°ª´µÂoªi)°Æµ{¦¡
-{																		//	¶i¤JGaussianBlur33V2°Æµ{¦¡
-	long double Mask[9];												//	«Å§iMask°}¦C
+//	GaussianBlur33V2(3*3é«˜æ–¯æ¿¾æ³¢)å‰¯ç¨‹å¼
+{																		//	é€²å…¥GaussianBlur33V2å‰¯ç¨‹å¼
+	long double Mask[9];												//	å®£å‘ŠMaské™£åˆ—
 	Mask[6] = NormalDistribution2D(-1,1,StandardDeviation);		Mask[7] = NormalDistribution2D(0,1,StandardDeviation);	Mask[8] = NormalDistribution2D(1,1,StandardDeviation);
-	//	µ¹©wMask¾B¸n¼Æ­È
+	//	çµ¦å®šMaské®ç½©æ•¸å€¼
 	Mask[3] = NormalDistribution2D(-1,0,StandardDeviation);		Mask[4] = NormalDistribution2D(0,0,StandardDeviation);	Mask[5] = NormalDistribution2D(1,0,StandardDeviation);
-	//	µ¹©wMask¾B¸n¼Æ­È
+	//	çµ¦å®šMaské®ç½©æ•¸å€¼
 	Mask[0] = NormalDistribution2D(-1,-1,StandardDeviation);	Mask[1] = NormalDistribution2D(0,-1,StandardDeviation);	Mask[2] = NormalDistribution2D(1,-1,StandardDeviation);
-	//	µ¹©wMask¾B¸n¼Æ­È
-    return BmpConvolution33(image, xsize, ysize, Mask);					//	©I¥sBmpConvolution33°Æµ{¦¡­pºâ¨Ã¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôGaussianBlur33V2°Æµ{¦¡
+	//	çµ¦å®šMaské®ç½©æ•¸å€¼
+    return BmpConvolution33(image, xsize, ysize, Mask);					//	å‘¼å«BmpConvolution33å‰¯ç¨‹å¼è¨ˆç®—ä¸¦å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸGaussianBlur33V2å‰¯ç¨‹å¼
 BMP24RGB *GaussianBlur(const int MaskSize, const BMP24RGB *image,const int xsize,const int ysize,const long double StandardDeviation)
-//	GaussianBlur(°ª´µÂoªi)°Æµ{¦¡
-{																		//	¶i¤JGaussianBlur°Æµ{¦¡
-	long double *Mask;													//	«Å§iMask«ü¼Ğ
+//	GaussianBlur(é«˜æ–¯æ¿¾æ³¢)å‰¯ç¨‹å¼
+{																		//	é€²å…¥GaussianBlurå‰¯ç¨‹å¼
+	long double *Mask;													//	å®£å‘ŠMaskæŒ‡æ¨™
 	Mask = (long double*)malloc(MaskSize * MaskSize * sizeof(long double));
-	//	°t¸mMask«ü¼Ğ°O¾ĞÅé¤j¤p
-	int loop_num1 = 0;													//	«Å§iloop_num1ÅÜ¼Æ¥Î©ó°j°é­p¼Æ¡A¨Ã³]©wªì©l­È¬°0
-	int loop_num2 = 0;													//	«Å§iloop_num2ÅÜ¼Æ¥Î©ó°j°é­p¼Æ¡A¨Ã³]©wªì©l­È¬°0
+	//	é…ç½®MaskæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	int loop_num1 = 0;													//	å®£å‘Šloop_num1è®Šæ•¸ç”¨æ–¼è¿´åœˆè¨ˆæ•¸ï¼Œä¸¦è¨­å®šåˆå§‹å€¼ç‚º0
+	int loop_num2 = 0;													//	å®£å‘Šloop_num2è®Šæ•¸ç”¨æ–¼è¿´åœˆè¨ˆæ•¸ï¼Œä¸¦è¨­å®šåˆå§‹å€¼ç‚º0
 	for(loop_num1 = -floor(MaskSize/2); loop_num1 <= floor(MaskSize/2); loop_num1 ++)
-	//	¥Hfor°j°é¥Í¦¨MaskÅv­«
-	{																	//	¶i¤Jfor°j°é
+	//	ä»¥forè¿´åœˆç”ŸæˆMaskæ¬Šé‡
+	{																	//	é€²å…¥forè¿´åœˆ
 		for(loop_num2 = -floor(MaskSize/2); loop_num2 <= floor(MaskSize/2); loop_num2 ++)
-		//	¥Hfor°j°é¥Í¦¨MaskÅv­«
-		{																//	¶i¤Jfor°j°é
+		//	ä»¥forè¿´åœˆç”ŸæˆMaskæ¬Šé‡
+		{																//	é€²å…¥forè¿´åœˆ
 			Mask[(int)((loop_num1 + floor(MaskSize/2)) * MaskSize + (loop_num2 + floor(MaskSize/2)))] = 
 				NormalDistribution2D((long double) loop_num2, (long double) loop_num1, StandardDeviation);
-			//	­pºâMaskÅv­«
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return BmpConvolution(MaskSize, image, xsize, ysize, Mask);			//	©I¥sBmpConvolution33°Æµ{¦¡­pºâ¨Ã¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôGaussianBlur°Æµ{¦¡
+			//	è¨ˆç®—Maskæ¬Šé‡
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return BmpConvolution(MaskSize, image, xsize, ysize, Mask);			//	å‘¼å«BmpConvolution33å‰¯ç¨‹å¼è¨ˆç®—ä¸¦å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸGaussianBlurå‰¯ç¨‹å¼
 BMP24RGB *GaussianFigure2D(const int xsize,const int ysize,const long double StandardDeviation)
-//	GaussianFigure2D(¤Gºû°ª´µ¸ê®Æ¹Ï§Î¥Í¦¨)°Æµ{¦¡
-{																		//	¶i¤JGaussianFigure2D(¤Gºû°ª´µ¸ê®Æ¹Ï§Î¥Í¦¨)°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	int Centerx,Centery;												//	«Å§iCenterx, Centery°O¿ı¹Ï¹³¤¤¤ß®y¼Ğ
-	Centerx = xsize / 2;												//	­pºâCenterx¼Æ­È¬°¹Ï¹³¼e«×/2
-	Centery = ysize / 2;												//	­pºâCentery¼Æ­È¬°¹Ï¹³¼e«×/2
-	long double NormalizeNumber;										//	«Å§iNormalizeNumber(¥¿³W¤Æ°Ñ¼Æ)
+//	GaussianFigure2D(äºŒç¶­é«˜æ–¯è³‡æ–™åœ–å½¢ç”Ÿæˆ)å‰¯ç¨‹å¼
+{																		//	é€²å…¥GaussianFigure2D(äºŒç¶­é«˜æ–¯è³‡æ–™åœ–å½¢ç”Ÿæˆ)å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	int Centerx,Centery;												//	å®£å‘ŠCenterx, Centeryè¨˜éŒ„åœ–åƒä¸­å¿ƒåº§æ¨™
+	Centerx = xsize / 2;												//	è¨ˆç®—Centerxæ•¸å€¼ç‚ºåœ–åƒå¯¬åº¦/2
+	Centery = ysize / 2;												//	è¨ˆç®—Centeryæ•¸å€¼ç‚ºåœ–åƒå¯¬åº¦/2
+	long double NormalizeNumber;										//	å®£å‘ŠNormalizeNumber(æ­£è¦åŒ–åƒæ•¸)
 	NormalizeNumber = (long double) 127.0 / NormalDistribution2D(0,0,StandardDeviation);
-	//	­pºâ¥¿³W¤Æ°Ñ¼Æ¡A¥Î©ó±N¤Gºû°ª´µ¹Ï¹³¤¤¤ßÂI¥¿³W¤Æ¬°255
-	int loop_num1, loop_num2;											//	«Å§iloop_num1, loop_num2°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num1 = 0; loop_num1 < xsize; loop_num1 ++)					//	¥H°j°é¨Ì§Ç³B²z¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		for(loop_num2 = 0; loop_num2 < ysize; loop_num2 ++)				//	¥H°j°é¨Ì§Ç³B²z¹³¯À
-		{																//	¶i¤Jfor°j°é
+	//	è¨ˆç®—æ­£è¦åŒ–åƒæ•¸ï¼Œç”¨æ–¼å°‡äºŒç¶­é«˜æ–¯åœ–åƒä¸­å¿ƒé»æ­£è¦åŒ–ç‚º255
+	int loop_num1, loop_num2;											//	å®£å‘Šloop_num1, loop_num2å€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num1 = 0; loop_num1 < xsize; loop_num1 ++)					//	ä»¥è¿´åœˆä¾åºè™•ç†åƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		for(loop_num2 = 0; loop_num2 < ysize; loop_num2 ++)				//	ä»¥è¿´åœˆä¾åºè™•ç†åƒç´ 
+		{																//	é€²å…¥forè¿´åœˆ
 			long double Data = 
 			NormalDistribution2D(fabs(Centerx - loop_num1), fabs(Centery - loop_num2), StandardDeviation) * NormalizeNumber + 128;
-			//	­pºâ¹Ï¹³¹³¯À­È¨Ã¥¿³W¤Æ
-			OutputData[ loop_num2 * xsize + loop_num1 ].R = Data;		//	¼g¤JR¸ê®Æ
-			OutputData[ loop_num2 * xsize + loop_num1 ].G = Data;		//	¼g¤JG¸ê®Æ
-			OutputData[ loop_num2 * xsize + loop_num1 ].B = Data;		//	¼g¤JB¸ê®Æ
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶Ç¤Gºû°ª´µ¹Ï¹³¥Í¦¨µ²ªG
-}																		//	µ²§ôGaussianFigure2D(¤Gºû°ª´µ¸ê®Æ¹Ï§Î¥Í¦¨)°Æµ{¦¡
+			//	è¨ˆç®—åœ–åƒåƒç´ å€¼ä¸¦æ­£è¦åŒ–
+			OutputData[ loop_num2 * xsize + loop_num1 ].R = Data;		//	å¯«å…¥Rè³‡æ–™
+			OutputData[ loop_num2 * xsize + loop_num1 ].G = Data;		//	å¯«å…¥Gè³‡æ–™
+			OutputData[ loop_num2 * xsize + loop_num1 ].B = Data;		//	å¯«å…¥Bè³‡æ–™
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³äºŒç¶­é«˜æ–¯åœ–åƒç”Ÿæˆçµæœ
+}																		//	çµæŸGaussianFigure2D(äºŒç¶­é«˜æ–¯è³‡æ–™åœ–å½¢ç”Ÿæˆ)å‰¯ç¨‹å¼
 long double NormalDistribution2D(long double xlocation,long double ylocation,long double StandardDeviation)
-//	NormalDistribution2D(¤Gºû±`ºA¤À¥¬­pºâ)°Æµ{¦¡
-{																		//	¶i¤JNormalDistribution2D°Æµ{¦¡
+//	NormalDistribution2D(äºŒç¶­å¸¸æ…‹åˆ†å¸ƒè¨ˆç®—)å‰¯ç¨‹å¼
+{																		//	é€²å…¥NormalDistribution2Då‰¯ç¨‹å¼
 	return pow(M_E,-(pow(xlocation,2) + pow(ylocation,2)) / (2 * pow(StandardDeviation,2)))/(2 * M_PI * pow(StandardDeviation,2));
-}																		//	µ²§ôNormalDistribution2D°Æµ{¦¡
+}																		//	çµæŸNormalDistribution2Då‰¯ç¨‹å¼
 BMP24RGB *ImageOCR(const BMP24RGB *image,const int xsize,const int ysize)
-//	ImageOCR(¼v¹³OCR)°Æµ{¦¡
-{																		//	¶i¤JImageOCR(¼v¹³OCR)°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z
-	//***ªì©l¤ÆOutputData«ü¼Ğ¸ê®Æ***
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Çªì©l¤ÆOutputData¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		OutputData[loop_num].R = 128;									//	³]©w¹³¯Àªì©l­È
-		OutputData[loop_num].G = 128;									//	³]©w¹³¯Àªì©l­È
-		OutputData[loop_num].B = 128;									//	³]©w¹³¯Àªì©l­È
-	}																	//	µ²§ôfor°j°é
-	bool XArray[1700];													//	«Å§iXArray¥¬ªLÅÜ¼Æ°}¦C
-	bool YArray[2340];													//	«Å§iYArray¥¬ªLÅÜ¼Æ°}¦C
-	//***ªì©l¤Æ¥¬ªLÅÜ¼Æ°}¦C***
-	for(loop_num = 0; loop_num < 1700; loop_num++)						//	¥Hfor°j°éªì©l¤ÆXArray¥¬ªLÅÜ¼Æ°}¦C
-	{																	//	¶i¤Jfor°j°é
-		XArray[loop_num] = false;										//	±Nfalse¶ñ¤JXArray¥¬ªLÅÜ¼Æ°}¦C
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num < 2340; loop_num++)						//	¥Hfor°j°éªì©l¤ÆYArray¥¬ªLÅÜ¼Æ°}¦C
-	{																	//	¶i¤Jfor°j°é
-		YArray[loop_num] = false;										//	±Nfalse¶ñ¤JYArray¥¬ªLÅÜ¼Æ°}¦C
-	}																	//	µ²§ôfor°j°é
-	//***¤ô¥­±½´yOCR¹Ï¹³***
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç±½´y¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		//---©¿²¤Ãä¬É¹³¯ÀÂI(±NindexÂà´«¬°¤Gºû®y¼Ğ)---
-		int PixelLocationX;												//	«Å§iPixelLocationX¡A°O¿ı¹³¯ÀÂI¦ì©ó¹Ï¹³¤Gºû®y¼Ğ¤¤¤§X¤è¦V¦ì¸m
-		int PixelLocationY;												//	«Å§iPixelLocationY¡A°O¿ı¹³¯ÀÂI¦ì©ó¹Ï¹³¤Gºû®y¼Ğ¤¤¤§Y¤è¦V¦ì¸m
-		PixelLocationX = loop_num % xsize;								//	­pºâPixelLocationX
-		PixelLocationY = floor(loop_num / xsize);						//	­pºâPixelLocationY
+//	ImageOCR(å½±åƒOCR)å‰¯ç¨‹å¼
+{																		//	é€²å…¥ImageOCR(å½±åƒOCR)å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿°
+	//***åˆå§‹åŒ–OutputDataæŒ‡æ¨™è³‡æ–™***
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–OutputDataåœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		OutputData[loop_num].R = 128;									//	è¨­å®šåƒç´ åˆå§‹å€¼
+		OutputData[loop_num].G = 128;									//	è¨­å®šåƒç´ åˆå§‹å€¼
+		OutputData[loop_num].B = 128;									//	è¨­å®šåƒç´ åˆå§‹å€¼
+	}																	//	çµæŸforè¿´åœˆ
+	bool XArray[1700];													//	å®£å‘ŠXArrayå¸ƒæ—è®Šæ•¸é™£åˆ—
+	bool YArray[2340];													//	å®£å‘ŠYArrayå¸ƒæ—è®Šæ•¸é™£åˆ—
+	//***åˆå§‹åŒ–å¸ƒæ—è®Šæ•¸é™£åˆ—***
+	for(loop_num = 0; loop_num < 1700; loop_num++)						//	ä»¥forè¿´åœˆåˆå§‹åŒ–XArrayå¸ƒæ—è®Šæ•¸é™£åˆ—
+	{																	//	é€²å…¥forè¿´åœˆ
+		XArray[loop_num] = false;										//	å°‡falseå¡«å…¥XArrayå¸ƒæ—è®Šæ•¸é™£åˆ—
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num < 2340; loop_num++)						//	ä»¥forè¿´åœˆåˆå§‹åŒ–YArrayå¸ƒæ—è®Šæ•¸é™£åˆ—
+	{																	//	é€²å…¥forè¿´åœˆ
+		YArray[loop_num] = false;										//	å°‡falseå¡«å…¥YArrayå¸ƒæ—è®Šæ•¸é™£åˆ—
+	}																	//	çµæŸforè¿´åœˆ
+	//***æ°´å¹³æƒæOCRåœ–åƒ***
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºæƒæåœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		//---å¿½ç•¥é‚Šç•Œåƒç´ é»(å°‡indexè½‰æ›ç‚ºäºŒç¶­åº§æ¨™)---
+		int PixelLocationX;												//	å®£å‘ŠPixelLocationXï¼Œè¨˜éŒ„åƒç´ é»ä½æ–¼åœ–åƒäºŒç¶­åº§æ¨™ä¸­ä¹‹Xæ–¹å‘ä½ç½®
+		int PixelLocationY;												//	å®£å‘ŠPixelLocationYï¼Œè¨˜éŒ„åƒç´ é»ä½æ–¼åœ–åƒäºŒç¶­åº§æ¨™ä¸­ä¹‹Yæ–¹å‘ä½ç½®
+		PixelLocationX = loop_num % xsize;								//	è¨ˆç®—PixelLocationX
+		PixelLocationY = floor(loop_num / xsize);						//	è¨ˆç®—PixelLocationY
 		if( (PixelLocationX < 150) || (PixelLocationX > (xsize - 150)) || (PixelLocationY < 150) || (PixelLocationY > (ysize - 150)))
-		//	ÀË´úÃä¬ÉÂI¹³¯À(¹³¯ÀÂI»PÃä¬É³Ìµu¶ZÂ÷­Y¤p©ó150)
-		{																//	¶i¤Jif±Ô­z
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ (åƒç´ é»èˆ‡é‚Šç•Œæœ€çŸ­è·é›¢è‹¥å°æ–¼150)
+		{																//	é€²å…¥ifæ•˜è¿°
 			
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
 			if( (image[loop_num].R == 0) || (image[loop_num].G == 0) || (image[loop_num].B == 0) )
-			//	­YR¡BG¡BB¹³¯À­È¥ô¤@¬°0(¥i¯à¬°¤å¦r)
-			{															//	¶i¤Jif±Ô­z
-				YArray[PixelLocationY] = true;							//	±N¥¬ªLÅÜ¼Æ§ï¬°true
-			}															//	µ²§ôif±Ô­z
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôfor°j°é	
-	//***««ª½±½´yOCR¹Ï¹³***
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç±½´y¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		int PixelLocationX;												//	«Å§iPixelLocationX¡A°O¿ı¹³¯ÀÂI¦ì©ó¹Ï¹³¤Gºû®y¼Ğ¤¤¤§X¤è¦V¦ì¸m
-		int PixelLocationY;												//	«Å§iPixelLocationY¡A°O¿ı¹³¯ÀÂI¦ì©ó¹Ï¹³¤Gºû®y¼Ğ¤¤¤§Y¤è¦V¦ì¸m
-		PixelLocationX = loop_num % xsize;								//	­pºâPixelLocationX
-		PixelLocationY = floor(loop_num / xsize);						//	­pºâPixelLocationY
+			//	è‹¥Rã€Gã€Båƒç´ å€¼ä»»ä¸€ç‚º0(å¯èƒ½ç‚ºæ–‡å­—)
+			{															//	é€²å…¥ifæ•˜è¿°
+				YArray[PixelLocationY] = true;							//	å°‡å¸ƒæ—è®Šæ•¸æ”¹ç‚ºtrue
+			}															//	çµæŸifæ•˜è¿°
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ	
+	//***å‚ç›´æƒæOCRåœ–åƒ***
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºæƒæåœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		int PixelLocationX;												//	å®£å‘ŠPixelLocationXï¼Œè¨˜éŒ„åƒç´ é»ä½æ–¼åœ–åƒäºŒç¶­åº§æ¨™ä¸­ä¹‹Xæ–¹å‘ä½ç½®
+		int PixelLocationY;												//	å®£å‘ŠPixelLocationYï¼Œè¨˜éŒ„åƒç´ é»ä½æ–¼åœ–åƒäºŒç¶­åº§æ¨™ä¸­ä¹‹Yæ–¹å‘ä½ç½®
+		PixelLocationX = loop_num % xsize;								//	è¨ˆç®—PixelLocationX
+		PixelLocationY = floor(loop_num / xsize);						//	è¨ˆç®—PixelLocationY
 		if( (PixelLocationX < 150) || (PixelLocationX > (xsize - 150)) || (PixelLocationY < 150) || (PixelLocationY > (ysize - 150)))
-		//	ÀË´úÃä¬ÉÂI¹³¯À(¹³¯ÀÂI»PÃä¬É³Ìµu¶ZÂ÷­Y¤p©ó150)
-		{																//	¶i¤Jif±Ô­z
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ (åƒç´ é»èˆ‡é‚Šç•Œæœ€çŸ­è·é›¢è‹¥å°æ–¼150)
+		{																//	é€²å…¥ifæ•˜è¿°
 			
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
 			if( (image[loop_num].R == 0) || (image[loop_num].G == 0) || (image[loop_num].B == 0) )
-			//	­YR¡BG¡BB¹³¯À­È¥ô¤@¬°0(¥i¯à¬°¤å¦r)
-			{															//	¶i¤Jif±Ô­z
-				YArray[PixelLocationY] = true;							//	±N¥¬ªLÅÜ¼Æ§ï¬°true
-			}															//	µ²§ôif±Ô­z
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôfor°j°é	
-	//---¿é¥X±½´yµ²ªG---
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Çªì©l¤ÆOutputData¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		int PixelLocationX;												//	«Å§iPixelLocationX¡A°O¿ı¹³¯ÀÂI¦ì©ó¹Ï¹³¤Gºû®y¼Ğ¤¤¤§X¤è¦V¦ì¸m
-		int PixelLocationY;												//	«Å§iPixelLocationY¡A°O¿ı¹³¯ÀÂI¦ì©ó¹Ï¹³¤Gºû®y¼Ğ¤¤¤§Y¤è¦V¦ì¸m
-		PixelLocationX = loop_num % xsize;								//	­pºâPixelLocationX
-		PixelLocationY = floor(loop_num / xsize);						//	­pºâPixelLocationY
+			//	è‹¥Rã€Gã€Båƒç´ å€¼ä»»ä¸€ç‚º0(å¯èƒ½ç‚ºæ–‡å­—)
+			{															//	é€²å…¥ifæ•˜è¿°
+				YArray[PixelLocationY] = true;							//	å°‡å¸ƒæ—è®Šæ•¸æ”¹ç‚ºtrue
+			}															//	çµæŸifæ•˜è¿°
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ	
+	//---è¼¸å‡ºæƒæçµæœ---
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–OutputDataåœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		int PixelLocationX;												//	å®£å‘ŠPixelLocationXï¼Œè¨˜éŒ„åƒç´ é»ä½æ–¼åœ–åƒäºŒç¶­åº§æ¨™ä¸­ä¹‹Xæ–¹å‘ä½ç½®
+		int PixelLocationY;												//	å®£å‘ŠPixelLocationYï¼Œè¨˜éŒ„åƒç´ é»ä½æ–¼åœ–åƒäºŒç¶­åº§æ¨™ä¸­ä¹‹Yæ–¹å‘ä½ç½®
+		PixelLocationX = loop_num % xsize;								//	è¨ˆç®—PixelLocationX
+		PixelLocationY = floor(loop_num / xsize);						//	è¨ˆç®—PixelLocationY
 		if( (XArray[PixelLocationX] == true) && (YArray[PixelLocationY] == true))
 		{
 			OutputData[loop_num].R = image[loop_num].R;								
 			OutputData[loop_num].G = image[loop_num].G;								
 			OutputData[loop_num].B = image[loop_num].B;								
 		}
-	}																	//	µ²§ôfor°j°é
+	}																	//	çµæŸforè¿´åœˆ
 	return OutputData;
-	#ifdef DebugMode													//	­Y¦³©w¸q¬°DebugMode(°£¿ù¼Ò¦¡)
-	//---Åã¥Ü±½´yµ²ªG---
+	#ifdef DebugMode													//	è‹¥æœ‰å®šç¾©ç‚ºDebugMode(é™¤éŒ¯æ¨¡å¼)
+	//---é¡¯ç¤ºæƒæçµæœ---
 	printf("OCR test\n");
 	bool temp;
 	int CountNum,CountNum2;
@@ -1416,8 +1162,8 @@ BMP24RGB *ImageOCR(const BMP24RGB *image,const int xsize,const int ysize)
 	CountNum=0;
 	CountNum2=0;
 	printf("XArray:\n%d:",(int)temp);
-	for(loop_num = 0; loop_num < 1700; loop_num++)						//	¥Hfor°j°éªì©l¤ÆXArray¥¬ªLÅÜ¼Æ°}¦C
-	{																	//	¶i¤Jfor°j°é
+	for(loop_num = 0; loop_num < 1700; loop_num++)						//	ä»¥forè¿´åœˆåˆå§‹åŒ–XArrayå¸ƒæ—è®Šæ•¸é™£åˆ—
+	{																	//	é€²å…¥forè¿´åœˆ
 		if(XArray[loop_num] == temp)
 		{
 			CountNum++;
@@ -1429,14 +1175,14 @@ BMP24RGB *ImageOCR(const BMP24RGB *image,const int xsize,const int ysize)
 			printf("%d(%d)\n%d:",CountNum,CountNum2,(int)temp);
 			CountNum=1;
 		}
-	}																	//	µ²§ôfor°j°é
+	}																	//	çµæŸforè¿´åœˆ
 	printf("%d",CountNum);*/
 	temp = YArray[0];
 	CountNum=0;
 	CountNum2=0;
 	printf("\nYArray:\n%d:",(int)temp);
-	for(loop_num = 0; loop_num < 2340; loop_num++)						//	¥Hfor°j°éªì©l¤ÆYArray¥¬ªLÅÜ¼Æ°}¦C
-	{																	//	¶i¤Jfor°j°é
+	for(loop_num = 0; loop_num < 2340; loop_num++)						//	ä»¥forè¿´åœˆåˆå§‹åŒ–YArrayå¸ƒæ—è®Šæ•¸é™£åˆ—
+	{																	//	é€²å…¥forè¿´åœˆ
 		if(YArray[loop_num] == temp)
 		{
 			CountNum++;
@@ -1448,1119 +1194,1119 @@ BMP24RGB *ImageOCR(const BMP24RGB *image,const int xsize,const int ysize)
 			printf("%d(%d)\n%d:",CountNum,ysize-CountNum2,(int)temp);
 			CountNum=1;
 		}
-	}																	//	µ²§ôfor°j°é
+	}																	//	çµæŸforè¿´åœˆ
 	printf("%d",CountNum);
-	#endif																//	µ²§ôifdef±Ô­z
-}																		//	µ²§ôImageOCR(¼v¹³OCR)°Æµ{¦¡
+	#endif																//	çµæŸifdefæ•˜è¿°
+}																		//	çµæŸImageOCR(å½±åƒOCR)å‰¯ç¨‹å¼
 BMP24RGB *BMP24RGBGradient(const BMP24RGB *image,const int xsize,const int ysize)
-//	BMP24RGBGradient(BMP¹Ï¤ù¸ê®Æ±è«×­pºâ)°Æµ{¦¡
-{																		//	¶i¤JBMP24RGBGradient(BMP¹Ï¤ù¸ê®Æ±è«×­pºâ)°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À±è«×
-	{																	//	¶i¤Jfor°j°é
+//	BMP24RGBGradient(BMPåœ–ç‰‡è³‡æ–™æ¢¯åº¦è¨ˆç®—)å‰¯ç¨‹å¼
+{																		//	é€²å…¥BMP24RGBGradient(BMPåœ–ç‰‡è³‡æ–™æ¢¯åº¦è¨ˆç®—)å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ æ¢¯åº¦
+	{																	//	é€²å…¥forè¿´åœˆ
 		if( (loop_num < xsize) || ( (loop_num % xsize) == 0) || ( ((loop_num + 1) % xsize) == 0) || (loop_num >= (xsize*(ysize-1))))
-		//	ÀË´úÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num].R = image[loop_num].R;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].G = image[loop_num].G;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].B = image[loop_num].B;					//	Ãä¬ÉÂI¤£³B²z
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
-			//***­pºâR¹³¯À¥­­±±è«×***
-			int Gx = 0, Gy = 0;											//	«Å§i±è«×­pºâµ²ªGGx¡BGy¡A¨Ãµ¹©wªì©l­È¬°0
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num].R = image[loop_num].R;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].G = image[loop_num].G;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].B = image[loop_num].B;					//	é‚Šç•Œé»ä¸è™•ç†
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
+			//***è¨ˆç®—Råƒç´ å¹³é¢æ¢¯åº¦***
+			int Gx = 0, Gy = 0;											//	å®£å‘Šæ¢¯åº¦è¨ˆç®—çµæœGxã€Gyï¼Œä¸¦çµ¦å®šåˆå§‹å€¼ç‚º0
 			Gx = (
 				image[loop_num+xsize-1].R	* (-1) + image[loop_num+xsize].R	* 0 + image[loop_num+xsize+1].R	* 1 +
 				image[loop_num-1].R 		* (-1) + image[loop_num].R			* 0 + image[loop_num+1].R 		* 1 +
 				image[loop_num-xsize-1].R	* (-1) + image[loop_num-xsize].R	* 0 + image[loop_num-xsize+1].R	* 1
-				);														//	Gx­pºâ
+				);														//	Gxè¨ˆç®—
 			Gy = (
 				image[loop_num+xsize-1].R	* (-1) + image[loop_num+xsize].R	* (-1) + image[loop_num+xsize+1].R	* (-1) +
 				image[loop_num-1].R 		*   0  + image[loop_num].R			*   0  + image[loop_num+1].R 		*   0  +
 				image[loop_num-xsize-1].R	*   1  + image[loop_num-xsize].R	*   1  + image[loop_num-xsize+1].R	*   1
-				);														//	Gy­pºâ
-			long double Magnitude, Direction;							//	«Å§iMagnitude»PDirectionÅÜ¼Æ°O¿ı±è«×¤j¤p»P¤è¦V
-			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	­pºâMagnitude
-			if((Gx > 0) && (Gy >= 0)) 									//	­YGx¤j©ó0¥BGy¤j©óµ¥©ó0
-			{															//	¶i¤Jif±Ô­z
+				);														//	Gyè¨ˆç®—
+			long double Magnitude, Direction;							//	å®£å‘ŠMagnitudeèˆ‡Directionè®Šæ•¸è¨˜éŒ„æ¢¯åº¦å¤§å°èˆ‡æ–¹å‘
+			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	è¨ˆç®—Magnitude
+			if((Gx > 0) && (Gy >= 0)) 									//	è‹¥Gxå¤§æ–¼0ä¸”Gyå¤§æ–¼ç­‰æ–¼0
+			{															//	é€²å…¥ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI);
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤@¶H­­
-			}															//	µ²§ôif±Ô­z
-			else if(Gx < 0)												//	­YGx¤p©ó0										
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬ä¸€è±¡é™
+			}															//	çµæŸifæ•˜è¿°
+			else if(Gx < 0)												//	è‹¥Gxå°æ–¼0										
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)180;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤G¶H­­¡B²Ä¤T¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx > 0) && (Gy < 0) )								//	­YGx¤j©ó0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬äºŒè±¡é™ã€ç¬¬ä¸‰è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx > 0) && (Gy < 0) )								//	è‹¥Gxå¤§æ–¼0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)360;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¥|¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy > 0) )							//	­YGx¬°0¥BGy¤j©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)90;							//	±è«×¬°90«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy < 0) )							//	­YGx¬°0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)270;							//	±è«×¬°270«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy == 0) )							//	­YGx¬°0¥BGyµ¥©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = 0;											//	±è«×¤è¦V¥¼©w¸q
-			}															//	µ²§ôelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬å››è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy > 0) )							//	è‹¥Gxç‚º0ä¸”Gyå¤§æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)90;							//	æ¢¯åº¦ç‚º90åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy < 0) )							//	è‹¥Gxç‚º0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)270;							//	æ¢¯åº¦ç‚º270åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy == 0) )							//	è‹¥Gxç‚º0ä¸”Gyç­‰æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = 0;											//	æ¢¯åº¦æ–¹å‘æœªå®šç¾©
+			}															//	çµæŸelse ifæ•˜è¿°
 			
 			OutputData[loop_num].R = (Magnitude > 255)?255:(Magnitude < 0)?0:(unsigned char)Magnitude;
-			//	±N­pºâµ²ªG¶ñ¤J¹³¯À¸ê®Æ
+			//	å°‡è¨ˆç®—çµæœå¡«å…¥åƒç´ è³‡æ–™
 			
-			//***­pºâG¹³¯À¥­­±±è«×***
+			//***è¨ˆç®—Gåƒç´ å¹³é¢æ¢¯åº¦***
 			Gx = (
 				image[loop_num+xsize-1].G	* (-1) + image[loop_num+xsize].G	* 0 + image[loop_num+xsize+1].G	* 1 +
 				image[loop_num-1].G 		* (-1) + image[loop_num].G			* 0 + image[loop_num+1].G 		* 1 +
 				image[loop_num-xsize-1].G	* (-1) + image[loop_num-xsize].G	* 0 + image[loop_num-xsize+1].G	* 1
-				);														//	Gx­pºâ
+				);														//	Gxè¨ˆç®—
 			Gy = (
 				image[loop_num+xsize-1].G	* (-1) + image[loop_num+xsize].G	* (-1) + image[loop_num+xsize+1].G	* (-1) +
 				image[loop_num-1].G 		*   0  + image[loop_num].G			*   0  + image[loop_num+1].G 		*   0  +
 				image[loop_num-xsize-1].G	*   1  + image[loop_num-xsize].G	*   1  + image[loop_num-xsize+1].G	*   1
-				);														//	Gy­pºâ
-			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	­pºâMagnitude
-			if((Gx > 0) && (Gy >= 0)) 									//	­YGx¤j©ó0¥BGy¤j©óµ¥©ó0
-			{															//	¶i¤Jif±Ô­z
+				);														//	Gyè¨ˆç®—
+			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	è¨ˆç®—Magnitude
+			if((Gx > 0) && (Gy >= 0)) 									//	è‹¥Gxå¤§æ–¼0ä¸”Gyå¤§æ–¼ç­‰æ–¼0
+			{															//	é€²å…¥ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI);
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤@¶H­­
-			}															//	µ²§ôif±Ô­z
-			else if(Gx < 0)												//	­YGx¤p©ó0										
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬ä¸€è±¡é™
+			}															//	çµæŸifæ•˜è¿°
+			else if(Gx < 0)												//	è‹¥Gxå°æ–¼0										
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)180;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤G¶H­­¡B²Ä¤T¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx > 0) && (Gy < 0) )								//	­YGx¤j©ó0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬äºŒè±¡é™ã€ç¬¬ä¸‰è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx > 0) && (Gy < 0) )								//	è‹¥Gxå¤§æ–¼0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)360;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¥|¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy > 0) )							//	­YGx¬°0¥BGy¤j©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)90;							//	±è«×¬°90«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy < 0) )							//	­YGx¬°0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)270;							//	±è«×¬°270«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy == 0) )							//	­YGx¬°0¥BGyµ¥©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = 0;											//	±è«×¤è¦V¥¼©w¸q
-			}															//	µ²§ôelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬å››è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy > 0) )							//	è‹¥Gxç‚º0ä¸”Gyå¤§æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)90;							//	æ¢¯åº¦ç‚º90åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy < 0) )							//	è‹¥Gxç‚º0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)270;							//	æ¢¯åº¦ç‚º270åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy == 0) )							//	è‹¥Gxç‚º0ä¸”Gyç­‰æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = 0;											//	æ¢¯åº¦æ–¹å‘æœªå®šç¾©
+			}															//	çµæŸelse ifæ•˜è¿°
 			
 			OutputData[loop_num].G = (Magnitude > 255)?255:(Magnitude < 0)?0:(unsigned char)Magnitude;
-			//	±N­pºâµ²ªG¶ñ¤J¹³¯À¸ê®Æ
+			//	å°‡è¨ˆç®—çµæœå¡«å…¥åƒç´ è³‡æ–™
 			
-			//***­pºâB¹³¯À¥­­±±è«×***
+			//***è¨ˆç®—Båƒç´ å¹³é¢æ¢¯åº¦***
 			Gx = (
 				image[loop_num+xsize-1].B	* (-1) + image[loop_num+xsize].B	* 0 + image[loop_num+xsize+1].B	* 1 +
 				image[loop_num-1].B 		* (-1) + image[loop_num].B			* 0 + image[loop_num+1].B 		* 1 +
 				image[loop_num-xsize-1].B	* (-1) + image[loop_num-xsize].B	* 0 + image[loop_num-xsize+1].B	* 1
-				);														//	Gx­pºâ
+				);														//	Gxè¨ˆç®—
 			Gy = (
 				image[loop_num+xsize-1].B	* (-1) + image[loop_num+xsize].B	* (-1) + image[loop_num+xsize+1].B	* (-1) +
 				image[loop_num-1].B 		*   0  + image[loop_num].B			*   0  + image[loop_num+1].B 		*   0  +
 				image[loop_num-xsize-1].B	*   1  + image[loop_num-xsize].B	*   1  + image[loop_num-xsize+1].B	*   1
-				);														//	Gy­pºâ
-			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	­pºâMagnitude
-			if((Gx > 0) && (Gy >= 0)) 									//	­YGx¤j©ó0¥BGy¤j©óµ¥©ó0
-			{															//	¶i¤Jif±Ô­z
+				);														//	Gyè¨ˆç®—
+			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	è¨ˆç®—Magnitude
+			if((Gx > 0) && (Gy >= 0)) 									//	è‹¥Gxå¤§æ–¼0ä¸”Gyå¤§æ–¼ç­‰æ–¼0
+			{															//	é€²å…¥ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI);
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤@¶H­­
-			}															//	µ²§ôif±Ô­z
-			else if(Gx < 0)												//	­YGx¤p©ó0										
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬ä¸€è±¡é™
+			}															//	çµæŸifæ•˜è¿°
+			else if(Gx < 0)												//	è‹¥Gxå°æ–¼0										
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)180;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤G¶H­­¡B²Ä¤T¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx > 0) && (Gy < 0) )								//	­YGx¤j©ó0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬äºŒè±¡é™ã€ç¬¬ä¸‰è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx > 0) && (Gy < 0) )								//	è‹¥Gxå¤§æ–¼0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)360;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¥|¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy > 0) )							//	­YGx¬°0¥BGy¤j©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)90;							//	±è«×¬°90«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy < 0) )							//	­YGx¬°0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)270;							//	±è«×¬°270«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy == 0) )							//	­YGx¬°0¥BGyµ¥©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = 0;											//	±è«×¤è¦V¥¼©w¸q
-			}															//	µ²§ôelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬å››è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy > 0) )							//	è‹¥Gxç‚º0ä¸”Gyå¤§æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)90;							//	æ¢¯åº¦ç‚º90åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy < 0) )							//	è‹¥Gxç‚º0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)270;							//	æ¢¯åº¦ç‚º270åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy == 0) )							//	è‹¥Gxç‚º0ä¸”Gyç­‰æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = 0;											//	æ¢¯åº¦æ–¹å‘æœªå®šç¾©
+			}															//	çµæŸelse ifæ•˜è¿°
 			
 			OutputData[loop_num].B = (Magnitude > 255)?255:(Magnitude < 0)?0:(unsigned char)Magnitude;
-			//	±N­pºâµ²ªG¶ñ¤J¹³¯À¸ê®Æ
+			//	å°‡è¨ˆç®—çµæœå¡«å…¥åƒç´ è³‡æ–™
 			
-		}																//	µ²§ôelse±Ô­z		
-	}																	//	µ²§ôfor°j°é
-    return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôBMP24RGBGradient(BMP¹Ï¤ù¸ê®Æ±è«×­pºâ)°Æµ{¦¡
+		}																//	çµæŸelseæ•˜è¿°		
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸBMP24RGBGradient(BMPåœ–ç‰‡è³‡æ–™æ¢¯åº¦è¨ˆç®—)å‰¯ç¨‹å¼
 BMP24RGB *BMP24RGBSobelEdge(const BMP24RGB *image,const int xsize,const int ysize)
-//	BMP24RGBSobelEdge(¯Á¨©º¸ºâ¤lÃä½t°»´ú)°Æµ{¦¡
-{																		//	¶i¤JBMP24RGBSobelEdge(¯Á¨©º¸ºâ¤lÃä½t°»´ú)°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À±è«×
-	{																	//	¶i¤Jfor°j°é
+//	BMP24RGBSobelEdge(ç´¢è²çˆ¾ç®—å­é‚Šç·£åµæ¸¬)å‰¯ç¨‹å¼
+{																		//	é€²å…¥BMP24RGBSobelEdge(ç´¢è²çˆ¾ç®—å­é‚Šç·£åµæ¸¬)å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ æ¢¯åº¦
+	{																	//	é€²å…¥forè¿´åœˆ
 		if( (loop_num < xsize) || ( (loop_num % xsize) == 0) || ( ((loop_num + 1) % xsize) == 0) || (loop_num >= (xsize*(ysize-1))))
-		//	ÀË´úÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num].R = image[loop_num].R;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].G = image[loop_num].G;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].B = image[loop_num].B;					//	Ãä¬ÉÂI¤£³B²z
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
-			//***­pºâR¹³¯À¥­­±±è«×***
-			int Gx = 0, Gy = 0;											//	«Å§i±è«×­pºâµ²ªGGx¡BGy¡A¨Ãµ¹©wªì©l­È¬°0
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num].R = image[loop_num].R;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].G = image[loop_num].G;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].B = image[loop_num].B;					//	é‚Šç•Œé»ä¸è™•ç†
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
+			//***è¨ˆç®—Råƒç´ å¹³é¢æ¢¯åº¦***
+			int Gx = 0, Gy = 0;											//	å®£å‘Šæ¢¯åº¦è¨ˆç®—çµæœGxã€Gyï¼Œä¸¦çµ¦å®šåˆå§‹å€¼ç‚º0
 			Gx = (
 				image[loop_num+xsize-1].R	* (-1) + image[loop_num+xsize].R	* 0 + image[loop_num+xsize+1].R	* 1 +
 				image[loop_num-1].R 		* (-2) + image[loop_num].R			* 0 + image[loop_num+1].R 		* 2 +
 				image[loop_num-xsize-1].R	* (-1) + image[loop_num-xsize].R	* 0 + image[loop_num-xsize+1].R	* 1
-				);														//	Gx­pºâ
+				);														//	Gxè¨ˆç®—
 			Gy = (
 				image[loop_num+xsize-1].R	* (-1) + image[loop_num+xsize].R	* (-2) + image[loop_num+xsize+1].R	* (-1) +
 				image[loop_num-1].R 		*   0  + image[loop_num].R			*   0  + image[loop_num+1].R 		*   0  +
 				image[loop_num-xsize-1].R	*   1  + image[loop_num-xsize].R	*   2  + image[loop_num-xsize+1].R	*   1
-				);														//	Gy­pºâ
-			long double Magnitude, Direction;							//	«Å§iMagnitude»PDirectionÅÜ¼Æ°O¿ı±è«×¤j¤p»P¤è¦V
-			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	­pºâMagnitude
-			if((Gx > 0) && (Gy >= 0)) 									//	­YGx¤j©ó0¥BGy¤j©óµ¥©ó0
-			{															//	¶i¤Jif±Ô­z
+				);														//	Gyè¨ˆç®—
+			long double Magnitude, Direction;							//	å®£å‘ŠMagnitudeèˆ‡Directionè®Šæ•¸è¨˜éŒ„æ¢¯åº¦å¤§å°èˆ‡æ–¹å‘
+			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	è¨ˆç®—Magnitude
+			if((Gx > 0) && (Gy >= 0)) 									//	è‹¥Gxå¤§æ–¼0ä¸”Gyå¤§æ–¼ç­‰æ–¼0
+			{															//	é€²å…¥ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI);
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤@¶H­­
-			}															//	µ²§ôif±Ô­z
-			else if(Gx < 0)												//	­YGx¤p©ó0										
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬ä¸€è±¡é™
+			}															//	çµæŸifæ•˜è¿°
+			else if(Gx < 0)												//	è‹¥Gxå°æ–¼0										
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)180;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤G¶H­­¡B²Ä¤T¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx > 0) && (Gy < 0) )								//	­YGx¤j©ó0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬äºŒè±¡é™ã€ç¬¬ä¸‰è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx > 0) && (Gy < 0) )								//	è‹¥Gxå¤§æ–¼0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)360;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¥|¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy > 0) )							//	­YGx¬°0¥BGy¤j©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)90;							//	±è«×¬°90«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy < 0) )							//	­YGx¬°0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)270;							//	±è«×¬°270«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy == 0) )							//	­YGx¬°0¥BGyµ¥©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = 0;											//	±è«×¤è¦V¥¼©w¸q
-			}															//	µ²§ôelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬å››è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy > 0) )							//	è‹¥Gxç‚º0ä¸”Gyå¤§æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)90;							//	æ¢¯åº¦ç‚º90åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy < 0) )							//	è‹¥Gxç‚º0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)270;							//	æ¢¯åº¦ç‚º270åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy == 0) )							//	è‹¥Gxç‚º0ä¸”Gyç­‰æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = 0;											//	æ¢¯åº¦æ–¹å‘æœªå®šç¾©
+			}															//	çµæŸelse ifæ•˜è¿°
 			
 			OutputData[loop_num].R = (Magnitude > 255)?255:(Magnitude < 0)?0:(unsigned char)Magnitude;
-			//	±N­pºâµ²ªG¶ñ¤J¹³¯À¸ê®Æ
+			//	å°‡è¨ˆç®—çµæœå¡«å…¥åƒç´ è³‡æ–™
 			
-			//***­pºâG¹³¯À¥­­±±è«×***
+			//***è¨ˆç®—Gåƒç´ å¹³é¢æ¢¯åº¦***
 			Gx = (
 				image[loop_num+xsize-1].G	* (-1) + image[loop_num+xsize].G	* 0 + image[loop_num+xsize+1].G	* 1 +
 				image[loop_num-1].G 		* (-2) + image[loop_num].G			* 0 + image[loop_num+1].G 		* 2 +
 				image[loop_num-xsize-1].G	* (-1) + image[loop_num-xsize].G	* 0 + image[loop_num-xsize+1].G	* 1
-				);														//	Gx­pºâ
+				);														//	Gxè¨ˆç®—
 			Gy = (
 				image[loop_num+xsize-1].G	* (-1) + image[loop_num+xsize].G	* (-2) + image[loop_num+xsize+1].G	* (-1) +
 				image[loop_num-1].G 		*   0  + image[loop_num].G			*   0  + image[loop_num+1].G 		*   0  +
 				image[loop_num-xsize-1].G	*   1  + image[loop_num-xsize].G	*   2  + image[loop_num-xsize+1].G	*   1
-				);														//	Gy­pºâ
-			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	­pºâMagnitude
-			if((Gx > 0) && (Gy >= 0)) 									//	­YGx¤j©ó0¥BGy¤j©óµ¥©ó0
-			{															//	¶i¤Jif±Ô­z
+				);														//	Gyè¨ˆç®—
+			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	è¨ˆç®—Magnitude
+			if((Gx > 0) && (Gy >= 0)) 									//	è‹¥Gxå¤§æ–¼0ä¸”Gyå¤§æ–¼ç­‰æ–¼0
+			{															//	é€²å…¥ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI);
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤@¶H­­
-			}															//	µ²§ôif±Ô­z
-			else if(Gx < 0)												//	­YGx¤p©ó0										
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬ä¸€è±¡é™
+			}															//	çµæŸifæ•˜è¿°
+			else if(Gx < 0)												//	è‹¥Gxå°æ–¼0										
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)180;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤G¶H­­¡B²Ä¤T¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx > 0) && (Gy < 0) )								//	­YGx¤j©ó0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬äºŒè±¡é™ã€ç¬¬ä¸‰è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx > 0) && (Gy < 0) )								//	è‹¥Gxå¤§æ–¼0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)360;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¥|¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy > 0) )							//	­YGx¬°0¥BGy¤j©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)90;							//	±è«×¬°90«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy < 0) )							//	­YGx¬°0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)270;							//	±è«×¬°270«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy == 0) )							//	­YGx¬°0¥BGyµ¥©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = 0;											//	±è«×¤è¦V¥¼©w¸q
-			}															//	µ²§ôelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬å››è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy > 0) )							//	è‹¥Gxç‚º0ä¸”Gyå¤§æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)90;							//	æ¢¯åº¦ç‚º90åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy < 0) )							//	è‹¥Gxç‚º0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)270;							//	æ¢¯åº¦ç‚º270åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy == 0) )							//	è‹¥Gxç‚º0ä¸”Gyç­‰æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = 0;											//	æ¢¯åº¦æ–¹å‘æœªå®šç¾©
+			}															//	çµæŸelse ifæ•˜è¿°
 			
 			OutputData[loop_num].G = (Magnitude > 255)?255:(Magnitude < 0)?0:(unsigned char)Magnitude;
-			//	±N­pºâµ²ªG¶ñ¤J¹³¯À¸ê®Æ
+			//	å°‡è¨ˆç®—çµæœå¡«å…¥åƒç´ è³‡æ–™
 			
-			//***­pºâB¹³¯À¥­­±±è«×***
+			//***è¨ˆç®—Båƒç´ å¹³é¢æ¢¯åº¦***
 			Gx = (
 				image[loop_num+xsize-1].B	* (-1) + image[loop_num+xsize].B	* 0 + image[loop_num+xsize+1].B	* 1 +
 				image[loop_num-1].B 		* (-2) + image[loop_num].B			* 0 + image[loop_num+1].B 		* 2 +
 				image[loop_num-xsize-1].B	* (-1) + image[loop_num-xsize].B	* 0 + image[loop_num-xsize+1].B	* 1
-				);														//	Gx­pºâ
+				);														//	Gxè¨ˆç®—
 			Gy = (
 				image[loop_num+xsize-1].B	* (-1) + image[loop_num+xsize].B	* (-2) + image[loop_num+xsize+1].B	* (-1) +
 				image[loop_num-1].B 		*   0  + image[loop_num].B			*   0  + image[loop_num+1].B 		*   0  +
 				image[loop_num-xsize-1].B	*   1  + image[loop_num-xsize].B	*   2  + image[loop_num-xsize+1].B	*   1
-				);														//	Gy­pºâ
-			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	­pºâMagnitude
-			if((Gx > 0) && (Gy >= 0)) 									//	­YGx¤j©ó0¥BGy¤j©óµ¥©ó0
-			{															//	¶i¤Jif±Ô­z
+				);														//	Gyè¨ˆç®—
+			Magnitude = sqrt(pow(Gx, 2) + pow(Gy, 2));					//	è¨ˆç®—Magnitude
+			if((Gx > 0) && (Gy >= 0)) 									//	è‹¥Gxå¤§æ–¼0ä¸”Gyå¤§æ–¼ç­‰æ–¼0
+			{															//	é€²å…¥ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI);
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤@¶H­­
-			}															//	µ²§ôif±Ô­z
-			else if(Gx < 0)												//	­YGx¤p©ó0										
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬ä¸€è±¡é™
+			}															//	çµæŸifæ•˜è¿°
+			else if(Gx < 0)												//	è‹¥Gxå°æ–¼0										
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)180;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¤G¶H­­¡B²Ä¤T¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx > 0) && (Gy < 0) )								//	­YGx¤j©ó0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬äºŒè±¡é™ã€ç¬¬ä¸‰è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx > 0) && (Gy < 0) )								//	è‹¥Gxå¤§æ–¼0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
 				Direction = atan((long double)Gy / (long double)Gx) * ( 180 / M_PI) + (long double)360;
-				//	­pºâ±è«×¤è¦V(Direction)¡Ğ²Ä¥|¶H­­
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy > 0) )							//	­YGx¬°0¥BGy¤j©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)90;							//	±è«×¬°90«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy < 0) )							//	­YGx¬°0¥BGy¤p©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = (long double)270;							//	±è«×¬°270«×
-			}															//	µ²§ôelse if±Ô­z
-			else if( (Gx == 0) && (Gy == 0) )							//	­YGx¬°0¥BGyµ¥©ó0
-			{															//	¶i¤Jelse if±Ô­z
-				Direction = 0;											//	±è«×¤è¦V¥¼©w¸q
-			}															//	µ²§ôelse if±Ô­z
+				//	è¨ˆç®—æ¢¯åº¦æ–¹å‘(Direction)ï¼ç¬¬å››è±¡é™
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy > 0) )							//	è‹¥Gxç‚º0ä¸”Gyå¤§æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)90;							//	æ¢¯åº¦ç‚º90åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy < 0) )							//	è‹¥Gxç‚º0ä¸”Gyå°æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = (long double)270;							//	æ¢¯åº¦ç‚º270åº¦
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if( (Gx == 0) && (Gy == 0) )							//	è‹¥Gxç‚º0ä¸”Gyç­‰æ–¼0
+			{															//	é€²å…¥else ifæ•˜è¿°
+				Direction = 0;											//	æ¢¯åº¦æ–¹å‘æœªå®šç¾©
+			}															//	çµæŸelse ifæ•˜è¿°
 			
 			OutputData[loop_num].B = (Magnitude > 255)?255:(Magnitude < 0)?0:(unsigned char)Magnitude;
-			//	±N­pºâµ²ªG¶ñ¤J¹³¯À¸ê®Æ
+			//	å°‡è¨ˆç®—çµæœå¡«å…¥åƒç´ è³‡æ–™
 			
-		}																//	µ²§ôelse±Ô­z		
-	}																	//	µ²§ôfor°j°é
-    return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôBMP24RGBSobelEdge(¯Á¨©º¸ºâ¤lÃä½t°»´ú)°Æµ{¦¡
+		}																//	çµæŸelseæ•˜è¿°		
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸBMP24RGBSobelEdge(ç´¢è²çˆ¾ç®—å­é‚Šç·£åµæ¸¬)å‰¯ç¨‹å¼
 BMP24RGB *RGBHistogramEqualization(const BMP24RGB *image,const int xsize,const int ysize)
-//	RGBHistogramEqualization(RGB¦Ç¶¥¼v¹³ª½¤è¹Ïµ¥¤Æ)°Æµ{¦¡
-{																		//	¶i¤JRGBHistogramEqualization(RGB¦Ç¶¥¼v¹³ª½¤è¹Ïµ¥¤Æ)°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z
-	//***ªì©l¤ÆOutputData«ü¼Ğ¸ê®Æ***
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Çªì©l¤ÆOutputData¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		OutputData[loop_num].R = 0;										//	³]©w¹³¯Àªì©l­È
-		OutputData[loop_num].G = 0;										//	³]©w¹³¯Àªì©l­È
-		OutputData[loop_num].B = 0;										//	³]©w¹³¯Àªì©l­È
-	}																	//	µ²§ôfor°j°é
-	long long int CountPixel[256];										//	«Å§iCountPixel°}¦C²Î­p¦U¹³¯À­È¥X²{¦¸¼Æ
-	//***¥Hfor°j°é¨Ì§Çªì©l¤ÆCountPixel²Î­p­È¬°0***
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°éªì©l¤ÆCountPixel²Î­p­È¬°0
-	{																	//	¶i¤Jfor°j°é
-		CountPixel[loop_num] = 0;										//	ªì©l¤ÆCountPixel²Î­p­È¬°0
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+//	RGBHistogramEqualization(RGBç°éšå½±åƒç›´æ–¹åœ–ç­‰åŒ–)å‰¯ç¨‹å¼
+{																		//	é€²å…¥RGBHistogramEqualization(RGBç°éšå½±åƒç›´æ–¹åœ–ç­‰åŒ–)å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿°
+	//***åˆå§‹åŒ–OutputDataæŒ‡æ¨™è³‡æ–™***
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–OutputDataåœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		OutputData[loop_num].R = 0;										//	è¨­å®šåƒç´ åˆå§‹å€¼
+		OutputData[loop_num].G = 0;										//	è¨­å®šåƒç´ åˆå§‹å€¼
+		OutputData[loop_num].B = 0;										//	è¨­å®šåƒç´ åˆå§‹å€¼
+	}																	//	çµæŸforè¿´åœˆ
+	long long int CountPixel[256];										//	å®£å‘ŠCountPixelé™£åˆ—çµ±è¨ˆå„åƒç´ å€¼å‡ºç¾æ¬¡æ•¸
+	//***ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0***
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆåˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0
+	{																	//	é€²å…¥forè¿´åœˆ
+		CountPixel[loop_num] = 0;										//	åˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		CountPixel[image[loop_num].R] = CountPixel[image[loop_num].R] + 1;
-		//	­pºâR¹³¯À­È¥X²{¦¸¼Æ
-	}																	//	µ²§ôfor°j°é
-	unsigned long long int PDF[256],CDF[256];							//	«Å§iPDF»PCDF°}¦C¡A­pºâ­Ó§O¹³¯À­È¾÷²v»P²Ö­p¾÷²v
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§Ç­pºâPDF
-	{																	//	¶i¤Jfor°j°é
-		PDF[loop_num] = CountPixel[loop_num];							//	­pºâ¹³¯À­ÈPDF
-	}																	//	µ²§ôfor°j°é
+		//	è¨ˆç®—Råƒç´ å€¼å‡ºç¾æ¬¡æ•¸
+	}																	//	çµæŸforè¿´åœˆ
+	unsigned long long int PDF[256],CDF[256];							//	å®£å‘ŠPDFèˆ‡CDFé™£åˆ—ï¼Œè¨ˆç®—å€‹åˆ¥åƒç´ å€¼æ©Ÿç‡èˆ‡ç´¯è¨ˆæ©Ÿç‡
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—PDF
+	{																	//	é€²å…¥forè¿´åœˆ
+		PDF[loop_num] = CountPixel[loop_num];							//	è¨ˆç®—åƒç´ å€¼PDF
+	}																	//	çµæŸforè¿´åœˆ
 	//system("pause");
-	CDF[0] = PDF[0];													//	¶ñ¤J¹³¯À­È¬°0ªºCDF
-	for(loop_num = 1; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§Ç­pºâCDF
-	{																	//	¶i¤Jfor°j°é
-		CDF[loop_num] = CDF[loop_num - 1] + PDF[loop_num];				//	­pºâ¹³¯À­ÈCDF
-	}																	//	µ²§ôfor°j°é
-	unsigned char ResultPixel[256];										//	«Å§iResultPixel°}¦C°O¿ıHistogramEqualization«á¹³¯À­È
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§ÇHistogramEqualization«á¹³¯À­È
-	{																	//	¶i¤Jfor°j°é
-		ResultPixel[loop_num] = CDF[loop_num] * 255 / (xsize * ysize);	//	­pºâHistogramEqualization«á¹³¯À­È
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¿é¥Xµ²ªG¦ÜOutputData
-	{																	//	¶i¤Jfor°j°é
-		OutputData[loop_num].R = ResultPixel[image[loop_num].R];		//	¿é¥Xµ²ªG¦ÜOutputData
-	}																	//	µ²§ôfor°j°é
+	CDF[0] = PDF[0];													//	å¡«å…¥åƒç´ å€¼ç‚º0çš„CDF
+	for(loop_num = 1; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—CDF
+	{																	//	é€²å…¥forè¿´åœˆ
+		CDF[loop_num] = CDF[loop_num - 1] + PDF[loop_num];				//	è¨ˆç®—åƒç´ å€¼CDF
+	}																	//	çµæŸforè¿´åœˆ
+	unsigned char ResultPixel[256];										//	å®£å‘ŠResultPixelé™£åˆ—è¨˜éŒ„HistogramEqualizationå¾Œåƒç´ å€¼
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºHistogramEqualizationå¾Œåƒç´ å€¼
+	{																	//	é€²å…¥forè¿´åœˆ
+		ResultPixel[loop_num] = CDF[loop_num] * 255 / (xsize * ysize);	//	è¨ˆç®—HistogramEqualizationå¾Œåƒç´ å€¼
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆè¼¸å‡ºçµæœè‡³OutputData
+	{																	//	é€²å…¥forè¿´åœˆ
+		OutputData[loop_num].R = ResultPixel[image[loop_num].R];		//	è¼¸å‡ºçµæœè‡³OutputData
+	}																	//	çµæŸforè¿´åœˆ
 	
-	//***¥Hfor°j°é¨Ì§Çªì©l¤ÆCountPixel²Î­p­È¬°0***
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°éªì©l¤ÆCountPixel²Î­p­È¬°0
-	{																	//	¶i¤Jfor°j°é
-		CountPixel[loop_num] = 0;										//	ªì©l¤ÆCountPixel²Î­p­È¬°0
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+	//***ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0***
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆåˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0
+	{																	//	é€²å…¥forè¿´åœˆ
+		CountPixel[loop_num] = 0;										//	åˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		CountPixel[image[loop_num].G] = CountPixel[image[loop_num].G] + 1;
-		//	­pºâG¹³¯À­È¥X²{¦¸¼Æ
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§Ç­pºâPDF
-	{																	//	¶i¤Jfor°j°é
-		PDF[loop_num] = CountPixel[loop_num];							//	­pºâ¹³¯À­ÈPDF
-	}																	//	µ²§ôfor°j°é
-	CDF[0] = PDF[0];													//	¶ñ¤J¹³¯À­È¬°0ªºCDF
-	for(loop_num = 1; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§Ç­pºâCDF
-	{																	//	¶i¤Jfor°j°é
-		CDF[loop_num] = CDF[loop_num - 1] + PDF[loop_num];				//	­pºâ¹³¯À­ÈCDF
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§ÇHistogramEqualization«á¹³¯À­È
-	{																	//	¶i¤Jfor°j°é
-		ResultPixel[loop_num] = CDF[loop_num] * 255 / (xsize * ysize);	//	­pºâHistogramEqualization«á¹³¯À­È
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¿é¥Xµ²ªG¦ÜOutputData
-	{																	//	¶i¤Jfor°j°é
-		OutputData[loop_num].G = ResultPixel[image[loop_num].G];		//	¿é¥Xµ²ªG¦ÜOutputData
-	}																	//	µ²§ôfor°j°é
+		//	è¨ˆç®—Gåƒç´ å€¼å‡ºç¾æ¬¡æ•¸
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—PDF
+	{																	//	é€²å…¥forè¿´åœˆ
+		PDF[loop_num] = CountPixel[loop_num];							//	è¨ˆç®—åƒç´ å€¼PDF
+	}																	//	çµæŸforè¿´åœˆ
+	CDF[0] = PDF[0];													//	å¡«å…¥åƒç´ å€¼ç‚º0çš„CDF
+	for(loop_num = 1; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—CDF
+	{																	//	é€²å…¥forè¿´åœˆ
+		CDF[loop_num] = CDF[loop_num - 1] + PDF[loop_num];				//	è¨ˆç®—åƒç´ å€¼CDF
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºHistogramEqualizationå¾Œåƒç´ å€¼
+	{																	//	é€²å…¥forè¿´åœˆ
+		ResultPixel[loop_num] = CDF[loop_num] * 255 / (xsize * ysize);	//	è¨ˆç®—HistogramEqualizationå¾Œåƒç´ å€¼
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆè¼¸å‡ºçµæœè‡³OutputData
+	{																	//	é€²å…¥forè¿´åœˆ
+		OutputData[loop_num].G = ResultPixel[image[loop_num].G];		//	è¼¸å‡ºçµæœè‡³OutputData
+	}																	//	çµæŸforè¿´åœˆ
 	
-	//***¥Hfor°j°é¨Ì§Çªì©l¤ÆCountPixel²Î­p­È¬°0***
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°éªì©l¤ÆCountPixel²Î­p­È¬°0
-	{																	//	¶i¤Jfor°j°é
-		CountPixel[loop_num] = 0;										//	ªì©l¤ÆCountPixel²Î­p­È¬°0
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+	//***ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0***
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆåˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0
+	{																	//	é€²å…¥forè¿´åœˆ
+		CountPixel[loop_num] = 0;										//	åˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		CountPixel[image[loop_num].B] = CountPixel[image[loop_num].B] + 1;
-		//	­pºâB¹³¯À­È¥X²{¦¸¼Æ
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§Ç­pºâPDF
-	{																	//	¶i¤Jfor°j°é
-		PDF[loop_num] = CountPixel[loop_num];							//	­pºâ¹³¯À­ÈPDF
-	}																	//	µ²§ôfor°j°é
-	CDF[0] = PDF[0];													//	¶ñ¤J¹³¯À­È¬°0ªºCDF
-	for(loop_num = 1; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§Ç­pºâCDF
-	{																	//	¶i¤Jfor°j°é
-		CDF[loop_num] = CDF[loop_num - 1] + PDF[loop_num];				//	­pºâ¹³¯À­ÈCDF
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§ÇHistogramEqualization«á¹³¯À­È
-	{																	//	¶i¤Jfor°j°é
-		ResultPixel[loop_num] = CDF[loop_num] * 255 / (xsize * ysize);	//	­pºâHistogramEqualization«á¹³¯À­È
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¿é¥Xµ²ªG¦ÜOutputData
-	{																	//	¶i¤Jfor°j°é
-		OutputData[loop_num].B = ResultPixel[image[loop_num].B];		//	¿é¥Xµ²ªG¦ÜOutputData
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶ÇHistogramEqualization¹Bºâµ²ªG
-}																		//	µ²§ôRGBHistogramEqualization(RGB¦Ç¶¥¼v¹³ª½¤è¹Ïµ¥¤Æ)°Æµ{¦¡
+		//	è¨ˆç®—Båƒç´ å€¼å‡ºç¾æ¬¡æ•¸
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—PDF
+	{																	//	é€²å…¥forè¿´åœˆ
+		PDF[loop_num] = CountPixel[loop_num];							//	è¨ˆç®—åƒç´ å€¼PDF
+	}																	//	çµæŸforè¿´åœˆ
+	CDF[0] = PDF[0];													//	å¡«å…¥åƒç´ å€¼ç‚º0çš„CDF
+	for(loop_num = 1; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—CDF
+	{																	//	é€²å…¥forè¿´åœˆ
+		CDF[loop_num] = CDF[loop_num - 1] + PDF[loop_num];				//	è¨ˆç®—åƒç´ å€¼CDF
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºHistogramEqualizationå¾Œåƒç´ å€¼
+	{																	//	é€²å…¥forè¿´åœˆ
+		ResultPixel[loop_num] = CDF[loop_num] * 255 / (xsize * ysize);	//	è¨ˆç®—HistogramEqualizationå¾Œåƒç´ å€¼
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆè¼¸å‡ºçµæœè‡³OutputData
+	{																	//	é€²å…¥forè¿´åœˆ
+		OutputData[loop_num].B = ResultPixel[image[loop_num].B];		//	è¼¸å‡ºçµæœè‡³OutputData
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³HistogramEqualizationé‹ç®—çµæœ
+}																		//	çµæŸRGBHistogramEqualization(RGBç°éšå½±åƒç›´æ–¹åœ–ç­‰åŒ–)å‰¯ç¨‹å¼
 BMP24RGB *BMPHaarWavelet(const BMP24RGB *image,const int xsize,const int ysize, const char mode)
-//	BMPHaarWavelet(BMP¹ÏÀÉHaar¤pªiÂoªi)°Æµ{¦¡
-{																		//	¶i¤JBMPHaarWavelet°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+//	BMPHaarWavelet(BMPåœ–æª”Haarå°æ³¢æ¿¾æ³¢)å‰¯ç¨‹å¼
+{																		//	é€²å…¥BMPHaarWaveletå‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		if( (loop_num < xsize) || ( (loop_num % xsize) == 0) || ( ((loop_num + 1) % xsize) == 0) || (loop_num >= (xsize*(ysize-1))))
-		//	ÀË´úÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num].R = image[loop_num].R;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].G = image[loop_num].G;					//	Ãä¬ÉÂI¤£³B²z
-			OutputData[loop_num].B = image[loop_num].B;					//	Ãä¬ÉÂI¤£³B²z
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y«DÃä¬ÉÂI¹³¯À
-		{																//	¶i¤Jelse±Ô­z
-			if(mode==HorizontalHighPass)								//	­Ymode¬°««ª½°ª³q¼Ò¦¡
-			{															//	¶i¤Jif±Ô­z
+		//	æª¢æ¸¬é‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num].R = image[loop_num].R;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].G = image[loop_num].G;					//	é‚Šç•Œé»ä¸è™•ç†
+			OutputData[loop_num].B = image[loop_num].B;					//	é‚Šç•Œé»ä¸è™•ç†
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥éé‚Šç•Œé»åƒç´ 
+		{																//	é€²å…¥elseæ•˜è¿°
+			if(mode==HorizontalHighPass)								//	è‹¥modeç‚ºå‚ç›´é«˜é€šæ¨¡å¼
+			{															//	é€²å…¥ifæ•˜è¿°
 				OutputData[loop_num].R = abs(
 					image[loop_num-1].R 	* (-1) + image[loop_num].R		* 0 + image[loop_num+1].R 	* 1
-					);													//	««ª½°ª³q¼Ò¦¡­pºâ
+					);													//	å‚ç›´é«˜é€šæ¨¡å¼è¨ˆç®—
 				OutputData[loop_num].G = abs(
 					image[loop_num-1].G 	* (-1) + image[loop_num].G		* 0 + image[loop_num+1].G 	* 1
-					);													//	««ª½°ª³q¼Ò¦¡­pºâ
+					);													//	å‚ç›´é«˜é€šæ¨¡å¼è¨ˆç®—
 				OutputData[loop_num].B = abs(
 					image[loop_num-1].B 	* (-1) + image[loop_num].B		* 0 + image[loop_num+1].B 	* 1
-					);													//	««ª½°ª³q¼Ò¦¡­pºâ
-			}															//	µ²§ôif±Ô­z
-			else if(mode==HorizontalLowPass)							//	­Ymode¬°««ª½§C³q¼Ò¦¡
-			{															//	¶i¤Jelse if±Ô­z
+					);													//	å‚ç›´é«˜é€šæ¨¡å¼è¨ˆç®—
+			}															//	çµæŸifæ•˜è¿°
+			else if(mode==HorizontalLowPass)							//	è‹¥modeç‚ºå‚ç›´ä½é€šæ¨¡å¼
+			{															//	é€²å…¥else ifæ•˜è¿°
 				OutputData[loop_num].R = (
 					image[loop_num-1].R 	* 1 + image[loop_num].R		* 0 + image[loop_num+1].R 	* 1
-					) / 2;												//	««ª½§C³q¼Ò¦¡­pºâ
+					) / 2;												//	å‚ç›´ä½é€šæ¨¡å¼è¨ˆç®—
 				OutputData[loop_num].G = (
 					image[loop_num-1].G 	* 1 + image[loop_num].G		* 0 + image[loop_num+1].G 	* 1
-					) / 2;												//	««ª½§C³q¼Ò¦¡­pºâ
+					) / 2;												//	å‚ç›´ä½é€šæ¨¡å¼è¨ˆç®—
 				OutputData[loop_num].B = (
 					image[loop_num-1].B 	* 1 + image[loop_num].B		* 0 + image[loop_num+1].B 	* 1
-					) / 2;												//	««ª½§C³q¼Ò¦¡­pºâ
-			}															//	µ²§ôelse if±Ô­z
-			else if(mode==VerticalHighPass)								//	­Ymode¬°¤ô¥­°ª³q¼Ò¦¡
-			{															//	¶i¤Jelse if±Ô­z
+					) / 2;												//	å‚ç›´ä½é€šæ¨¡å¼è¨ˆç®—
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if(mode==VerticalHighPass)								//	è‹¥modeç‚ºæ°´å¹³é«˜é€šæ¨¡å¼
+			{															//	é€²å…¥else ifæ•˜è¿°
 				OutputData[loop_num].R = abs(
 								image[loop_num+xsize].R	* (-1) +
 								image[loop_num].R		* 0    +
 								image[loop_num-xsize].R	* 1
-					);													//	¤ô¥­°ª³q¼Ò¦¡­pºâ
+					);													//	æ°´å¹³é«˜é€šæ¨¡å¼è¨ˆç®—
 				OutputData[loop_num].G = abs(
 								image[loop_num+xsize].G	* (-1) +
 								image[loop_num].G		* 0    +
 								image[loop_num-xsize].G	* 1
-					);													//	¤ô¥­°ª³q¼Ò¦¡­pºâ
+					);													//	æ°´å¹³é«˜é€šæ¨¡å¼è¨ˆç®—
 				OutputData[loop_num].B = abs(
 								image[loop_num+xsize].B	* (-1) +
 								image[loop_num].B		* 0    +
 								image[loop_num-xsize].B	* 1
-					);													//	¤ô¥­°ª³q¼Ò¦¡­pºâ
-			}															//	µ²§ôelse if±Ô­z
-			else if(mode==VerticalLowPass)								//	­Ymode¬°¤ô¥­§C³q¼Ò¦¡
-			{															//	¶i¤Jelse if±Ô­z
+					);													//	æ°´å¹³é«˜é€šæ¨¡å¼è¨ˆç®—
+			}															//	çµæŸelse ifæ•˜è¿°
+			else if(mode==VerticalLowPass)								//	è‹¥modeç‚ºæ°´å¹³ä½é€šæ¨¡å¼
+			{															//	é€²å…¥else ifæ•˜è¿°
 				OutputData[loop_num].R = (
 								image[loop_num+xsize].R	* 1 +
 								image[loop_num].R		* 0 +
 								image[loop_num-xsize].R	* 1
-					) / 2;												//	¤ô¥­§C³q¼Ò¦¡­pºâ
+					) / 2;												//	æ°´å¹³ä½é€šæ¨¡å¼è¨ˆç®—
 				OutputData[loop_num].G = (
 								image[loop_num+xsize].G	* 1 +
 								image[loop_num].G		* 0 +
 								image[loop_num-xsize].G	* 1
-					) / 2;												//	¤ô¥­§C³q¼Ò¦¡­pºâ
+					) / 2;												//	æ°´å¹³ä½é€šæ¨¡å¼è¨ˆç®—
 				OutputData[loop_num].B = (
 								image[loop_num+xsize].B	* 1 +
 								image[loop_num].B		* 0 +
 								image[loop_num-xsize].B	* 1
-					) / 2;												//	¤ô¥­§C³q¼Ò¦¡­pºâ
-			}															//	µ²§ôelse if±Ô­z
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôfor°j°é
-    return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôBMPHaarWavelet°Æµ{¦¡
+					) / 2;												//	æ°´å¹³ä½é€šæ¨¡å¼è¨ˆç®—
+			}															//	çµæŸelse ifæ•˜è¿°
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸBMPHaarWaveletå‰¯ç¨‹å¼
 BMP24RGB *BMPHaarWavelet2(const BMP24RGB *image,const int xsize,const int ysize, const char mode)
-//	BMPHaarWavelet2(BMP¹ÏÀÉ¤G¶¥Haar¤pªiÂoªi)°Æµ{¦¡
-{																		//	¶i¤JBMPHaarWavelet2°Æµ{¦¡
-	BMP24RGB *OutputData;												//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	if(mode == HighHigh)												//	­Y¼Ò¦¡¬°HighHigh
-	{																	//	¶i¤Jif±Ô­z
+//	BMPHaarWavelet2(BMPåœ–æª”äºŒéšHaarå°æ³¢æ¿¾æ³¢)å‰¯ç¨‹å¼
+{																		//	é€²å…¥BMPHaarWavelet2å‰¯ç¨‹å¼
+	BMP24RGB *OutputData;												//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	if(mode == HighHigh)												//	è‹¥æ¨¡å¼ç‚ºHighHigh
+	{																	//	é€²å…¥ifæ•˜è¿°
 		OutputData = BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalHighPass),xsize,ysize,VerticalHighPass);
-		//	©I¥sBMPHaarWavelet°Æµ{¦¡HorizontalHighPass¼Ò¦¡¡A¦A©I¥sBMPHaarWavelet°Æµ{¦¡VerticalHighPass¼Ò¦¡
-	}																	//	µ²§ôif±Ô­z
-	else if(mode == HighLow)											//	­Y¼Ò¦¡¬°HighLow
-	{																	//	¶i¤Jelse if±Ô­z
+		//	å‘¼å«BMPHaarWaveletå‰¯ç¨‹å¼HorizontalHighPassæ¨¡å¼ï¼Œå†å‘¼å«BMPHaarWaveletå‰¯ç¨‹å¼VerticalHighPassæ¨¡å¼
+	}																	//	çµæŸifæ•˜è¿°
+	else if(mode == HighLow)											//	è‹¥æ¨¡å¼ç‚ºHighLow
+	{																	//	é€²å…¥else ifæ•˜è¿°
 		OutputData = BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalHighPass),xsize,ysize,VerticalLowPass);
-		//	©I¥sBMPHaarWavelet°Æµ{¦¡HorizontalHighPass¼Ò¦¡¡A¦A©I¥sBMPHaarWavelet°Æµ{¦¡VerticalLowPass¼Ò¦¡
-	}																	//	µ²§ôelse if±Ô­z
-	else if(mode == LowHigh)											//	­Y¼Ò¦¡¬°LowHigh
-	{																	//	¶i¤Jelse if±Ô­z
+		//	å‘¼å«BMPHaarWaveletå‰¯ç¨‹å¼HorizontalHighPassæ¨¡å¼ï¼Œå†å‘¼å«BMPHaarWaveletå‰¯ç¨‹å¼VerticalLowPassæ¨¡å¼
+	}																	//	çµæŸelse ifæ•˜è¿°
+	else if(mode == LowHigh)											//	è‹¥æ¨¡å¼ç‚ºLowHigh
+	{																	//	é€²å…¥else ifæ•˜è¿°
 		OutputData = BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalLowPass),xsize,ysize,VerticalHighPass);
-		//	©I¥sBMPHaarWavelet°Æµ{¦¡HorizontalLowPass¼Ò¦¡¡A¦A©I¥sBMPHaarWavelet°Æµ{¦¡VerticalHighPass¼Ò¦¡
-	}																	//	µ²§ôelse if±Ô­z
-	else if(mode == LowLow)												//	­Y¼Ò¦¡¬°LowLow
-	{																	//	¶i¤Jelse if±Ô­z
+		//	å‘¼å«BMPHaarWaveletå‰¯ç¨‹å¼HorizontalLowPassæ¨¡å¼ï¼Œå†å‘¼å«BMPHaarWaveletå‰¯ç¨‹å¼VerticalHighPassæ¨¡å¼
+	}																	//	çµæŸelse ifæ•˜è¿°
+	else if(mode == LowLow)												//	è‹¥æ¨¡å¼ç‚ºLowLow
+	{																	//	é€²å…¥else ifæ•˜è¿°
 		OutputData = BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalLowPass),xsize,ysize,VerticalLowPass);
-		//	©I¥sBMPHaarWavelet°Æµ{¦¡HorizontalLowPass¼Ò¦¡¡A¦A©I¥sBMPHaarWavelet°Æµ{¦¡VerticalLowPass¼Ò¦¡
-	}																	//	µ²§ôelse if±Ô­z
-    else if(mode == (HighHigh|HighLow) )								//	­Y¼Ò¦¡¬°HighHigh»PHighLow²V©M
-	{																	//	¶i¤Jelse if±Ô­z
+		//	å‘¼å«BMPHaarWaveletå‰¯ç¨‹å¼HorizontalLowPassæ¨¡å¼ï¼Œå†å‘¼å«BMPHaarWaveletå‰¯ç¨‹å¼VerticalLowPassæ¨¡å¼
+	}																	//	çµæŸelse ifæ•˜è¿°
+    else if(mode == (HighHigh|HighLow) )								//	è‹¥æ¨¡å¼ç‚ºHighHighèˆ‡HighLowæ··å’Œ
+	{																	//	é€²å…¥else ifæ•˜è¿°
 		OutputData = BMP24RGB2or(BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalHighPass),xsize,ysize,VerticalHighPass),
 								 BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalHighPass),xsize,ysize,VerticalLowPass),
 								 xsize,ysize);
-		//	±NHighHighµ²ªG»PHighLowµ²ªG²V¦X(or¹Bºâ)
-	}																	//	µ²§ôelse if±Ô­z
-	else if(mode == (HighHigh|LowHigh) )								//	­Y¼Ò¦¡¬°HighHigh»PLowHigh²V©M
-	{																	//	¶i¤Jelse if±Ô­z
+		//	å°‡HighHighçµæœèˆ‡HighLowçµæœæ··åˆ(oré‹ç®—)
+	}																	//	çµæŸelse ifæ•˜è¿°
+	else if(mode == (HighHigh|LowHigh) )								//	è‹¥æ¨¡å¼ç‚ºHighHighèˆ‡LowHighæ··å’Œ
+	{																	//	é€²å…¥else ifæ•˜è¿°
 		OutputData = BMP24RGB2or(BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalHighPass),xsize,ysize,VerticalHighPass),
 								 BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalLowPass),xsize,ysize,VerticalHighPass),
 								 xsize,ysize);
-		//	±NHighHighµ²ªG»PLowHighµ²ªG²V¦X(or¹Bºâ)
-	}																	//	µ²§ôelse if±Ô­z
-	else if(mode == (HighLow|LowHigh) )									//	­Y¼Ò¦¡¬°HighLow»PLowHigh²V©M
-	{																	//	¶i¤Jelse if±Ô­z
+		//	å°‡HighHighçµæœèˆ‡LowHighçµæœæ··åˆ(oré‹ç®—)
+	}																	//	çµæŸelse ifæ•˜è¿°
+	else if(mode == (HighLow|LowHigh) )									//	è‹¥æ¨¡å¼ç‚ºHighLowèˆ‡LowHighæ··å’Œ
+	{																	//	é€²å…¥else ifæ•˜è¿°
 		OutputData = BMP24RGB2or(BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalHighPass),xsize,ysize,VerticalLowPass),
 								 BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalLowPass),xsize,ysize,VerticalHighPass),
 								 xsize,ysize);
-		//	±NHighLowµ²ªG»PLowHighµ²ªG²V¦X(or¹Bºâ)
-	}																	//	µ²§ôelse if±Ô­z
-	else if(mode == (HighHigh|HighLow|LowHigh) )						//	­Y¼Ò¦¡¬°HighHigh¡BHighLow»PLowHigh²V©M
-	{																	//	¶i¤Jelse if±Ô­z
+		//	å°‡HighLowçµæœèˆ‡LowHighçµæœæ··åˆ(oré‹ç®—)
+	}																	//	çµæŸelse ifæ•˜è¿°
+	else if(mode == (HighHigh|HighLow|LowHigh) )						//	è‹¥æ¨¡å¼ç‚ºHighHighã€HighLowèˆ‡LowHighæ··å’Œ
+	{																	//	é€²å…¥else ifæ•˜è¿°
 		OutputData = BMP24RGB2or(BMP24RGB2or(BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalHighPass),xsize,ysize,VerticalHighPass),
 								 BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalHighPass),xsize,ysize,VerticalLowPass),
 								 xsize,ysize),
 								 BMPHaarWavelet(BMPHaarWavelet(image,xsize,ysize,HorizontalLowPass),xsize,ysize,VerticalHighPass),
 								 xsize,ysize);
-		//	±NHighHighµ²ªG¡BHighLowµ²ªG»PLowHighµ²ªG²V¦X(or¹Bºâ)
-	}																	//	µ²§ôelse if±Ô­z
-	return OutputData;													//	¦^¶Ç¹Bºâµ²ªG
-}																		//	µ²§ôBMPHaarWavelet2°Æµ{¦¡
+		//	å°‡HighHighçµæœã€HighLowçµæœèˆ‡LowHighçµæœæ··åˆ(oré‹ç®—)
+	}																	//	çµæŸelse ifæ•˜è¿°
+	return OutputData;													//	å›å‚³é‹ç®—çµæœ
+}																		//	çµæŸBMPHaarWavelet2å‰¯ç¨‹å¼
 HSV *HSVHistogramEqualization(const HSV *image,const int xsize,const int ysize)
-//	HSVHistogramEqualization(HSV¼v¹³ª½¤è¹Ïµ¥¤Æ)°Æµ{¦¡
-{																		//	¶i¤JHSVHistogramEqualization(HSV¼v¹³ª½¤è¹Ïµ¥¤Æ)°Æµ{¦¡
-	HSV *OutputData;													//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (HSV*)malloc(xsize * ysize * sizeof(HSV));				//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z
-	//***ªì©l¤ÆOutputData«ü¼Ğ¸ê®Æ***
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Çªì©l¤ÆOutputData¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		OutputData[loop_num].H = image[loop_num].H;						//	³]©w¹³¯Àªì©l­È
-		OutputData[loop_num].S = image[loop_num].S;						//	³]©w¹³¯Àªì©l­È
-		OutputData[loop_num].V = 0;										//	³]©w¹³¯Àªì©l­È
-	}																	//	µ²§ôfor°j°é
-	long long int CountPixel[256];										//	«Å§iCountPixel°}¦C²Î­p¦U¹³¯À­È¥X²{¦¸¼Æ
-	//***¥Hfor°j°é¨Ì§Çªì©l¤ÆCountPixel²Î­p­È¬°0***
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°éªì©l¤ÆCountPixel²Î­p­È¬°0
-	{																	//	¶i¤Jfor°j°é
-		CountPixel[loop_num] = 0;										//	ªì©l¤ÆCountPixel²Î­p­È¬°0
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Ç­pºâ¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+//	HSVHistogramEqualization(HSVå½±åƒç›´æ–¹åœ–ç­‰åŒ–)å‰¯ç¨‹å¼
+{																		//	é€²å…¥HSVHistogramEqualization(HSVå½±åƒç›´æ–¹åœ–ç­‰åŒ–)å‰¯ç¨‹å¼
+	HSV *OutputData;													//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (HSV*)malloc(xsize * ysize * sizeof(HSV));				//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿°
+	//***åˆå§‹åŒ–OutputDataæŒ‡æ¨™è³‡æ–™***
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–OutputDataåœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		OutputData[loop_num].H = image[loop_num].H;						//	è¨­å®šåƒç´ åˆå§‹å€¼
+		OutputData[loop_num].S = image[loop_num].S;						//	è¨­å®šåƒç´ åˆå§‹å€¼
+		OutputData[loop_num].V = 0;										//	è¨­å®šåƒç´ åˆå§‹å€¼
+	}																	//	çµæŸforè¿´åœˆ
+	long long int CountPixel[256];										//	å®£å‘ŠCountPixelé™£åˆ—çµ±è¨ˆå„åƒç´ å€¼å‡ºç¾æ¬¡æ•¸
+	//***ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0***
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆåˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0
+	{																	//	é€²å…¥forè¿´åœˆ
+		CountPixel[loop_num] = 0;										//	åˆå§‹åŒ–CountPixelçµ±è¨ˆå€¼ç‚º0
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		CountPixel[(int)(image[loop_num].V)] = CountPixel[(int)(image[loop_num].V)] + 1;
-		//	­pºâValue­È¥X²{¦¸¼Æ
-	}																	//	µ²§ôfor°j°é
-	unsigned long long int PDF[256],CDF[256];							//	«Å§iPDF»PCDF°}¦C¡A­pºâ­Ó§O¹³¯À­È¾÷²v»P²Ö­p¾÷²v
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§Ç­pºâPDF
-	{																	//	¶i¤Jfor°j°é
-		PDF[loop_num] = CountPixel[loop_num];							//	­pºâ¹³¯À­ÈPDF
-	}																	//	µ²§ôfor°j°é
+		//	è¨ˆç®—Valueå€¼å‡ºç¾æ¬¡æ•¸
+	}																	//	çµæŸforè¿´åœˆ
+	unsigned long long int PDF[256],CDF[256];							//	å®£å‘ŠPDFèˆ‡CDFé™£åˆ—ï¼Œè¨ˆç®—å€‹åˆ¥åƒç´ å€¼æ©Ÿç‡èˆ‡ç´¯è¨ˆæ©Ÿç‡
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—PDF
+	{																	//	é€²å…¥forè¿´åœˆ
+		PDF[loop_num] = CountPixel[loop_num];							//	è¨ˆç®—åƒç´ å€¼PDF
+	}																	//	çµæŸforè¿´åœˆ
 	//system("pause");
-	CDF[0] = PDF[0];													//	¶ñ¤J¹³¯À­È¬°0ªºCDF
-	for(loop_num = 1; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§Ç­pºâCDF
-	{																	//	¶i¤Jfor°j°é
-		CDF[loop_num] = CDF[loop_num - 1] + PDF[loop_num];				//	­pºâ¹³¯À­ÈCDF
-	}																	//	µ²§ôfor°j°é
-	unsigned char ResultPixel[256];										//	«Å§iResultPixel°}¦C°O¿ıHistogramEqualization«á¹³¯À­È
-	for(loop_num = 0; loop_num < 256; loop_num++)						//	¥Hfor°j°é¨Ì§ÇHistogramEqualization«á¹³¯À­È
-	{																	//	¶i¤Jfor°j°é
-		ResultPixel[loop_num] = CDF[loop_num] * 255 / (xsize * ysize);	//	­pºâHistogramEqualization«á¹³¯À­È
-	}																	//	µ²§ôfor°j°é
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¿é¥Xµ²ªG¦ÜOutputData
-	{																	//	¶i¤Jfor°j°é
-		OutputData[loop_num].V = ResultPixel[(int)(image[loop_num].V)];	//	¿é¥Xµ²ªG¦ÜOutputData
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶ÇHistogramEqualization¹Bºâµ²ªG
-}																		//	µ²§ôHSVHistogramEqualization(HSV¼v¹³ª½¤è¹Ïµ¥¤Æ)°Æµ{¦¡
+	CDF[0] = PDF[0];													//	å¡«å…¥åƒç´ å€¼ç‚º0çš„CDF
+	for(loop_num = 1; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºè¨ˆç®—CDF
+	{																	//	é€²å…¥forè¿´åœˆ
+		CDF[loop_num] = CDF[loop_num - 1] + PDF[loop_num];				//	è¨ˆç®—åƒç´ å€¼CDF
+	}																	//	çµæŸforè¿´åœˆ
+	unsigned char ResultPixel[256];										//	å®£å‘ŠResultPixelé™£åˆ—è¨˜éŒ„HistogramEqualizationå¾Œåƒç´ å€¼
+	for(loop_num = 0; loop_num < 256; loop_num++)						//	ä»¥forè¿´åœˆä¾åºHistogramEqualizationå¾Œåƒç´ å€¼
+	{																	//	é€²å…¥forè¿´åœˆ
+		ResultPixel[loop_num] = CDF[loop_num] * 255 / (xsize * ysize);	//	è¨ˆç®—HistogramEqualizationå¾Œåƒç´ å€¼
+	}																	//	çµæŸforè¿´åœˆ
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆè¼¸å‡ºçµæœè‡³OutputData
+	{																	//	é€²å…¥forè¿´åœˆ
+		OutputData[loop_num].V = ResultPixel[(int)(image[loop_num].V)];	//	è¼¸å‡ºçµæœè‡³OutputData
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³HistogramEqualizationé‹ç®—çµæœ
+}																		//	çµæŸHSVHistogramEqualization(HSVå½±åƒç›´æ–¹åœ–ç­‰åŒ–)å‰¯ç¨‹å¼
 BMP24RGB *HueToBMP24RGB(const HSV *image,const int xsize,const int ysize)
-//	HueToBMP24RGB°Æµ{¦¡
-{																		//	¶i¤JHueToBMP24RGB°Æµ{¦¡
-	BMP24RGB *OutputImage;												//	«Å§iOutputImage«ü¼ĞÅÜ¼Æ¡A°O¿ı¿é¥X¹Ï¹³¸ê®Æ
+//	HueToBMP24RGBå‰¯ç¨‹å¼
+{																		//	é€²å…¥HueToBMP24RGBå‰¯ç¨‹å¼
+	BMP24RGB *OutputImage;												//	å®£å‘ŠOutputImageæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„è¼¸å‡ºåœ–åƒè³‡æ–™
 	OutputImage = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));
-	//	°t¸mOutputImage«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputImage == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long long int LoopNumber;											//	«Å§iLoopNumber°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(LoopNumber = 0; LoopNumber <(xsize * ysize); LoopNumber++)		//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+	//	é…ç½®OutputImageæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputImage == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long long int LoopNumber;											//	å®£å‘ŠLoopNumberå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(LoopNumber = 0; LoopNumber <(xsize * ysize); LoopNumber++)		//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		OutputImage[LoopNumber].R = image[LoopNumber].H * (long double)255 / (long double)360;
-		//	¶ñ¤J¼v¹³¸ê®Æ
+		//	å¡«å…¥å½±åƒè³‡æ–™
 		OutputImage[LoopNumber].G = image[LoopNumber].H * (long double)255 / (long double)360;
-		//	¶ñ¤J¼v¹³¸ê®Æ
+		//	å¡«å…¥å½±åƒè³‡æ–™
 		OutputImage[LoopNumber].B = image[LoopNumber].H * (long double)255 / (long double)360;
-		//	¶ñ¤J¼v¹³¸ê®Æ
-	}																	//	µ²§ôfor°j°é
-    return OutputImage;													//	¦^¶Ç¿é¥X¹Ï¹³
-}																		//	µ²§ôHueToBMP24RGB°Æµ{¦¡
+		//	å¡«å…¥å½±åƒè³‡æ–™
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputImage;													//	å›å‚³è¼¸å‡ºåœ–åƒ
+}																		//	çµæŸHueToBMP24RGBå‰¯ç¨‹å¼
 BMP24RGB *SaturationToBMP24RGB(const HSV *image,const int xsize,const int ysize)
-//	SaturationToBMP24RGB°Æµ{¦¡
-{																		//	¶i¤JSaturationToBMP24RGB°Æµ{¦¡
-	BMP24RGB *OutputImage;												//	«Å§iOutputImage«ü¼ĞÅÜ¼Æ¡A°O¿ı¿é¥X¹Ï¹³¸ê®Æ
+//	SaturationToBMP24RGBå‰¯ç¨‹å¼
+{																		//	é€²å…¥SaturationToBMP24RGBå‰¯ç¨‹å¼
+	BMP24RGB *OutputImage;												//	å®£å‘ŠOutputImageæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„è¼¸å‡ºåœ–åƒè³‡æ–™
 	OutputImage = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));
-	//	°t¸mOutputImage«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputImage == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long long int LoopNumber;											//	«Å§iLoopNumber°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(LoopNumber = 0; LoopNumber <(xsize * ysize); LoopNumber++)		//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
+	//	é…ç½®OutputImageæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputImage == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long long int LoopNumber;											//	å®£å‘ŠLoopNumberå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(LoopNumber = 0; LoopNumber <(xsize * ysize); LoopNumber++)		//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
 		OutputImage[LoopNumber].R = image[LoopNumber].S * (long double)255;
-		//	¶ñ¤J¼v¹³¸ê®Æ
+		//	å¡«å…¥å½±åƒè³‡æ–™
 		OutputImage[LoopNumber].G = image[LoopNumber].S * (long double)255;
-		//	¶ñ¤J¼v¹³¸ê®Æ
+		//	å¡«å…¥å½±åƒè³‡æ–™
 		OutputImage[LoopNumber].B = image[LoopNumber].S * (long double)255;
-		//	¶ñ¤J¼v¹³¸ê®Æ
-	}																	//	µ²§ôfor°j°é
-    return OutputImage;													//	¦^¶Ç¿é¥X¹Ï¹³
-}																		//	µ²§ôSaturationToBMP24RGB°Æµ{¦¡
+		//	å¡«å…¥å½±åƒè³‡æ–™
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputImage;													//	å›å‚³è¼¸å‡ºåœ–åƒ
+}																		//	çµæŸSaturationToBMP24RGBå‰¯ç¨‹å¼
 BMP24RGB *ValueToBMP24RGB(const HSV *image,const int xsize,const int ysize)
-//	ValueToBMP24RGB°Æµ{¦¡
-{																		//	¶i¤JValueToBMP24RGB°Æµ{¦¡
-	BMP24RGB *OutputImage;												//	«Å§iOutputImage«ü¼ĞÅÜ¼Æ¡A°O¿ı¿é¥X¹Ï¹³¸ê®Æ
-	OutputImage = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	°t¸mOutputImage«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputImage == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z 
-	long long int LoopNumber;											//	«Å§iLoopNumber°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(LoopNumber = 0; LoopNumber <(xsize * ysize); LoopNumber++)		//	¥Hfor°j°é¨Ì§Ç³B²z¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		OutputImage[LoopNumber].R = image[LoopNumber].V;				//	¶ñ¤J¼v¹³¸ê®Æ
-		OutputImage[LoopNumber].G = image[LoopNumber].V;				//	¶ñ¤J¼v¹³¸ê®Æ
-		OutputImage[LoopNumber].B = image[LoopNumber].V;				//	¶ñ¤J¼v¹³¸ê®Æ
-	}																	//	µ²§ôfor°j°é
-    return OutputImage;													//	¦^¶Ç¿é¥X¹Ï¹³
-}																		//	µ²§ôValueToBMP24RGB°Æµ{¦¡
+//	ValueToBMP24RGBå‰¯ç¨‹å¼
+{																		//	é€²å…¥ValueToBMP24RGBå‰¯ç¨‹å¼
+	BMP24RGB *OutputImage;												//	å®£å‘ŠOutputImageæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„è¼¸å‡ºåœ–åƒè³‡æ–™
+	OutputImage = (BMP24RGB*)malloc(xsize * ysize * sizeof(BMP24RGB));	//	é…ç½®OutputImageæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputImage == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿° 
+	long long int LoopNumber;											//	å®£å‘ŠLoopNumberå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(LoopNumber = 0; LoopNumber <(xsize * ysize); LoopNumber++)		//	ä»¥forè¿´åœˆä¾åºè™•ç†åœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		OutputImage[LoopNumber].R = image[LoopNumber].V;				//	å¡«å…¥å½±åƒè³‡æ–™
+		OutputImage[LoopNumber].G = image[LoopNumber].V;				//	å¡«å…¥å½±åƒè³‡æ–™
+		OutputImage[LoopNumber].B = image[LoopNumber].V;				//	å¡«å…¥å½±åƒè³‡æ–™
+	}																	//	çµæŸforè¿´åœˆ
+    return OutputImage;													//	å›å‚³è¼¸å‡ºåœ–åƒ
+}																		//	çµæŸValueToBMP24RGBå‰¯ç¨‹å¼
 HSV *HSVSkin(const HSV *image,const int xsize,const int ysize)
-//	HSVSkin(HSV¼v¹³¥Ö½§¹LÂo)°Æµ{¦¡
-{																		//	¶i¤JHSVSkin(HSV¼v¹³¥Ö½§¹LÂo)°Æµ{¦¡
-	HSV *OutputData;													//	«Å§iOutputData«ü¼ĞÅÜ¼Æ¡A°O¿ı¹Ï¹³¸ê®Æ¹Bºâµ²ªG
-	OutputData = (HSV*)malloc(xsize * ysize * sizeof(HSV));				//	°t¸mOutputData«ü¼Ğ°O¾ĞÅé¤j¤p
-	if (OutputData == NULL) 											//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("°O¾ĞÅé¤À°t¿ù»~!");										//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-		return NULL;													//	¶Ç¦^NULL¡A¨Ãµ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z
-	//***ªì©l¤ÆOutputData«ü¼Ğ¸ê®Æ***
-	long long int loop_num;												//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Çªì©l¤ÆOutputData¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		OutputData[loop_num].H = 0;										//	³]©w¹³¯Àªì©l­È
-		OutputData[loop_num].S = 0;										//	³]©w¹³¯Àªì©l­È
-		OutputData[loop_num].V = 0;										//	³]©w¹³¯Àªì©l­È
-	}																	//	µ²§ôfor°j°é
-	//***¹LÂo¥Ö½§¹³¯ÀÂI***
-	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	¥Hfor°j°é¨Ì§Çªì©l¤ÆOutputData¹Ï¹³¹³¯À
-	{																	//	¶i¤Jfor°j°é
-		long double HData,SData;										//	«Å§iHData»PSDataªøÂùºë«×¯BÂI¼Æ¡A°O¿ı¹³¯ÀÂI¤§H»PS¸ê°T
-		HData = image[loop_num].H;										//	¶ñ¤JHData
-		SData = image[loop_num].S;										//	¶ñ¤JSData
-		if( ( HData >= (long double)15.0 ) &&							//	­YHData¤j©óµ¥©ó15
-			( HData <= (long double)50.0 ) && 							//	¥BHData¤p©óµ¥©ó50
-			( SData >= (long double)0.23 ) && 							//	¥BSData¤j©óµ¥©ó0.23
-			( SData >= (long double)0.68 ) )							//	¥BSData¤p©óµ¥©ó0.68
-		{																//	¶i¤Jif±Ô­z
-			OutputData[loop_num].H = image[loop_num].H;					//	¶ñ¤J­ì¹³¯À­È
-			OutputData[loop_num].S = image[loop_num].S;					//	¶ñ¤J­ì¹³¯À­È
-			OutputData[loop_num].V = image[loop_num].V;					//	¶ñ¤J­ì¹³¯À­È
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y¹³¯À¦â±m¸ê°T¤£¦b½d³ò¤¤
-		{																//	¶i¤Jelse±Ô­z
-			OutputData[loop_num].H = image[loop_num].H;					//	¶ñ¤J­ì¹³¯À­È
-			OutputData[loop_num].S = image[loop_num].S;					//	¶ñ¤J­ì¹³¯À­È
+//	HSVSkin(HSVå½±åƒçš®è†šéæ¿¾)å‰¯ç¨‹å¼
+{																		//	é€²å…¥HSVSkin(HSVå½±åƒçš®è†šéæ¿¾)å‰¯ç¨‹å¼
+	HSV *OutputData;													//	å®£å‘ŠOutputDataæŒ‡æ¨™è®Šæ•¸ï¼Œè¨˜éŒ„åœ–åƒè³‡æ–™é‹ç®—çµæœ
+	OutputData = (HSV*)malloc(xsize * ysize * sizeof(HSV));				//	é…ç½®OutputDataæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	if (OutputData == NULL) 											//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");										//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+		return NULL;													//	å‚³å›NULLï¼Œä¸¦çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿°
+	//***åˆå§‹åŒ–OutputDataæŒ‡æ¨™è³‡æ–™***
+	long long int loop_num;												//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–OutputDataåœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		OutputData[loop_num].H = 0;										//	è¨­å®šåƒç´ åˆå§‹å€¼
+		OutputData[loop_num].S = 0;										//	è¨­å®šåƒç´ åˆå§‹å€¼
+		OutputData[loop_num].V = 0;										//	è¨­å®šåƒç´ åˆå§‹å€¼
+	}																	//	çµæŸforè¿´åœˆ
+	//***éæ¿¾çš®è†šåƒç´ é»***
+	for(loop_num = 0; loop_num <(xsize * ysize); loop_num++)			//	ä»¥forè¿´åœˆä¾åºåˆå§‹åŒ–OutputDataåœ–åƒåƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		long double HData,SData;										//	å®£å‘ŠHDataèˆ‡SDataé•·é›™ç²¾åº¦æµ®é»æ•¸ï¼Œè¨˜éŒ„åƒç´ é»ä¹‹Hèˆ‡Sè³‡è¨Š
+		HData = image[loop_num].H;										//	å¡«å…¥HData
+		SData = image[loop_num].S;										//	å¡«å…¥SData
+		if( ( HData >= (long double)15.0 ) &&							//	è‹¥HDataå¤§æ–¼ç­‰æ–¼15
+			( HData <= (long double)50.0 ) && 							//	ä¸”HDataå°æ–¼ç­‰æ–¼50
+			( SData >= (long double)0.23 ) && 							//	ä¸”SDataå¤§æ–¼ç­‰æ–¼0.23
+			( SData >= (long double)0.68 ) )							//	ä¸”SDataå°æ–¼ç­‰æ–¼0.68
+		{																//	é€²å…¥ifæ•˜è¿°
+			OutputData[loop_num].H = image[loop_num].H;					//	å¡«å…¥åŸåƒç´ å€¼
+			OutputData[loop_num].S = image[loop_num].S;					//	å¡«å…¥åŸåƒç´ å€¼
+			OutputData[loop_num].V = image[loop_num].V;					//	å¡«å…¥åŸåƒç´ å€¼
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥åƒç´ è‰²å½©è³‡è¨Šä¸åœ¨ç¯„åœä¸­
+		{																//	é€²å…¥elseæ•˜è¿°
+			OutputData[loop_num].H = image[loop_num].H;					//	å¡«å…¥åŸåƒç´ å€¼
+			OutputData[loop_num].S = image[loop_num].S;					//	å¡«å…¥åŸåƒç´ å€¼
 			OutputData[loop_num].V = image[loop_num].V * (long double)0.3;
-			//	¶ñ¤J§í¨îValue
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶Ç¹LÂoµ²ªG
-}																		//	µ²§ôHSVSkin(HSV¼v¹³¥Ö½§¹LÂo)°Æµ{¦¡
+			//	å¡«å…¥æŠ‘åˆ¶Value
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³éæ¿¾çµæœ
+}																		//	çµæŸHSVSkin(HSVå½±åƒçš®è†šéæ¿¾)å‰¯ç¨‹å¼
 
-unsigned char BmpFillingByteCalc(const unsigned int xsize)				//	BmpFillingByteCalc(BMP¹ÏÀÉ¶ñ¸É¦ì¤¸­pºâ)°Æµ{¦¡
-{																		//	¶i¤JBmpFillingByteCalc°Æµ{¦¡
-	unsigned char FillingByte;											//	«Å§iFillingByte°O¿ı¶ñ¸É¦ì¤¸²Õ­pºâµ²ªG
-	FillingByte = ( xsize % 4);											//	­pºâ¶ñ¸É¦ì¤¸²Õ¼Æ¶q
-	return FillingByte;													//	¶Ç¦^­pºâµ²ªG
-}																		//	µ²§ôBmpFillingByteCalc°Æµ{¦¡
-bool FileExistCheck(char *file_name)									//	FileExistCheck(ÀÉ®×¦s¦bÀË¬d)°Æµ{¦¡
-{																		//	¶i¤JFileExistCheck(ÀÉ®×¦s¦bÀË¬d)°Æµ{¦¡
-	if( access( file_name, F_OK ) != -1 )								//	­YÀÉ®×¦s¦b
-	{																	//	¶i¤Jif±Ô­z
-    	return True;													//	¶Ç¦^True
-	} 																	//	µ²§ôif±Ô­z
-	else 																//	­YÀÉ®×¤£¦s¦b
-	{																	//	¶i¤Jelse±Ô­z
-	    return False;													//	¦^¶Çfalse
-	}																	//	µ²§ôelse±Ô­z
-} 																		//	µ²§ôFileExistCheck(ÀÉ®×¦s¦bÀË¬d)°Æµ{¦¡
-bool FileReadPermissionCheck(const char *file_name)						//	FileReadPermissionCheck(ÀÉ®×Åª¨úÅv­­ÀË¬d)°Æµ{¦¡
-{																		//	¶i¤JFileReadPermissionCheck(ÀÉ®×Åª¨úÅv­­ÀË¬d)°Æµ{¦¡
-	if( access( file_name, R_OK ) != -1 )								//	­YÀÉ®×¥iÅª¨ú
-	{																	//	¶i¤Jif±Ô­z
-    	return True;													//	¶Ç¦^True
-	} 																	//	µ²§ôif±Ô­z
-	else 																//	­YÀÉ®×¤£¥iÅª¨ú
-	{																	//	¶i¤Jelse±Ô­z
-	    return False;													//	¦^¶Çfalse
-	}																	//	µ²§ôelse±Ô­z
-} 																		//	µ²§ôFileReadPermissionCheck(ÀÉ®×Åª¨úÅv­­ÀË¬d)°Æµ{¦¡
-bool FileWritePermissionCheck(const char *file_name)					//	FileWritePermissionCheck(ÀÉ®×¼g¤JÅv­­ÀË¬d)°Æµ{¦¡
-{																		//	¶i¤JFileWritePermissionCheck(ÀÉ®×¼g¤JÅv­­ÀË¬d)°Æµ{¦¡
-	if( access( file_name, W_OK ) != -1 )								//	­YÀÉ®×¥iÅª¨ú
-	{																	//	¶i¤Jif±Ô­z
-    	return True;													//	¶Ç¦^True
-	} 																	//	µ²§ôif±Ô­z
-	else 																//	­YÀÉ®×¤£¥iÅª¨ú
-	{																	//	¶i¤Jelse±Ô­z
-	    return False;													//	¦^¶Çfalse
-	}																	//	µ²§ôelse±Ô­z
-} 																		//	µ²§ôFileWritePermissionCheck(ÀÉ®×¼g¤JÅv­­ÀË¬d)°Æµ{¦¡
+unsigned char BmpFillingByteCalc(const unsigned int xsize)				//	BmpFillingByteCalc(BMPåœ–æª”å¡«è£œä½å…ƒè¨ˆç®—)å‰¯ç¨‹å¼
+{																		//	é€²å…¥BmpFillingByteCalcå‰¯ç¨‹å¼
+	unsigned char FillingByte;											//	å®£å‘ŠFillingByteè¨˜éŒ„å¡«è£œä½å…ƒçµ„è¨ˆç®—çµæœ
+	FillingByte = ( xsize % 4);											//	è¨ˆç®—å¡«è£œä½å…ƒçµ„æ•¸é‡
+	return FillingByte;													//	å‚³å›è¨ˆç®—çµæœ
+}																		//	çµæŸBmpFillingByteCalcå‰¯ç¨‹å¼
+bool FileExistCheck(char *file_name)									//	FileExistCheck(æª”æ¡ˆå­˜åœ¨æª¢æŸ¥)å‰¯ç¨‹å¼
+{																		//	é€²å…¥FileExistCheck(æª”æ¡ˆå­˜åœ¨æª¢æŸ¥)å‰¯ç¨‹å¼
+	if( access( file_name, F_OK ) != -1 )								//	è‹¥æª”æ¡ˆå­˜åœ¨
+	{																	//	é€²å…¥ifæ•˜è¿°
+    	return True;													//	å‚³å›True
+	} 																	//	çµæŸifæ•˜è¿°
+	else 																//	è‹¥æª”æ¡ˆä¸å­˜åœ¨
+	{																	//	é€²å…¥elseæ•˜è¿°
+	    return False;													//	å›å‚³false
+	}																	//	çµæŸelseæ•˜è¿°
+} 																		//	çµæŸFileExistCheck(æª”æ¡ˆå­˜åœ¨æª¢æŸ¥)å‰¯ç¨‹å¼
+bool FileReadPermissionCheck(const char *file_name)						//	FileReadPermissionCheck(æª”æ¡ˆè®€å–æ¬Šé™æª¢æŸ¥)å‰¯ç¨‹å¼
+{																		//	é€²å…¥FileReadPermissionCheck(æª”æ¡ˆè®€å–æ¬Šé™æª¢æŸ¥)å‰¯ç¨‹å¼
+	if( access( file_name, R_OK ) != -1 )								//	è‹¥æª”æ¡ˆå¯è®€å–
+	{																	//	é€²å…¥ifæ•˜è¿°
+    	return True;													//	å‚³å›True
+	} 																	//	çµæŸifæ•˜è¿°
+	else 																//	è‹¥æª”æ¡ˆä¸å¯è®€å–
+	{																	//	é€²å…¥elseæ•˜è¿°
+	    return False;													//	å›å‚³false
+	}																	//	çµæŸelseæ•˜è¿°
+} 																		//	çµæŸFileReadPermissionCheck(æª”æ¡ˆè®€å–æ¬Šé™æª¢æŸ¥)å‰¯ç¨‹å¼
+bool FileWritePermissionCheck(const char *file_name)					//	FileWritePermissionCheck(æª”æ¡ˆå¯«å…¥æ¬Šé™æª¢æŸ¥)å‰¯ç¨‹å¼
+{																		//	é€²å…¥FileWritePermissionCheck(æª”æ¡ˆå¯«å…¥æ¬Šé™æª¢æŸ¥)å‰¯ç¨‹å¼
+	if( access( file_name, W_OK ) != -1 )								//	è‹¥æª”æ¡ˆå¯è®€å–
+	{																	//	é€²å…¥ifæ•˜è¿°
+    	return True;													//	å‚³å›True
+	} 																	//	çµæŸifæ•˜è¿°
+	else 																//	è‹¥æª”æ¡ˆä¸å¯è®€å–
+	{																	//	é€²å…¥elseæ•˜è¿°
+	    return False;													//	å›å‚³false
+	}																	//	çµæŸelseæ•˜è¿°
+} 																		//	çµæŸFileWritePermissionCheck(æª”æ¡ˆå¯«å…¥æ¬Šé™æª¢æŸ¥)å‰¯ç¨‹å¼
 
 bool FileWrite(const char *file_name,const char *input_str,const char *mode)
-//	FileWrite(ÀÉ®×¼g¤J)°Æµ{¦¡¡A°õ¦æ¤å¦rÀÉ®×¼g¤J
-//	file_name¬°±ı¼g¤JÀÉ®×ÀÉ¦W
-// 	input_str¬°±ı¼g¤JÀÉ®×¤§«ü¼Ğ§Î¦¡¦r¦ê¸ê®Æ
-//	mode¬°¼g¤JÀÉ®×¼Ò¦¡³]©w¡A¥i¶Ç¤J"w"©Î"a"¡A"w"¬°·s¼W/ÂĞ»\¼Ò¦¡¡A"a"¬°ÂX¥R¼Ò¦¡
-//	¦^¶Çµ²ªG¡G­YÀÉ®×¼g¤J¦¨¥\¦^¶ÇTrue¡A­Y¼g¤J¥¢±Ñ¦^¶ÇFalse
-{																		//	¶i¤JFileWrite(ÀÉ®×¼g¤J)°Æµ{¦¡
-	FILE *file_point;													//	«Å§i¤@file_point«ü¼Ğ¡A±±¨îÀÉ®×Åª¼g
+//	FileWrite(æª”æ¡ˆå¯«å…¥)å‰¯ç¨‹å¼ï¼ŒåŸ·è¡Œæ–‡å­—æª”æ¡ˆå¯«å…¥
+//	file_nameç‚ºæ¬²å¯«å…¥æª”æ¡ˆæª”å
+// 	input_strç‚ºæ¬²å¯«å…¥æª”æ¡ˆä¹‹æŒ‡æ¨™å½¢å¼å­—ä¸²è³‡æ–™
+//	modeç‚ºå¯«å…¥æª”æ¡ˆæ¨¡å¼è¨­å®šï¼Œå¯å‚³å…¥"w"æˆ–"a"ï¼Œ"w"ç‚ºæ–°å¢/è¦†è“‹æ¨¡å¼ï¼Œ"a"ç‚ºæ“´å……æ¨¡å¼
+//	å›å‚³çµæœï¼šè‹¥æª”æ¡ˆå¯«å…¥æˆåŠŸå›å‚³Trueï¼Œè‹¥å¯«å…¥å¤±æ•—å›å‚³False
+{																		//	é€²å…¥FileWrite(æª”æ¡ˆå¯«å…¥)å‰¯ç¨‹å¼
+	FILE *file_point;													//	å®£å‘Šä¸€file_pointæŒ‡æ¨™ï¼Œæ§åˆ¶æª”æ¡ˆè®€å¯«
 	if (strcmp(mode, "w") != 0 && strcmp(mode, "a") != 0 && strcmp(mode, "w+") != 0 && strcmp(mode, "a+") != 0)
-	//	­Ymode°Ñ¼Æ¤£¬°"w"¥ç¤£¬°"a"¥ç¤£¬°"w+"¥ç¤£¬°"a+"
-	{																	//	¶i¤Jif±Ô­z
-		printf("FileWrite:mode ERROR!\n");								//	Åã¥Ü"FileWrite:mode ERROR!"¨Ã´«¦æ
-		return False;													//	¦^¶ÇFalse¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-	}																	//	µ²§ôif±Ô­z
-	if( strcmp(mode, "a") == 0 || strcmp(mode, "a+") == 0 )				//	­Ymode°Ñ¼Æ¬°"a"©Î"a+"(ÂX¥R¼Ò¦¡)
-	{																	//	¶i¤Jif±Ô­z
-		if (FileWritePermissionCheck(file_name) == False)				//	­YÀÉ®×µLªk¼g¤J
-		{																//	¶i¤Jif±Ô­z
-			printf("FileWrite:permission ERROR!\n");					//	Åã¥Ü"FileWrite:permission ERROR!"¨Ã´«¦æ
-			return False;												//	¦^¶ÇFalse¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-		}																//	µ²§ôif±Ô­z
-	}																	//	µ²§ôif±Ô­z
-	file_point = fopen(file_name, mode);								//	¥Hmode¼Ò¦¡¥´¶}ÀÉ®×
-	//	fprintf©Îfputs»yªk¤G¾Ü¤@¨Ï¥Î
-	fprintf(file_point, input_str);										//	¥Hfprintf»yªk¼g¤JÀÉ®×
-	//fputs(input_str, file_point);										//	¥Hfputs»yªk¼g¤JÀÉ®×
-	fclose(file_point); 												//	Ãö³¬ÀÉ®×
-	return True;														//	¦^¶ÇTrue¨Ãµ²§ô°Æµ{¦¡ªğ¦^
-}																		//	µ²§ôFileWrite(ÀÉ®×¼g¤J)°Æµ{¦¡
+	//	è‹¥modeåƒæ•¸ä¸ç‚º"w"äº¦ä¸ç‚º"a"äº¦ä¸ç‚º"w+"äº¦ä¸ç‚º"a+"
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("FileWrite:mode ERROR!\n");								//	é¡¯ç¤º"FileWrite:mode ERROR!"ä¸¦æ›è¡Œ
+		return False;													//	å›å‚³Falseä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+	}																	//	çµæŸifæ•˜è¿°
+	if( strcmp(mode, "a") == 0 || strcmp(mode, "a+") == 0 )				//	è‹¥modeåƒæ•¸ç‚º"a"æˆ–"a+"(æ“´å……æ¨¡å¼)
+	{																	//	é€²å…¥ifæ•˜è¿°
+		if (FileWritePermissionCheck(file_name) == False)				//	è‹¥æª”æ¡ˆç„¡æ³•å¯«å…¥
+		{																//	é€²å…¥ifæ•˜è¿°
+			printf("FileWrite:permission ERROR!\n");					//	é¡¯ç¤º"FileWrite:permission ERROR!"ä¸¦æ›è¡Œ
+			return False;												//	å›å‚³Falseä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+		}																//	çµæŸifæ•˜è¿°
+	}																	//	çµæŸifæ•˜è¿°
+	file_point = fopen(file_name, mode);								//	ä»¥modeæ¨¡å¼æ‰“é–‹æª”æ¡ˆ
+	//	fprintfæˆ–fputsèªæ³•äºŒæ“‡ä¸€ä½¿ç”¨
+	fprintf(file_point, input_str);										//	ä»¥fprintfèªæ³•å¯«å…¥æª”æ¡ˆ
+	//fputs(input_str, file_point);										//	ä»¥fputsèªæ³•å¯«å…¥æª”æ¡ˆ
+	fclose(file_point); 												//	é—œé–‰æª”æ¡ˆ
+	return True;														//	å›å‚³Trueä¸¦çµæŸå‰¯ç¨‹å¼è¿”å›
+}																		//	çµæŸFileWrite(æª”æ¡ˆå¯«å…¥)å‰¯ç¨‹å¼
 
 unsigned char *UCharBubbleSort(	const unsigned char *InputData,
 								const unsigned long long int InputDataNum,
 								const bool Mode)
-//	UCharBubbleSort°Æµ{¦¡
-{																		//	¶i¤JUCharBubbleSort°Æµ{¦¡
-	unsigned char *OutputData;											//	«Å§iOutputData°O¿ı¿é¥X¸ê®Æ
+//	UCharBubbleSortå‰¯ç¨‹å¼
+{																		//	é€²å…¥UCharBubbleSortå‰¯ç¨‹å¼
+	unsigned char *OutputData;											//	å®£å‘ŠOutputDataè¨˜éŒ„è¼¸å‡ºè³‡æ–™
 	OutputData = (unsigned char*)malloc( InputDataNum * sizeof(unsigned char) );
-	//	°t¸mOutputData¿é¥X¸ê®Æ«ü¼Ğ°O¾ĞÅéªÅ¶¡
-	unsigned long long int LoopNumber1,LoopNumber2;						//	«Å§iLoopNumber1»PLoopNumber2¡A¥Î©ó°j°é°õ¦æ¦¸¼Æ­pºâ
-	for(LoopNumber1=0;LoopNumber1 < InputDataNum;LoopNumber1++)			//	¥H°j°é¨Ì§Ç
-	{																	//	¶i¤Jfor°j°é
-		OutputData[LoopNumber1] = InputData[LoopNumber1];				//	½Æ»s¸ê®Æ¦Ü¿é¥X«ü¼Ğ°O¾ĞÅéªÅ¶¡
-	}																	//	µ²§ôfor°j°é
-	for(LoopNumber2 = 1;LoopNumber2 < InputDataNum;LoopNumber2++)		//	¥H°j°é¨Ì§Ç¤ñ¸û¼Æ­È
-	{																	//	¶i¤Jfor°j°é
+	//	é…ç½®OutputDataè¼¸å‡ºè³‡æ–™æŒ‡æ¨™è¨˜æ†¶é«”ç©ºé–“
+	unsigned long long int LoopNumber1,LoopNumber2;						//	å®£å‘ŠLoopNumber1èˆ‡LoopNumber2ï¼Œç”¨æ–¼è¿´åœˆåŸ·è¡Œæ¬¡æ•¸è¨ˆç®—
+	for(LoopNumber1=0;LoopNumber1 < InputDataNum;LoopNumber1++)			//	ä»¥è¿´åœˆä¾åº
+	{																	//	é€²å…¥forè¿´åœˆ
+		OutputData[LoopNumber1] = InputData[LoopNumber1];				//	è¤‡è£½è³‡æ–™è‡³è¼¸å‡ºæŒ‡æ¨™è¨˜æ†¶é«”ç©ºé–“
+	}																	//	çµæŸforè¿´åœˆ
+	for(LoopNumber2 = 1;LoopNumber2 < InputDataNum;LoopNumber2++)		//	ä»¥è¿´åœˆä¾åºæ¯”è¼ƒæ•¸å€¼
+	{																	//	é€²å…¥forè¿´åœˆ
 		for(LoopNumber1=0;LoopNumber1 < InputDataNum - LoopNumber2;LoopNumber1++)
-		//	¥H°j°é¨Ì§Ç¤ñ¸û¼Æ­È
-		{																//	¶i¤Jfor°j°é
-			if( Mode == 0 )												//	­Y¼Ò¦¡¬°¥Ñ¤p±Æ¦Ü¤j
-			{															//	¶i¤Jif±Ô­z
+		//	ä»¥è¿´åœˆä¾åºæ¯”è¼ƒæ•¸å€¼
+		{																//	é€²å…¥forè¿´åœˆ
+			if( Mode == 0 )												//	è‹¥æ¨¡å¼ç‚ºç”±å°æ’è‡³å¤§
+			{															//	é€²å…¥ifæ•˜è¿°
 				if(OutputData[LoopNumber1] > OutputData[LoopNumber1 + 1])
-				//	­Y¸û¤jªº¼Æ­È¦b«e
-				{														//	¶i¤Jif±Ô­z
-					unsigned char TempNumber;							//	«Å§iTempNumber¼È¦sÅÜ¼Æ(¥Î©ó¼Æ­È¥æ´«)
-					TempNumber = OutputData[LoopNumber1];				//	¼Æ­È¥æ´«
+				//	è‹¥è¼ƒå¤§çš„æ•¸å€¼åœ¨å‰
+				{														//	é€²å…¥ifæ•˜è¿°
+					unsigned char TempNumber;							//	å®£å‘ŠTempNumberæš«å­˜è®Šæ•¸(ç”¨æ–¼æ•¸å€¼äº¤æ›)
+					TempNumber = OutputData[LoopNumber1];				//	æ•¸å€¼äº¤æ›
 					OutputData[LoopNumber1] = OutputData[LoopNumber1 + 1];
-					//	¼Æ­È¥æ´«
-					OutputData[LoopNumber1 + 1] = TempNumber;			//	¼Æ­È¥æ´«
-				}														//	µ²§ôif±Ô­z
-			}															//	µ²§ôif±Ô­z
-			else if( Mode == 1 )										//	­Y¼Ò¦¡¬°¥Ñ¤j±Æ¦Ü¤p
-			{															//	¶i¤Jelse if±Ô­z
+					//	æ•¸å€¼äº¤æ›
+					OutputData[LoopNumber1 + 1] = TempNumber;			//	æ•¸å€¼äº¤æ›
+				}														//	çµæŸifæ•˜è¿°
+			}															//	çµæŸifæ•˜è¿°
+			else if( Mode == 1 )										//	è‹¥æ¨¡å¼ç‚ºç”±å¤§æ’è‡³å°
+			{															//	é€²å…¥else ifæ•˜è¿°
 				if(OutputData[LoopNumber1] < OutputData[LoopNumber1 + 1])
-				//	­Y¸û¤pªº¼Æ­È¦b«e
-				{														//	¶i¤Jif±Ô­z
-					unsigned char TempNumber;							//	«Å§iTempNumber¼È¦sÅÜ¼Æ(¥Î©ó¼Æ­È¥æ´«)
-					TempNumber = OutputData[LoopNumber1];				//	¼Æ­È¥æ´«
+				//	è‹¥è¼ƒå°çš„æ•¸å€¼åœ¨å‰
+				{														//	é€²å…¥ifæ•˜è¿°
+					unsigned char TempNumber;							//	å®£å‘ŠTempNumberæš«å­˜è®Šæ•¸(ç”¨æ–¼æ•¸å€¼äº¤æ›)
+					TempNumber = OutputData[LoopNumber1];				//	æ•¸å€¼äº¤æ›
 					OutputData[LoopNumber1] = OutputData[LoopNumber1 + 1];
-					//	¼Æ­È¥æ´«
-					OutputData[LoopNumber1 + 1] = TempNumber;			//	¼Æ­È¥æ´«
-				}														//	µ²§ôif±Ô­z
-			}															//	µ²§ôelse if±Ô­z
-		}																//	µ²§ôfor°j°é
-	}																	//	µ²§ôfor°j°é
-	return OutputData;													//	¦^¶Ç¿é¥X¸ê®Æ
-}																		//	µ²§ôUCharBubbleSort°Æµ{¦¡
+					//	æ•¸å€¼äº¤æ›
+					OutputData[LoopNumber1 + 1] = TempNumber;			//	æ•¸å€¼äº¤æ›
+				}														//	çµæŸifæ•˜è¿°
+			}															//	çµæŸelse ifæ•˜è¿°
+		}																//	çµæŸforè¿´åœˆ
+	}																	//	çµæŸforè¿´åœˆ
+	return OutputData;													//	å›å‚³è¼¸å‡ºè³‡æ–™
+}																		//	çµæŸUCharBubbleSortå‰¯ç¨‹å¼
 
-int Compare(const void *data1,const void *data2)						//	Compare°Æµ{¦¡
-{																		//	¶i¤JCompare°Æµ{¦¡
-	int *ptr1 = (int*)data1;											//	«Å§i*ptr1¾ã¼Æ«ü¼ĞÅÜ¼Æ
-	int *ptr2 = (int*)data2;											//	«Å§i*ptr2¾ã¼Æ«ü¼ĞÅÜ¼Æ
-	if(*ptr1 < *ptr2)													//	­Y*ptr1¼Æ­È¸û¤p
-	{																	//	¶i¤Jif±Ô­z
-		return -1;														//	¶Ç¦^-1¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	else if(*ptr1 > *ptr2)												//	­Y*ptr1¼Æ­È¸û¤j
-	{																	//	¶i¤Jelse if±Ô­z
-		return 1;														//	¶Ç¦^1¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôelse if±Ô­z
-	else																//	­Y*ptr1»P*ptr2¼Æ­È¬Ûµ¥
-	{																	//	¶i¤Jelse±Ô­z
-		return 0;														//	¶Ç¦^0¡A¨Ãµ²§ô°Æµ{¦¡
-	}																	//	µ²§ôelse±Ô­z	
-}																		//	µ²§ôCompare°Æµ{¦¡
+int Compare(const void *data1,const void *data2)						//	Compareå‰¯ç¨‹å¼
+{																		//	é€²å…¥Compareå‰¯ç¨‹å¼
+	int *ptr1 = (int*)data1;											//	å®£å‘Š*ptr1æ•´æ•¸æŒ‡æ¨™è®Šæ•¸
+	int *ptr2 = (int*)data2;											//	å®£å‘Š*ptr2æ•´æ•¸æŒ‡æ¨™è®Šæ•¸
+	if(*ptr1 < *ptr2)													//	è‹¥*ptr1æ•¸å€¼è¼ƒå°
+	{																	//	é€²å…¥ifæ•˜è¿°
+		return -1;														//	å‚³å›-1ï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	else if(*ptr1 > *ptr2)												//	è‹¥*ptr1æ•¸å€¼è¼ƒå¤§
+	{																	//	é€²å…¥else ifæ•˜è¿°
+		return 1;														//	å‚³å›1ï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸelse ifæ•˜è¿°
+	else																//	è‹¥*ptr1èˆ‡*ptr2æ•¸å€¼ç›¸ç­‰
+	{																	//	é€²å…¥elseæ•˜è¿°
+		return 0;														//	å‚³å›0ï¼Œä¸¦çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸelseæ•˜è¿°	
+}																		//	çµæŸCompareå‰¯ç¨‹å¼
 unsigned long long int CountCharPointStr(const char *Input_string, const bool Detail)	
-//	CountCharPointStr(­pºâ¦r¤¸«ü¼Ğªø«×)°Æµ{¦¡¡A­pºâ¦r¤¸«ü¼Ğ(¦r¦ê)ªø«×
-{																		//	¶i¤JCountCharPointStr°Æµ{¦¡
-	unsigned long long int count_num = 0;								//	«Å§icount_num°Ï°ìÅÜ¼Æ¡A¨Ã³]©wªì©l­È¬°0
-	while (Input_string[count_num] != '\0')								//	­Y«D¦r¦êµ²§À
-	{																	//	¶i¤Jwhile±Ô­z
-		if(Detail == True)												//	­YDetail°Ñ¼Æ¬°True
-		{																//	¶i¤Jif±Ô­z
-			printf("²Ä%d­Ó¦r¤¸¬°¡G%c\n",count_num + 1,Input_string[count_num]);
-			//	Åã¥Ü­p¼Æ²Ó¸`
-		}																//	µ²§ôif±Ô­z
-		count_num++;													//	²Ö¥[count_numÅÜ¼Æ
-    }																	//	µ²§ôwhile±Ô­z
-    return count_num;													//	¦^¶Çcount_num(¦r¤¸«ü¼Ğªø«×)ÅÜ¼Æ
-}																		//	µ²§ôCountCharPointStr°Æµ{¦¡
-void Show_char_point_str(const char *Input_string)						//	Show_char_point_str(Åã¥Ü¦r¤¸«ü¼Ğ)°Æµ{¦¡
-/*	Åã¥Ü¦r¦ê¤º®e
-	¤Ş¥Î°Æµ{¦¡¡G
-		CountCharPointStr(­pºâ¦r¤¸«ü¼Ğªø«×)°Æµ{¦¡
+//	CountCharPointStr(è¨ˆç®—å­—å…ƒæŒ‡æ¨™é•·åº¦)å‰¯ç¨‹å¼ï¼Œè¨ˆç®—å­—å…ƒæŒ‡æ¨™(å­—ä¸²)é•·åº¦
+{																		//	é€²å…¥CountCharPointStrå‰¯ç¨‹å¼
+	unsigned long long int count_num = 0;								//	å®£å‘Šcount_numå€åŸŸè®Šæ•¸ï¼Œä¸¦è¨­å®šåˆå§‹å€¼ç‚º0
+	while (Input_string[count_num] != '\0')								//	è‹¥éå­—ä¸²çµå°¾
+	{																	//	é€²å…¥whileæ•˜è¿°
+		if(Detail == True)												//	è‹¥Detailåƒæ•¸ç‚ºTrue
+		{																//	é€²å…¥ifæ•˜è¿°
+			printf("ç¬¬%då€‹å­—å…ƒç‚ºï¼š%c\n",count_num + 1,Input_string[count_num]);
+			//	é¡¯ç¤ºè¨ˆæ•¸ç´°ç¯€
+		}																//	çµæŸifæ•˜è¿°
+		count_num++;													//	ç´¯åŠ count_numè®Šæ•¸
+    }																	//	çµæŸwhileæ•˜è¿°
+    return count_num;													//	å›å‚³count_num(å­—å…ƒæŒ‡æ¨™é•·åº¦)è®Šæ•¸
+}																		//	çµæŸCountCharPointStrå‰¯ç¨‹å¼
+void Show_char_point_str(const char *Input_string)						//	Show_char_point_str(é¡¯ç¤ºå­—å…ƒæŒ‡æ¨™)å‰¯ç¨‹å¼
+/*	é¡¯ç¤ºå­—ä¸²å…§å®¹
+	å¼•ç”¨å‰¯ç¨‹å¼ï¼š
+		CountCharPointStr(è¨ˆç®—å­—å…ƒæŒ‡æ¨™é•·åº¦)å‰¯ç¨‹å¼
 */
-{																		//	¶i¤JShow_char_point_str°Æµ{¦¡
-	unsigned long long int loop_num = 0;								//	«Å§iloop_num°Ï°ìÅÜ¼Æ¨Ñ°j°é¨Ï¥Î¡A¨Ã³]©wªì©l­È¬°0
+{																		//	é€²å…¥Show_char_point_strå‰¯ç¨‹å¼
+	unsigned long long int loop_num = 0;								//	å®£å‘Šloop_numå€åŸŸè®Šæ•¸ä¾›è¿´åœˆä½¿ç”¨ï¼Œä¸¦è¨­å®šåˆå§‹å€¼ç‚º0
 	for(loop_num = 0; loop_num < CountCharPointStr(Input_string, False); loop_num++)
-	{																	//	¶i¤Jfor°j°é
-		printf("%c",Input_string[loop_num]);							//	¨Ì§ÇÅã¥Ü¦r¤¸
-	}																	//	µ²§ôfor°j°é
-}																		//	µ²§ôShow_char_point_str°Æµ{¦¡
+	{																	//	é€²å…¥forè¿´åœˆ
+		printf("%c",Input_string[loop_num]);							//	ä¾åºé¡¯ç¤ºå­—å…ƒ
+	}																	//	çµæŸforè¿´åœˆ
+}																		//	çµæŸShow_char_point_strå‰¯ç¨‹å¼
 void ShowUCharPointStr(const unsigned char *InputData,unsigned long long int InputDataLen)
-//	ShowUCharPointStr(Åã¥ÜµL¸¹¦r¤¸«ü¼Ğ)°Æµ{¦¡
-{																		//	¶i¤JShowUCharPointStr°Æµ{¦¡
-	unsigned long long int LoopNumber = 0;								//	«Å§iLoopNumberÅÜ¼Æ¡A¥Î©ó°j°é­p¼Æ
-	for(LoopNumber=0;LoopNumber<InputDataLen;LoopNumber++)				//	¥Hfor°j°é¨Ì§ÇÅã¥Ü¨C¶µ¤¸¯À
-	{																	//	¶i¤Jfor°j°é
-		printf("%u,",InputData[LoopNumber]);							//	Åã¥ÜµL¸¹¦r¤¸«ü¼Ğ¤º®e
-	}																	//	µ²§ôfor°j°é
-}																		//	µ²§ôShowUCharPointStr°Æµ{¦¡
-void ShowLongDouble(const long double InputNumber)						//	ShowLongDouble°Æµ{¦¡
-{																		//	¶i¤JShowLongDouble°Æµ{¦¡
-	int TimesNumber = 308;												//	«Å§iTimesNumber¬°¾ã¼Æ(int)ÅÜ¼Æ¡A¨Ãªì©l¤Æ¬°308
-	long double DisplayNumber;											//	«Å§iDisplayNumberÅÜ¼Æ¡A¥Î©ó°O¿ıÅã¥Ü¼Æ­È
-	//***³B²z¥¿­t¸¹***
-	if(InputNumber < 0)													//	­YInputNumber¿é¤J¼Æ­È¬°­t¼Æ
-	{																	//	¶i¤Jif±Ô­z
-		DisplayNumber = (long double)0.0 - InputNumber;					//	¶ñ¤JDisplayNumber¼Æ­È
-		printf("-");													//	Åã¥Ü­t¸¹"-"
-	}																	//	µ²§ôif±Ô­z
-	else																//	­YInputNumber¿é¤J¼Æ­È¤£¬°­t¼Æ
-	{																	//	¶i¤Jelse±Ô­z
-		DisplayNumber = InputNumber;									//	¶ñ¤JDisplayNumber¼Æ­È
-	}																	//	µ²§ôelse±Ô­z
-	//***¥h°£«e¾É0***
-	char DisplayChar='\0';												//	«Å§iDisplayChar¬°¦r¤¸(char)«¬ºA¡A¨Ãªì©l¤Æ¬°ªÅ¦r¤¸
+//	ShowUCharPointStr(é¡¯ç¤ºç„¡è™Ÿå­—å…ƒæŒ‡æ¨™)å‰¯ç¨‹å¼
+{																		//	é€²å…¥ShowUCharPointStrå‰¯ç¨‹å¼
+	unsigned long long int LoopNumber = 0;								//	å®£å‘ŠLoopNumberè®Šæ•¸ï¼Œç”¨æ–¼è¿´åœˆè¨ˆæ•¸
+	for(LoopNumber=0;LoopNumber<InputDataLen;LoopNumber++)				//	ä»¥forè¿´åœˆä¾åºé¡¯ç¤ºæ¯é …å…ƒç´ 
+	{																	//	é€²å…¥forè¿´åœˆ
+		printf("%u,",InputData[LoopNumber]);							//	é¡¯ç¤ºç„¡è™Ÿå­—å…ƒæŒ‡æ¨™å…§å®¹
+	}																	//	çµæŸforè¿´åœˆ
+}																		//	çµæŸShowUCharPointStrå‰¯ç¨‹å¼
+void ShowLongDouble(const long double InputNumber)						//	ShowLongDoubleå‰¯ç¨‹å¼
+{																		//	é€²å…¥ShowLongDoubleå‰¯ç¨‹å¼
+	int TimesNumber = 308;												//	å®£å‘ŠTimesNumberç‚ºæ•´æ•¸(int)è®Šæ•¸ï¼Œä¸¦åˆå§‹åŒ–ç‚º308
+	long double DisplayNumber;											//	å®£å‘ŠDisplayNumberè®Šæ•¸ï¼Œç”¨æ–¼è¨˜éŒ„é¡¯ç¤ºæ•¸å€¼
+	//***è™•ç†æ­£è² è™Ÿ***
+	if(InputNumber < 0)													//	è‹¥InputNumberè¼¸å…¥æ•¸å€¼ç‚ºè² æ•¸
+	{																	//	é€²å…¥ifæ•˜è¿°
+		DisplayNumber = (long double)0.0 - InputNumber;					//	å¡«å…¥DisplayNumberæ•¸å€¼
+		printf("-");													//	é¡¯ç¤ºè² è™Ÿ"-"
+	}																	//	çµæŸifæ•˜è¿°
+	else																//	è‹¥InputNumberè¼¸å…¥æ•¸å€¼ä¸ç‚ºè² æ•¸
+	{																	//	é€²å…¥elseæ•˜è¿°
+		DisplayNumber = InputNumber;									//	å¡«å…¥DisplayNumberæ•¸å€¼
+	}																	//	çµæŸelseæ•˜è¿°
+	//***å»é™¤å‰å°0***
+	char DisplayChar='\0';												//	å®£å‘ŠDisplayCharç‚ºå­—å…ƒ(char)å‹æ…‹ï¼Œä¸¦åˆå§‹åŒ–ç‚ºç©ºå­—å…ƒ
 	DisplayChar = floor(DisplayNumber/(long double)pow(10,TimesNumber)) - pow(10,1) * floor(DisplayNumber/(long double)pow(10,(TimesNumber + 1)));
-	//	¨ú¥XÅã¥Ü¼Æ­È
-	while((DisplayChar == 0) && (TimesNumber > 0))						//	­Y¼Æ­È¬°0¥BTimesNumber(¦¸¤è)¤j©ó0(¤£¬°­Ó¦ì¼Æ)
-	{																	//	¶i¤Jwhile±Ô­z
-		TimesNumber = TimesNumber - 1;									//	»¼´îTimesNumberÅÜ¼Æ
+	//	å–å‡ºé¡¯ç¤ºæ•¸å€¼
+	while((DisplayChar == 0) && (TimesNumber > 0))						//	è‹¥æ•¸å€¼ç‚º0ä¸”TimesNumber(æ¬¡æ–¹)å¤§æ–¼0(ä¸ç‚ºå€‹ä½æ•¸)
+	{																	//	é€²å…¥whileæ•˜è¿°
+		TimesNumber = TimesNumber - 1;									//	éæ¸›TimesNumberè®Šæ•¸
 		DisplayChar = floor(DisplayNumber/(long double)pow(10,TimesNumber)) - pow(10,1) * floor(DisplayNumber/(long double)pow(10,(TimesNumber + 1)));
-		//	¨ú¥XÅã¥Ü¼Æ­È
-	}																	//	µ²§ôwhile±Ô­z
-	//***Åã¥Ü¼Æ­È***
-	int DisplayStartTimes = TimesNumber;								//	«Å§iDisplayStartTimes¬°¾ã¼Æ(int)ÅÜ¼Æ¡A¥Î¥H°O¿ı°_©lÅã¥Ü¼Æ¦r¦¸¤è
-	int DisplayDigit;													//	«Å§iDisplayDigit¬°¾ã¼Æ(int)ÅÜ¼Æ¡A¥Î¥H°O¿ıÅã¥Ü¦ì¼Æ
-	if(DisplayStartTimes > 14)											//	­YDisplayStartTimes(°_©lÅã¥Ü¼Æ¦r¦¸¤è)¤j©ó14(§Y±ıÅã¥Ü¼Æ­ÈInputNumber¤j©ó10^14)
-	{																	//	¶i¤Jif±Ô­z
-		DisplayDigit = DisplayStartTimes;								//	µ¹©wDisplayDigitÅã¥Ü¦ì¼Æ¬°°_©lÅã¥Ü¼Æ¦r¦¸¤è¼Æ
-	}																	//	µ²§ôif±Ô­z
-	else																//	­Y±ıÅã¥Ü¼Æ­ÈInputNumber¤£¤j©ó10^14
-	{																	//	¶i¤Jelse±Ô­z
-		DisplayDigit = 14;												//	µ¹©wDisplayDigitÅã¥Ü¦ì¼Æ¬°14¦ì(¦³®Ä¦ì¼Æ)
-	}																	//	µ²§ôelse±Ô­z
+		//	å–å‡ºé¡¯ç¤ºæ•¸å€¼
+	}																	//	çµæŸwhileæ•˜è¿°
+	//***é¡¯ç¤ºæ•¸å€¼***
+	int DisplayStartTimes = TimesNumber;								//	å®£å‘ŠDisplayStartTimesç‚ºæ•´æ•¸(int)è®Šæ•¸ï¼Œç”¨ä»¥è¨˜éŒ„èµ·å§‹é¡¯ç¤ºæ•¸å­—æ¬¡æ–¹
+	int DisplayDigit;													//	å®£å‘ŠDisplayDigitç‚ºæ•´æ•¸(int)è®Šæ•¸ï¼Œç”¨ä»¥è¨˜éŒ„é¡¯ç¤ºä½æ•¸
+	if(DisplayStartTimes > 14)											//	è‹¥DisplayStartTimes(èµ·å§‹é¡¯ç¤ºæ•¸å­—æ¬¡æ–¹)å¤§æ–¼14(å³æ¬²é¡¯ç¤ºæ•¸å€¼InputNumberå¤§æ–¼10^14)
+	{																	//	é€²å…¥ifæ•˜è¿°
+		DisplayDigit = DisplayStartTimes;								//	çµ¦å®šDisplayDigité¡¯ç¤ºä½æ•¸ç‚ºèµ·å§‹é¡¯ç¤ºæ•¸å­—æ¬¡æ–¹æ•¸
+	}																	//	çµæŸifæ•˜è¿°
+	else																//	è‹¥æ¬²é¡¯ç¤ºæ•¸å€¼InputNumberä¸å¤§æ–¼10^14
+	{																	//	é€²å…¥elseæ•˜è¿°
+		DisplayDigit = 14;												//	çµ¦å®šDisplayDigité¡¯ç¤ºä½æ•¸ç‚º14ä½(æœ‰æ•ˆä½æ•¸)
+	}																	//	çµæŸelseæ•˜è¿°
 	while(TimesNumber >= DisplayStartTimes - DisplayDigit)				//	
-	{																	//	¶i¤Jwhile±Ô­z
-		if(TimesNumber == -1)											//	­YTimesNumber(¦¸¤è)¬°-1®É
-		{																//	¶i¤Jif±Ô­z
-			printf(".");												//	Åã¥Ü¤p¼ÆÂI
-		}																//	µ²§ôif±Ô­z
+	{																	//	é€²å…¥whileæ•˜è¿°
+		if(TimesNumber == -1)											//	è‹¥TimesNumber(æ¬¡æ–¹)ç‚º-1æ™‚
+		{																//	é€²å…¥ifæ•˜è¿°
+			printf(".");												//	é¡¯ç¤ºå°æ•¸é»
+		}																//	çµæŸifæ•˜è¿°
 		DisplayChar = floor(DisplayNumber/(long double)pow(10,TimesNumber)) - pow(10,1) * floor(DisplayNumber/(long double)pow(10,(TimesNumber + 1)));
-		//	¨ú¥XÅã¥Ü¼Æ­È
-		if( (DisplayChar >= 0) && (DisplayChar <= 9) )					//	­Y¨ú¥X¤§¼Æ­È¤¶©ó0~9¤§¶¡
-		{																//	¶i¤Jif±Ô­z
-			printf("%d",DisplayChar);									//	Åã¥Ü¼Æ­È
-		}																//	µ²§ôif±Ô­z
-		else															//	­Y¨ú¥X¼Æ­È¿ù»~
-		{																//	¶i¤Jelse±Ô­z
-			break;														//	µ²§ôwhile°j°é
-		}																//	µ²§ôelse±Ô­z
-		TimesNumber = TimesNumber - 1;									//	»¼´îTimesNumberÅÜ¼Æ
-	}																	//	µ²§ôwhile±Ô­z
-}																		//	µ²§ôShowLongDouble°Æµ{¦¡
+		//	å–å‡ºé¡¯ç¤ºæ•¸å€¼
+		if( (DisplayChar >= 0) && (DisplayChar <= 9) )					//	è‹¥å–å‡ºä¹‹æ•¸å€¼ä»‹æ–¼0~9ä¹‹é–“
+		{																//	é€²å…¥ifæ•˜è¿°
+			printf("%d",DisplayChar);									//	é¡¯ç¤ºæ•¸å€¼
+		}																//	çµæŸifæ•˜è¿°
+		else															//	è‹¥å–å‡ºæ•¸å€¼éŒ¯èª¤
+		{																//	é€²å…¥elseæ•˜è¿°
+			break;														//	çµæŸwhileè¿´åœˆ
+		}																//	çµæŸelseæ•˜è¿°
+		TimesNumber = TimesNumber - 1;									//	éæ¸›TimesNumberè®Šæ•¸
+	}																	//	çµæŸwhileæ•˜è¿°
+}																		//	çµæŸShowLongDoubleå‰¯ç¨‹å¼
 
-void InitialIMGArrayTest(void)											//	InitialIMGArrayTest°Æµ{¦¡
-{																		//	¶i¤JInitialIMGArrayTest°Æµ{¦¡
+void InitialIMGArrayTest(void)											//	InitialIMGArrayTestå‰¯ç¨‹å¼
+{																		//	é€²å…¥InitialIMGArrayTestå‰¯ç¨‹å¼
 	BmpWriteV1(ArrayToRAWImage(InitialIMGArray(10,10),10,10),10,10,"TestIMG");
-	//	ªì©l¼v¹³«Ø¥ß´ú¸Õ(´ú¸ÕInitialIMGArray°Æµ{¦¡¥\¯à)
-}																		//	µ²§ôInitialIMGArrayTest°Æµ{¦¡
-void BmpReadFilesizeTest(void)											//	BmpReadFilesizeTest°Æµ{¦¡
-{																		//	¶i¤JBmpReadFilesizeTest°Æµ{¦¡
-	//***¥¿±`©I¥s¤è¦¡***
-	printf("BmpReadFilesize°Æµ{¦¡´ú¸Õ(µL°ÆÀÉ¦W)¡G%d\n", BmpReadFilesize("LennaTestBMP",false));
-	//	©I¥sBmpReadFilesize°Æµ{¦¡¨ú¥X"LennaTestBMP"BMP¹ÏÀÉ¤§¤j¤p
-	printf("BmpReadFilesize°Æµ{¦¡´ú¸Õ(§t°ÆÀÉ¦W)¡G%d\n", BmpReadFilesize("LennaTestBMP.bmp",true));
-	//	©I¥sBmpReadFilesize°Æµ{¦¡¨ú¥X"LennaTestBMP"BMP¹ÏÀÉ¤§¤j¤p
-	//***¨Ò¥~ª¬ªp´ú¸Õ***
-	printf("BmpReadFilesize°Æµ{¦¡¨Ò¥~ª¬ªp´ú¸Õ1¡G%d\n", BmpReadFilesize("LennaTestBMP.bmp",(int)123));
-	//	¥H¨Ò¥~ª¬ªp©I¥s°Æµ{¦¡
-}																		//	µ²§ôBmpReadFilesizeTest°Æµ{¦¡
-void BmpReadXSizeTest(void)												//	BmpReadXSizeTest°Æµ{¦¡
-{																		//	¶i¤JBmpReadXSizeTest°Æµ{¦¡
-	BMPIMAGE BMPImage1;													//	«Å§iBMP¼v¹³1(BMPImage1)
-	printf("½Ğ¿é¤JBMP¹ÏÀÉ¡G");											//	Åã¥Ü°T®§"½Ğ¿é¤JBMP¹ÏÀÉ¡G"
-	scanf("%s",&BMPImage1.FILENAME);									//	¨Ï¥ÎªÌ¿é¤J¹ÏÀÉ¦WºÙ 
-	bool FileCheck;														//	«Å§iFileCheck¥¬ªLÅÜ¼Æ¡A¥Î¥H°O¿ıÀÉ®×¬O§_¦s¦b(­YÀÉ®×¦s¦b¬°true)
-	FileCheck = FileExistCheck(BMPImage1.FILENAME);						//	©I¥sFileExistCheck°Æµ{¦¡ÀË¬dÀÉ®×¬O§_¦s¦b
-	if(FileCheck == false)												//	­YÀÉ®×¤£¦s¦b
-	{																	//	¶i¤Jif±Ô­z
-		printf("¹ÏÀÉ¤£¦s¦b!");											//	Åã¥Ü"¹ÏÀÉ¤£¦s¦b!"
-		return;															//	µ{¦¡µ²§ô 
-	}																	//	µ²§ôif±Ô­z
+	//	åˆå§‹å½±åƒå»ºç«‹æ¸¬è©¦(æ¸¬è©¦InitialIMGArrayå‰¯ç¨‹å¼åŠŸèƒ½)
+}																		//	çµæŸInitialIMGArrayTestå‰¯ç¨‹å¼
+void BmpReadFilesizeTest(void)											//	BmpReadFilesizeTestå‰¯ç¨‹å¼
+{																		//	é€²å…¥BmpReadFilesizeTestå‰¯ç¨‹å¼
+	//***æ­£å¸¸å‘¼å«æ–¹å¼***
+	printf("BmpReadFilesizeå‰¯ç¨‹å¼æ¸¬è©¦(ç„¡å‰¯æª”å)ï¼š%d\n", BmpReadFilesize("LennaTestBMP",false));
+	//	å‘¼å«BmpReadFilesizeå‰¯ç¨‹å¼å–å‡º"LennaTestBMP"BMPåœ–æª”ä¹‹å¤§å°
+	printf("BmpReadFilesizeå‰¯ç¨‹å¼æ¸¬è©¦(å«å‰¯æª”å)ï¼š%d\n", BmpReadFilesize("LennaTestBMP.bmp",true));
+	//	å‘¼å«BmpReadFilesizeå‰¯ç¨‹å¼å–å‡º"LennaTestBMP"BMPåœ–æª”ä¹‹å¤§å°
+	//***ä¾‹å¤–ç‹€æ³æ¸¬è©¦***
+	printf("BmpReadFilesizeå‰¯ç¨‹å¼ä¾‹å¤–ç‹€æ³æ¸¬è©¦1ï¼š%d\n", BmpReadFilesize("LennaTestBMP.bmp",(int)123));
+	//	ä»¥ä¾‹å¤–ç‹€æ³å‘¼å«å‰¯ç¨‹å¼
+}																		//	çµæŸBmpReadFilesizeTestå‰¯ç¨‹å¼
+void BmpReadXSizeTest(void)												//	BmpReadXSizeTestå‰¯ç¨‹å¼
+{																		//	é€²å…¥BmpReadXSizeTestå‰¯ç¨‹å¼
+	BMPIMAGE BMPImage1;													//	å®£å‘ŠBMPå½±åƒ1(BMPImage1)
+	printf("è«‹è¼¸å…¥BMPåœ–æª”ï¼š");											//	é¡¯ç¤ºè¨Šæ¯"è«‹è¼¸å…¥BMPåœ–æª”ï¼š"
+	scanf("%s",&BMPImage1.FILENAME);									//	ä½¿ç”¨è€…è¼¸å…¥åœ–æª”åç¨± 
+	bool FileCheck;														//	å®£å‘ŠFileCheckå¸ƒæ—è®Šæ•¸ï¼Œç”¨ä»¥è¨˜éŒ„æª”æ¡ˆæ˜¯å¦å­˜åœ¨(è‹¥æª”æ¡ˆå­˜åœ¨ç‚ºtrue)
+	FileCheck = FileExistCheck(BMPImage1.FILENAME);						//	å‘¼å«FileExistCheckå‰¯ç¨‹å¼æª¢æŸ¥æª”æ¡ˆæ˜¯å¦å­˜åœ¨
+	if(FileCheck == false)												//	è‹¥æª”æ¡ˆä¸å­˜åœ¨
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("åœ–æª”ä¸å­˜åœ¨!");											//	é¡¯ç¤º"åœ–æª”ä¸å­˜åœ¨!"
+		return;															//	ç¨‹å¼çµæŸ 
+	}																	//	çµæŸifæ•˜è¿°
 	BMPImage1.XSIZE = (unsigned int)BmpReadXSize(BMPImage1.FILENAME,false);
-	//	Åª¨ú¿é¤JBMP¹ÏÀÉ¼e«× 
-	if(BMPImage1.XSIZE == -1)											//	­YXSIZE¬°-1(¥NªíÅª¨úÀÉ®×¥¢±Ñ)	
-	{																	//	¶i¤Jif±Ô­z 
-		printf("Åª¨ú¹ÏÀÉ¤j¤p¸ê°T¥¢±Ñ!");								//	Åã¥Ü"Åª¨ú¹ÏÀÉ¤j¤p¸ê°T¥¢±Ñ!"
-		return;															//	µ{¦¡µ²§ô 
-	}																	//	µ²§ôif±Ô­z 
-	else																//	­YXSIZE¤£¬°-1(¥¿±`Åª¨úÀÉ®×)
-	{																	//	¶i¤Jelse±Ô­z
-		printf("¿é¤J¹ÏÀÉ¼e«×¡G%d\n",BMPImage1.XSIZE);					//	Åã¥Ü¿é¤J¹ÏÀÉ¼e«×¼Æ­È 
-		return;															//	µ{¦¡µ²§ô 
-	}																	//	µ²§ôelse±Ô­z 
-}																		//	µ²§ôBmpReadXSizeTest°Æµ{¦¡
+	//	è®€å–è¼¸å…¥BMPåœ–æª”å¯¬åº¦ 
+	if(BMPImage1.XSIZE == -1)											//	è‹¥XSIZEç‚º-1(ä»£è¡¨è®€å–æª”æ¡ˆå¤±æ•—)	
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è®€å–åœ–æª”å¤§å°è³‡è¨Šå¤±æ•—!");								//	é¡¯ç¤º"è®€å–åœ–æª”å¤§å°è³‡è¨Šå¤±æ•—!"
+		return;															//	ç¨‹å¼çµæŸ 
+	}																	//	çµæŸifæ•˜è¿° 
+	else																//	è‹¥XSIZEä¸ç‚º-1(æ­£å¸¸è®€å–æª”æ¡ˆ)
+	{																	//	é€²å…¥elseæ•˜è¿°
+		printf("è¼¸å…¥åœ–æª”å¯¬åº¦ï¼š%d\n",BMPImage1.XSIZE);					//	é¡¯ç¤ºè¼¸å…¥åœ–æª”å¯¬åº¦æ•¸å€¼ 
+		return;															//	ç¨‹å¼çµæŸ 
+	}																	//	çµæŸelseæ•˜è¿° 
+}																		//	çµæŸBmpReadXSizeTestå‰¯ç¨‹å¼
 
-void BmpReadYSizeTest(void)												//	BmpReadYSizeTest°Æµ{¦¡
-{																		//	¶i¤JBmpReadYSizeTest°Æµ{¦¡
-	BMPIMAGE BMPImage1;													//	«Å§iBMP¼v¹³1(BMPImage1)
-	printf("½Ğ¿é¤JBMP¹ÏÀÉ¡G");											//	Åã¥Ü°T®§"½Ğ¿é¤JBMP¹ÏÀÉ¡G"
-	scanf("%s",&BMPImage1.FILENAME);									//	¨Ï¥ÎªÌ¿é¤J¹ÏÀÉ¦WºÙ 
-	bool FileCheck;														//	«Å§iFileCheck¥¬ªLÅÜ¼Æ¡A¥Î¥H°O¿ıÀÉ®×¬O§_¦s¦b(­YÀÉ®×¦s¦b¬°true)
-	FileCheck = FileExistCheck(BMPImage1.FILENAME);						//	©I¥sFileExistCheck°Æµ{¦¡ÀË¬dÀÉ®×¬O§_¦s¦b
-	if(FileCheck == false)												//	­YÀÉ®×¤£¦s¦b
-	{																	//	¶i¤Jif±Ô­z
-		printf("¹ÏÀÉ¤£¦s¦b!");											//	Åã¥Ü"¹ÏÀÉ¤£¦s¦b!"
-		return;															//	µ{¦¡µ²§ô 
-	}																	//	µ²§ôif±Ô­z
+void BmpReadYSizeTest(void)												//	BmpReadYSizeTestå‰¯ç¨‹å¼
+{																		//	é€²å…¥BmpReadYSizeTestå‰¯ç¨‹å¼
+	BMPIMAGE BMPImage1;													//	å®£å‘ŠBMPå½±åƒ1(BMPImage1)
+	printf("è«‹è¼¸å…¥BMPåœ–æª”ï¼š");											//	é¡¯ç¤ºè¨Šæ¯"è«‹è¼¸å…¥BMPåœ–æª”ï¼š"
+	scanf("%s",&BMPImage1.FILENAME);									//	ä½¿ç”¨è€…è¼¸å…¥åœ–æª”åç¨± 
+	bool FileCheck;														//	å®£å‘ŠFileCheckå¸ƒæ—è®Šæ•¸ï¼Œç”¨ä»¥è¨˜éŒ„æª”æ¡ˆæ˜¯å¦å­˜åœ¨(è‹¥æª”æ¡ˆå­˜åœ¨ç‚ºtrue)
+	FileCheck = FileExistCheck(BMPImage1.FILENAME);						//	å‘¼å«FileExistCheckå‰¯ç¨‹å¼æª¢æŸ¥æª”æ¡ˆæ˜¯å¦å­˜åœ¨
+	if(FileCheck == false)												//	è‹¥æª”æ¡ˆä¸å­˜åœ¨
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("åœ–æª”ä¸å­˜åœ¨!");											//	é¡¯ç¤º"åœ–æª”ä¸å­˜åœ¨!"
+		return;															//	ç¨‹å¼çµæŸ 
+	}																	//	çµæŸifæ•˜è¿°
 	BMPImage1.YSIZE = (unsigned int)BmpReadYSize(BMPImage1.FILENAME,false);
-	//	Åª¨ú¿é¤JBMP¹ÏÀÉ°ª«× 
-	if(BMPImage1.YSIZE == -1)											//	­YYSIZE¬°-1(¥NªíÅª¨úÀÉ®×¥¢±Ñ)	
-	{																	//	¶i¤Jif±Ô­z 
-		printf("Åª¨ú¹ÏÀÉ¤j¤p¸ê°T¥¢±Ñ!");								//	Åã¥Ü"Åª¨ú¹ÏÀÉ¤j¤p¸ê°T¥¢±Ñ!"
-		return;															//	µ{¦¡µ²§ô 
-	}																	//	µ²§ôif±Ô­z 
-	else																//	­YYSIZE¤£¬°-1(¥¿±`Åª¨úÀÉ®×)
-	{																	//	¶i¤Jelse±Ô­z
-		printf("¿é¤J¹ÏÀÉ°ª«×¡G%d\n",BMPImage1.YSIZE);					//	Åã¥Ü¿é¤J¹ÏÀÉ°ª«×¼Æ­È 
-		return;															//	µ{¦¡µ²§ô 
-	}																	//	µ²§ôelse±Ô­z 
-}																		//	µ²§ôBmpReadYSizeTest°Æµ{¦¡
+	//	è®€å–è¼¸å…¥BMPåœ–æª”é«˜åº¦ 
+	if(BMPImage1.YSIZE == -1)											//	è‹¥YSIZEç‚º-1(ä»£è¡¨è®€å–æª”æ¡ˆå¤±æ•—)	
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è®€å–åœ–æª”å¤§å°è³‡è¨Šå¤±æ•—!");								//	é¡¯ç¤º"è®€å–åœ–æª”å¤§å°è³‡è¨Šå¤±æ•—!"
+		return;															//	ç¨‹å¼çµæŸ 
+	}																	//	çµæŸifæ•˜è¿° 
+	else																//	è‹¥YSIZEä¸ç‚º-1(æ­£å¸¸è®€å–æª”æ¡ˆ)
+	{																	//	é€²å…¥elseæ•˜è¿°
+		printf("è¼¸å…¥åœ–æª”é«˜åº¦ï¼š%d\n",BMPImage1.YSIZE);					//	é¡¯ç¤ºè¼¸å…¥åœ–æª”é«˜åº¦æ•¸å€¼ 
+		return;															//	ç¨‹å¼çµæŸ 
+	}																	//	çµæŸelseæ•˜è¿° 
+}																		//	çµæŸBmpReadYSizeTestå‰¯ç¨‹å¼
 
-void BmpReadTest(void)													//	BmpReadTest°Æµ{¦¡
-{																		//	¶i¤JBmpReadTest°Æµ{¦¡
-	char filename[MAX_PATH]="";											//	«Å§ifilename¦r¦ê
-	printf("½Ğ¿é¤JBMP¹ÏÀÉ(ex¡Gtest)¡G");								//	Åã¥Ü°T®§"½Ğ¿é¤JBMP¹ÏÀÉ(ex¡Gtest)¡G"
-	scanf("%s",filename);												//	¨Ï¥ÎªÌ¿é¤J¹ÏÀÉ¦WºÙ 
-	bool FilenameExtension = false;										//	³]©w¨Ï¥ÎªÌ¿é¤J¹ÏÀÉ¦WºÙ¤£§t°ÆÀÉ¦W
-	//***ÀË¬d¿é¤JÀÉ¦W¬O§_ªÅ¥Õ***
-	if(filename == NULL)												//	­Y¿é¤Jfilename¬°NULL
-	{																	//	¶i¤Jif±Ô­z
-		printf("ÀÉ®×¸ô®|¿é¤J¬°NULL\n");									//	Åã¥Ü"ÀÉ®×¸ô®|¿é¤J¬°NULL"¨Ã´«¦æ
-		return;															//	µ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	//***°ÆÀÉ¦W¶ñ¸É***
-	char fname_bmp[MAX_PATH];											//	«Å§iÀÉ®×¦WºÙfname_bmp°}¦CÅÜ¼Æ(³Ì¦hMAX_PATH­Ó¦r¤¸) 
-	if(FilenameExtension == false)										//	­Y¿é¤J°Ñ¼Æfname_bmp¤£¨ã°ÆÀÉ¦W
-	{																	//	¶i¤Jif±Ô­z
-		sprintf(fname_bmp, "%s.bmp", filename);							//	²£¥Í§¹¾ãÀÉ®×¸ô®|¨Ã¦s©ñ¦Üfname_bmp°}¦C
-	}																	//	µ²§ôif±Ô­z
-	else																//	­Y¿é¤J°Ñ¼Æfname_bmp¤w¥]§t°ÆÀÉ¦W
-	{																	//	¶i¤Jelse±Ô­z
-		strcpy(fname_bmp,filename);										//	ª½±µ¶ñ¤JÀÉ¦W¸ô®|
-	}																	//	µ²§ôelse±Ô­z
-	//***½T»{ÀÉ®×¦s¦b¤Î¥iÅª©Ê***
-	if (FileExistCheck(fname_bmp) == false)								//	­YÀÉ®×¤£¦s¦b 
-	{																	//	¶i¤Jif±Ô­z 
-		printf("ÀÉ®×¤£¦s¦b¡I\n");										//	Åã¥Ü¿ù»~°T®§ 
-		return;															//	µ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z	 
-	if (FileReadPermissionCheck(fname_bmp) == false)					//	­YÀÉ®×¤£¥iÅª¨ú
-	{																	//	¶i¤Jif±Ô­z 
-		printf("Åª¨úÀÉ®×¿ù»~¡I\n");										//	Åã¥Ü¿ù»~°T®§
-		return;															//	µ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	unsigned int XSIZE,YSIZE;											//	«Å§iXSIZE»PYSIZEÅÜ¼Æ°O¿ı¹ÏÀÉ¼e«×»P°ª«×
-	XSIZE = (unsigned int)BmpReadXSize(fname_bmp,true);					//	Åª¨ú¿é¤JBMP¹ÏÀÉ¼e«×(¸ô®|¤w¥]§t°ÆÀÉ¦W) 
-	YSIZE = (unsigned int)BmpReadYSize(fname_bmp,true);					//	Åª¨ú¿é¤JBMP¹ÏÀÉ°ª«×(¸ô®|¤w¥]§t°ÆÀÉ¦W) 
-	if( (XSIZE == -1) || (YSIZE == -1) )								//	­YXSIZE©ÎYSIZE¬°-1(¥NªíÅª¨úÀÉ®×¥¢±Ñ)	
-	{																	//	¶i¤Jif±Ô­z 
-		printf("Åª¨ú¹ÏÀÉ¤j¤p¸ê°T¥¢±Ñ!");								//	Åã¥Ü"Åª¨ú¹ÏÀÉ¤j¤p¸ê°T¥¢±Ñ!"
-		return;															//	µ²§ô°Æµ{¦¡
-	}																	//	µ²§ôif±Ô­z
-	else																//	­YXSIZE»PYSIZE¬Ò¤£¬°-1(¥¿±`Åª¨úÀÉ®×)
-	{																	//	¶i¤Jelse±Ô­z 
-		printf("¿é¤J¹ÏÀÉ¼e«×¡G%d\n",XSIZE);								//	Åã¥Ü¿é¤J¹ÏÀÉ¼e«×¼Æ­È 
-		printf("¿é¤J¹ÏÀÉ°ª«×¡G%d\n",YSIZE);								//	Åã¥Ü¿é¤J¹ÏÀÉ°ª«×¼Æ­È 
-		printf("¿é¤J¼v¹³¤j¤p(Byte)¡G%d\n",(size_t)XSIZE * YSIZE * 3);	//	Åã¥Ü¿é¤J¼v¹³¤j¤p¼Æ­È(Byte) 
-		char FILLINGBYTE;												//	«Å§iFILLINGBYTE°O¿ı¹ÏÀÉ¶ñ¸É¦ì¤¸
-		FILLINGBYTE = BmpFillingByteCalc(XSIZE);						//	©I¥sBmpFillingByteCalc°Æµ{¦¡­pºâ¶ñ¥R¤§¦ì¤¸²Õ¼Æ¶q
-		unsigned char *IMAGE_DATA;										//	«Å§iIMAGE_DATAµL¸¹¦r¤¸«ü¼Ğ¥Î¥H°O¿ı¹Ï¹³¸ê®Æ
+void BmpReadTest(void)													//	BmpReadTestå‰¯ç¨‹å¼
+{																		//	é€²å…¥BmpReadTestå‰¯ç¨‹å¼
+	char filename[MAX_PATH]="";											//	å®£å‘Šfilenameå­—ä¸²
+	printf("è«‹è¼¸å…¥BMPåœ–æª”(exï¼štest)ï¼š");								//	é¡¯ç¤ºè¨Šæ¯"è«‹è¼¸å…¥BMPåœ–æª”(exï¼štest)ï¼š"
+	scanf("%s",filename);												//	ä½¿ç”¨è€…è¼¸å…¥åœ–æª”åç¨± 
+	bool FilenameExtension = false;										//	è¨­å®šä½¿ç”¨è€…è¼¸å…¥åœ–æª”åç¨±ä¸å«å‰¯æª”å
+	//***æª¢æŸ¥è¼¸å…¥æª”åæ˜¯å¦ç©ºç™½***
+	if(filename == NULL)												//	è‹¥è¼¸å…¥filenameç‚ºNULL
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("æª”æ¡ˆè·¯å¾‘è¼¸å…¥ç‚ºNULL\n");									//	é¡¯ç¤º"æª”æ¡ˆè·¯å¾‘è¼¸å…¥ç‚ºNULL"ä¸¦æ›è¡Œ
+		return;															//	çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	//***å‰¯æª”åå¡«è£œ***
+	char fname_bmp[MAX_PATH];											//	å®£å‘Šæª”æ¡ˆåç¨±fname_bmpé™£åˆ—è®Šæ•¸(æœ€å¤šMAX_PATHå€‹å­—å…ƒ) 
+	if(FilenameExtension == false)										//	è‹¥è¼¸å…¥åƒæ•¸fname_bmpä¸å…·å‰¯æª”å
+	{																	//	é€²å…¥ifæ•˜è¿°
+		sprintf(fname_bmp, "%s.bmp", filename);							//	ç”¢ç”Ÿå®Œæ•´æª”æ¡ˆè·¯å¾‘ä¸¦å­˜æ”¾è‡³fname_bmpé™£åˆ—
+	}																	//	çµæŸifæ•˜è¿°
+	else																//	è‹¥è¼¸å…¥åƒæ•¸fname_bmpå·²åŒ…å«å‰¯æª”å
+	{																	//	é€²å…¥elseæ•˜è¿°
+		strcpy(fname_bmp,filename);										//	ç›´æ¥å¡«å…¥æª”åè·¯å¾‘
+	}																	//	çµæŸelseæ•˜è¿°
+	//***ç¢ºèªæª”æ¡ˆå­˜åœ¨åŠå¯è®€æ€§***
+	if (FileExistCheck(fname_bmp) == false)								//	è‹¥æª”æ¡ˆä¸å­˜åœ¨ 
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("æª”æ¡ˆä¸å­˜åœ¨ï¼\n");										//	é¡¯ç¤ºéŒ¯èª¤è¨Šæ¯ 
+		return;															//	çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°	 
+	if (FileReadPermissionCheck(fname_bmp) == false)					//	è‹¥æª”æ¡ˆä¸å¯è®€å–
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è®€å–æª”æ¡ˆéŒ¯èª¤ï¼\n");										//	é¡¯ç¤ºéŒ¯èª¤è¨Šæ¯
+		return;															//	çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	unsigned int XSIZE,YSIZE;											//	å®£å‘ŠXSIZEèˆ‡YSIZEè®Šæ•¸è¨˜éŒ„åœ–æª”å¯¬åº¦èˆ‡é«˜åº¦
+	XSIZE = (unsigned int)BmpReadXSize(fname_bmp,true);					//	è®€å–è¼¸å…¥BMPåœ–æª”å¯¬åº¦(è·¯å¾‘å·²åŒ…å«å‰¯æª”å) 
+	YSIZE = (unsigned int)BmpReadYSize(fname_bmp,true);					//	è®€å–è¼¸å…¥BMPåœ–æª”é«˜åº¦(è·¯å¾‘å·²åŒ…å«å‰¯æª”å) 
+	if( (XSIZE == -1) || (YSIZE == -1) )								//	è‹¥XSIZEæˆ–YSIZEç‚º-1(ä»£è¡¨è®€å–æª”æ¡ˆå¤±æ•—)	
+	{																	//	é€²å…¥ifæ•˜è¿° 
+		printf("è®€å–åœ–æª”å¤§å°è³‡è¨Šå¤±æ•—!");								//	é¡¯ç¤º"è®€å–åœ–æª”å¤§å°è³‡è¨Šå¤±æ•—!"
+		return;															//	çµæŸå‰¯ç¨‹å¼
+	}																	//	çµæŸifæ•˜è¿°
+	else																//	è‹¥XSIZEèˆ‡YSIZEçš†ä¸ç‚º-1(æ­£å¸¸è®€å–æª”æ¡ˆ)
+	{																	//	é€²å…¥elseæ•˜è¿° 
+		printf("è¼¸å…¥åœ–æª”å¯¬åº¦ï¼š%d\n",XSIZE);								//	é¡¯ç¤ºè¼¸å…¥åœ–æª”å¯¬åº¦æ•¸å€¼ 
+		printf("è¼¸å…¥åœ–æª”é«˜åº¦ï¼š%d\n",YSIZE);								//	é¡¯ç¤ºè¼¸å…¥åœ–æª”é«˜åº¦æ•¸å€¼ 
+		printf("è¼¸å…¥å½±åƒå¤§å°(Byte)ï¼š%d\n",(size_t)XSIZE * YSIZE * 3);	//	é¡¯ç¤ºè¼¸å…¥å½±åƒå¤§å°æ•¸å€¼(Byte) 
+		char FILLINGBYTE;												//	å®£å‘ŠFILLINGBYTEè¨˜éŒ„åœ–æª”å¡«è£œä½å…ƒ
+		FILLINGBYTE = BmpFillingByteCalc(XSIZE);						//	å‘¼å«BmpFillingByteCalcå‰¯ç¨‹å¼è¨ˆç®—å¡«å……ä¹‹ä½å…ƒçµ„æ•¸é‡
+		unsigned char *IMAGE_DATA;										//	å®£å‘ŠIMAGE_DATAç„¡è™Ÿå­—å…ƒæŒ‡æ¨™ç”¨ä»¥è¨˜éŒ„åœ–åƒè³‡æ–™
 		IMAGE_DATA = (unsigned char*)malloc((XSIZE * 3 + FILLINGBYTE) * YSIZE * sizeof(unsigned char));
-		//	­pºâ¨Ã«Ø¥ß¼v¹³¤j¤pªÅ¶¡ 
-		if (IMAGE_DATA == NULL) 										//	­Y«Ø¥ß¼v¹³ªÅ¶¡¥¢±Ñ 
-		{																//	¶i¤Jif±Ô­z 
-			printf("°O¾ĞÅé¤À°t¿ù»~!");									//	Åã¥Ü"°O¾ĞÅé¤À°t¿ù»~!" 
-			return;														//	µ²§ô°Æµ{¦¡
-		}																//	µ²§ôif±Ô­z 
-		else															//	­Y¥¼µo¥Í¿ù»~ 
-		{																//	¶i¤Jelse±Ô­z 
-			int loop_num = 0;											//	«Å§i°Ï°ìÅÜ¼Æloop_num¨Ñ°j°é¨Ï¥Î 
+		//	è¨ˆç®—ä¸¦å»ºç«‹å½±åƒå¤§å°ç©ºé–“ 
+		if (IMAGE_DATA == NULL) 										//	è‹¥å»ºç«‹å½±åƒç©ºé–“å¤±æ•— 
+		{																//	é€²å…¥ifæ•˜è¿° 
+			printf("è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!");									//	é¡¯ç¤º"è¨˜æ†¶é«”åˆ†é…éŒ¯èª¤!" 
+			return;														//	çµæŸå‰¯ç¨‹å¼
+		}																//	çµæŸifæ•˜è¿° 
+		else															//	è‹¥æœªç™¼ç”ŸéŒ¯èª¤ 
+		{																//	é€²å…¥elseæ•˜è¿° 
+			int loop_num = 0;											//	å®£å‘Šå€åŸŸè®Šæ•¸loop_numä¾›è¿´åœˆä½¿ç”¨ 
 			for(loop_num=0;loop_num<((XSIZE * 3 + FILLINGBYTE) * YSIZE);loop_num++)
-			//	¥Hfor°j°éªì©l¤Æ¨C­Ó¹³¯À 
-			{															//	¶i¤Jfor°j°é 
-				IMAGE_DATA[loop_num]=255;								//	¶ñ¤J¹w³]¹³¯À¦â±m¼Æ­È 
-			}															//	µ²§ôfor°j°é 
-			BmpRead(IMAGE_DATA, XSIZE, YSIZE, fname_bmp,true);			//	Åª¨ú¹ÏÀÉ¸ê®Æ
-		}																//	µ²§ôelse±Ô­z
-	}																	//	µ²§ôelse±Ô­z
+			//	ä»¥forè¿´åœˆåˆå§‹åŒ–æ¯å€‹åƒç´  
+			{															//	é€²å…¥forè¿´åœˆ 
+				IMAGE_DATA[loop_num]=255;								//	å¡«å…¥é è¨­åƒç´ è‰²å½©æ•¸å€¼ 
+			}															//	çµæŸforè¿´åœˆ 
+			BmpRead(IMAGE_DATA, XSIZE, YSIZE, fname_bmp,true);			//	è®€å–åœ–æª”è³‡æ–™
+		}																//	çµæŸelseæ•˜è¿°
+	}																	//	çµæŸelseæ•˜è¿°
 	
-}																		//	µ²§ôBmpReadTest°Æµ{¦¡
-void BmpWriteV2Test(void)												//	BmpWriteV2Test°Æµ{¦¡
-{																		//	¶i¤JBmpWriteV2Test°Æµ{¦¡
-	printf("½Ğ¿é¤JBMP¹ÏÀÉ(ex:test)¡G");									//	Åã¥Ü°T®§"½Ğ¿é¤JBMP¹ÏÀÉ(ex:test)¡G"
-	char *FilenameString;												//	«Å§iFilenameString¦r¤¸«ü¼Ğ¥Î¥H°O¿ı¨Ï¥ÎªÌ¿é¤J±ıÅª¨ú¤§¹ÏÀÉ
-	FilenameString = (char*)malloc( MAX_PATH * sizeof(char) );			//	°t¸mFilenameString¦r¤¸«ü¼Ğ°O¾ĞÅé¤j¤p
-	scanf("%s",FilenameString);											//	¨Ï¥ÎªÌ¿é¤J¹ÏÀÉ¦WºÙ 
-	BMPIMAGE BMPImage1;													//	«Å§iBMP¼v¹³1(BMPImage1)
-	BMPImage1 = BmpFileRead(FilenameString,false);						//	©I¥sBmpFileRead°Æµ{¦¡Åª¨úBMP¹ÏÀÉ
-	free(FilenameString);												//	ÄÀ©ñFilenameString¦r¤¸«ü¼Ğ°O¾ĞÅéªÅ¶¡
-	printf("%s\n",BMPImage1.FILENAME);									//	Åã¥ÜÅª¨ú¹ÏÀÉ¤§ÀÉ¦W
+}																		//	çµæŸBmpReadTestå‰¯ç¨‹å¼
+void BmpWriteV2Test(void)												//	BmpWriteV2Testå‰¯ç¨‹å¼
+{																		//	é€²å…¥BmpWriteV2Testå‰¯ç¨‹å¼
+	printf("è«‹è¼¸å…¥BMPåœ–æª”(ex:test)ï¼š");									//	é¡¯ç¤ºè¨Šæ¯"è«‹è¼¸å…¥BMPåœ–æª”(ex:test)ï¼š"
+	char *FilenameString;												//	å®£å‘ŠFilenameStringå­—å…ƒæŒ‡æ¨™ç”¨ä»¥è¨˜éŒ„ä½¿ç”¨è€…è¼¸å…¥æ¬²è®€å–ä¹‹åœ–æª”
+	FilenameString = (char*)malloc( MAX_PATH * sizeof(char) );			//	é…ç½®FilenameStringå­—å…ƒæŒ‡æ¨™è¨˜æ†¶é«”å¤§å°
+	scanf("%s",FilenameString);											//	ä½¿ç”¨è€…è¼¸å…¥åœ–æª”åç¨± 
+	BMPIMAGE BMPImage1;													//	å®£å‘ŠBMPå½±åƒ1(BMPImage1)
+	BMPImage1 = BmpFileRead(FilenameString,false);						//	å‘¼å«BmpFileReadå‰¯ç¨‹å¼è®€å–BMPåœ–æª”
+	free(FilenameString);												//	é‡‹æ”¾FilenameStringå­—å…ƒæŒ‡æ¨™è¨˜æ†¶é«”ç©ºé–“
+	printf("%s\n",BMPImage1.FILENAME);									//	é¡¯ç¤ºè®€å–åœ–æª”ä¹‹æª”å
 	
-	if(BMPImage1.IMAGE_DATA == NULL)									//	­YÅª¨úBMP¹ÏÀÉµo¥Í¿ù»~
-	{																	//	¶i¤Jif±Ô­z
-		printf("¹ÏÀÉª«¥ó¿ù»~!");										//	Åã¥Ü"¹ÏÀÉª«¥ó¿ù»~!" 
-		return;															//	µ²§ôµ{¦¡ 
-	}																	//	µ²§ôif±Ô­z
+	if(BMPImage1.IMAGE_DATA == NULL)									//	è‹¥è®€å–BMPåœ–æª”ç™¼ç”ŸéŒ¯èª¤
+	{																	//	é€²å…¥ifæ•˜è¿°
+		printf("åœ–æª”ç‰©ä»¶éŒ¯èª¤!");										//	é¡¯ç¤º"åœ–æª”ç‰©ä»¶éŒ¯èª¤!" 
+		return;															//	çµæŸç¨‹å¼ 
+	}																	//	çµæŸifæ•˜è¿°
 	
-	//***BmpWriteV2°Æµ{¦¡´ú¸Õ***
-	sprintf(BMPImage1.FILENAME, "%s", "BmpWriteV2Test");				//	³]©w¼g¤J¹ÏÀÉ¦WºÙ
-	BmpWriteV2(BMPImage1);												//	±N¹ÏÀÉ¼g¤J¦ÜÀÉ®×
-}																		//	µ²§ôBmpWriteV2Test°Æµ{¦¡
+	//***BmpWriteV2å‰¯ç¨‹å¼æ¸¬è©¦***
+	sprintf(BMPImage1.FILENAME, "%s", "BmpWriteV2Test");				//	è¨­å®šå¯«å…¥åœ–æª”åç¨±
+	BmpWriteV2(BMPImage1);												//	å°‡åœ–æª”å¯«å…¥è‡³æª”æ¡ˆ
+}																		//	çµæŸBmpWriteV2Testå‰¯ç¨‹å¼
