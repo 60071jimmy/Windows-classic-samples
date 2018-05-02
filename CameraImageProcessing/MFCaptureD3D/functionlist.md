@@ -76,7 +76,7 @@
 - ValueToBMP24RGB(將Value轉換至圖檔)
 - HSVSkin(HSV色彩空間皮膚偵測副程式)
 
-## 基礎副程式(排序、字串處理、顯示等)
+## 基礎副程式(排序、字串處理、顯示等)(OtherBasicFunctions)
 
 - BmpFillingByteCalc(BMP圖檔填補位元計算副程式)
 - UCharBubbleSort(unsigned char型態變數氣泡排序副程式)
